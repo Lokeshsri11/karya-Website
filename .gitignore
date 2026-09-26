@@ -3,3 +3,7 @@ node_modules
 out
 *.tsbuildinfo
 next-env.d.ts
+*.log
+shots/
+.vercel
+.DS_Store

@@ -1,0 +1,29 @@
+:root{--bg:#14120f;--bg-2:#1b1915;--term-bg:#0f0e0c;--line:#2a2620;--line-2:#3d372e;--fg:#ede6d9;--fg-2:#b9b0a0;--fg-3:#8c8374;--accent:#d9a14b;--accent-ink:#17130d;--ok:#93c47d;--ok-bg:#1a2416;--no:#e5806f;--no-bg:#2b1915;color-scheme:dark}
+html[data-theme="light"]{--bg:#f5f1e8;--bg-2:#ede7db;--term-bg:#fbf9f4;--line:#ddd5c6;--line-2:#c4b9a5;--fg:#1d1a16;--fg-2:#4b4439;--fg-3:#6e6557;--accent:#9c600d;--accent-ink:#fffaf0;--ok:#3a7330;--ok-bg:#e1ebd6;--no:#a5402d;--no-bg:#f4e0d9;color-scheme:light}
+:root{--mono:var(--font-mono),'IBM Plex Mono',ui-monospace,monospace;--serif:var(--font-serif),Newsreader,Georgia,serif}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased;font-family:var(--serif)}
+a{color:var(--fg)}
+a:hover{color:var(--accent)}
+::selection{background:var(--accent);color:var(--accent-ink)}
+.mono{font-family:var(--mono)}
+.serif{font-family:var(--serif)}
+button{font-family:inherit}
+pre,code{font-family:var(--mono)}
+
+/* hover states ported from style-hover attributes */
+.hl:hover{color:var(--fg)!important}
+.ha:hover{color:var(--accent)!important}
+.btn-fill:hover{background:transparent!important;color:var(--accent)!important}
+.card-hover:hover{background:var(--bg-2)!important}
+.key-a:hover{background:var(--ok);color:var(--term-bg)}
+.key-d:hover{background:var(--no);color:var(--term-bg)}
+.gate-btn:hover{background:var(--accent-ink)!important;color:var(--accent)!important}
+.replay:hover{color:var(--accent)!important;border-color:var(--accent)!important}
+.noscroll{scrollbar-width:none}
+.noscroll::-webkit-scrollbar{display:none}
+
+/* docs sidebar: sticky on wide screens, static below 820px (ResizeObserver in the design) */
+.docs-aside{position:sticky}
+@media (max-width:819px){.docs-aside{position:static}}
