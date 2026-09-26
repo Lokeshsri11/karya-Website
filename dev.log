@@ -1,0 +1,49 @@
+
+> karya-site@0.1.0 dev
+> next dev -p 3400
+
+▲ Next.js 16.3.6 (Turbopack)
+- Local:         http://localhost:3400
+- Network:       http://192.168.1.5:3400
+✓ Ready in 796ms
+✓ Running next.config.ts took 56ms
+
+ GET / 200 in 4.0s (next.js: 3.6s, application-code: 380ms)
+ GET /docs 200 in 653ms (next.js: 482ms, application-code: 171ms)
+ GET /roadmap 200 in 448ms (next.js: 346ms, application-code: 101ms)
+ GET / 200 in 150ms (next.js: 33ms, application-code: 117ms)
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <__next_root_layout_boundary__>
+                    <SegmentViewNode type="layout" pagePath="layout.tsx">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <RootLayout>
+                        <html lang="en" data-theme="dark" suppressHydrationWarning={true} className="ibm_plex_m...">
+                          <head>
+                          <body
+-                           __processed_4e80182b-2c11-46b9-ab6d-fd6451cb93de__="true"
+                          >
+                  ...
+ 
