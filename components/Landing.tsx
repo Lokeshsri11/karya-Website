@@ -325,7 +325,7 @@ export default class Landing extends React.Component<LandingProps, State> {
 
         {/* hero */}
         <section style={{ ...gridBg, borderBottom: "1px solid var(--line)" }}>
-          <div style={{ maxWidth: 1200, margin: "0 auto", padding: "clamp(56px,8vw,104px) 24px clamp(56px,7vw,96px)" }}>
+          <div className="hero-wrap" style={{ maxWidth: 1200, margin: "0 auto", padding: "clamp(56px,8vw,104px) 24px clamp(56px,7vw,96px)" }}>
             <div className="mono" style={{ display: "flex", flexWrap: "wrap", gap: "10px 14px", alignItems: "center", fontSize: 12.5 }}>
               <span style={{ border: "1px solid var(--accent)", color: "var(--accent)", padding: "3px 10px" }}>pre-1.0</span>
               <span style={{ color: "var(--fg-2)" }}>open-source agent harness · single Go binary</span>
@@ -333,7 +333,7 @@ export default class Landing extends React.Component<LandingProps, State> {
                 roadmap →
               </Link>
             </div>
-            <h1 className="serif" style={{ position: "relative", fontWeight: 400, fontSize: "clamp(48px,8.4vw,120px)", lineHeight: 0.95, letterSpacing: "-0.04em", margin: "28px 0 36px", maxWidth: "12ch" }}>
+            <h1 className="serif hero-h1" style={{ position: "relative", fontWeight: 400, fontSize: "clamp(48px,8.4vw,120px)", lineHeight: 0.95, letterSpacing: "-0.04em", margin: "28px 0 36px", maxWidth: "12ch" }}>
               <span aria-hidden="true" style={{ visibility: "hidden" }}>
                 {A}
                 <em>{B}</em>&nbsp;
@@ -344,11 +344,11 @@ export default class Landing extends React.Component<LandingProps, State> {
                 <span style={{ display: "inline-block", width: "0.07em", height: "0.76em", marginLeft: "0.05em", background: "var(--accent)", verticalAlign: "-0.04em", opacity: this.state.cur ? 1 : 0 }} />
               </span>
             </h1>
-            <p data-reveal className="serif" style={{ fontSize: "clamp(19px,2.1vw,24px)", lineHeight: 1.5, color: "var(--fg-2)", maxWidth: "56ch", margin: 0, textWrap: "pretty" as never }}>
+            <p data-reveal className="serif hero-p" style={{ fontSize: "clamp(19px,2.1vw,24px)", lineHeight: 1.5, color: "var(--fg-2)", maxWidth: "56ch", margin: 0, textWrap: "pretty" as never }}>
               An agent harness is the runtime around a language model: it calls the model and its tools, keeps the conversation state, applies policy, and carries a task through to the end. Karya is a small one that runs in your terminal, built so the engineer stays in the control seat.
             </p>
             <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px 28px", marginTop: 40 }}>
-              <div className="mono" style={{ display: "flex", alignItems: "center", gap: 14, maxWidth: "100%", border: "1px solid var(--accent)", background: "var(--bg-2)", padding: "12px 12px 12px 18px", fontSize: 14 }}>
+              <div className="mono cmd-box" style={{ display: "flex", alignItems: "center", gap: 14, maxWidth: "100%", border: "1px solid var(--accent)", background: "var(--bg-2)", padding: "12px 12px 12px 18px", fontSize: 14 }}>
                 <span style={{ color: "var(--accent)" }}>$</span>
                 <code style={{ overflowX: "auto", whiteSpace: "nowrap", minWidth: 0 }}>{INSTALL}</code>
                 <button onClick={this.copy} className="btn-fill" style={{ font: "inherit", fontSize: 12.5, background: "var(--accent)", border: "1px solid var(--accent)", color: "var(--accent-ink)", padding: "5px 12px", cursor: "pointer", flex: "none" }}>
@@ -359,8 +359,8 @@ export default class Landing extends React.Component<LandingProps, State> {
                 Read the docs →
               </Link>
             </div>
-            <div data-reveal style={{ marginTop: 72, border: "1px solid var(--line-2)", background: "var(--bg-2)", padding: "clamp(12px,2.4vw,32px)" }}>
-              <div className="mono" style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "6px 16px", fontSize: 12, color: "var(--fg-3)", marginBottom: 22 }}>
+            <div data-reveal className="demo-box" style={{ marginTop: 72, border: "1px solid var(--line-2)", background: "var(--bg-2)", padding: "clamp(12px,2.4vw,32px)" }}>
+              <div className="mono demo-head" style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "6px 16px", fontSize: 12, color: "var(--fg-3)", marginBottom: 22 }}>
                 <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
                   <span style={{ display: "inline-block", width: 8, height: 8, background: "var(--accent)" }} />
                   live demo · when it asks, press <span style={{ border: "1px solid var(--accent)", color: "var(--accent)", padding: "0 6px" }}>a</span> or <span style={{ border: "1px solid var(--fg-3)", color: "var(--fg-2)", padding: "0 6px" }}>d</span>
@@ -368,7 +368,7 @@ export default class Landing extends React.Component<LandingProps, State> {
                 <span>{chapterLabel}</span>
               </div>
               <Terminal mode={termMode} model={model} interactive onChapter={this.onChapter} />
-              <div className="mono" style={{ display: "grid", gridTemplateColumns: "repeat(7,minmax(0,1fr))", gap: 6, marginTop: 18, fontSize: 11.5 }}>
+              <div className="mono chapters" style={{ display: "grid", gridTemplateColumns: "repeat(7,minmax(0,1fr))", gap: 6, marginTop: 18, fontSize: 11.5 }}>
                 {CHAPTERS.map((c, i) => (
                   <div key={c} style={{ display: "flex", flexDirection: "column", gap: 7, minWidth: 0 }}>
                     <div style={{ height: 2, background: i < ch ? "var(--fg-2)" : i === ch ? "var(--accent)" : "var(--line-2)", transition: "background .3s" }} />
@@ -404,7 +404,7 @@ export default class Landing extends React.Component<LandingProps, State> {
 
         {/* numbers */}
         <section style={{ borderBottom: "1px solid var(--line)" }}>
-          <div style={{ maxWidth: 1100, margin: "0 auto", padding: "clamp(56px,8vw,104px) 24px", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: "48px 28px" }}>
+          <div className="num-grid" style={{ maxWidth: 1100, margin: "0 auto", padding: "clamp(56px,8vw,104px) 24px", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: "48px 28px" }}>
             {[
               ["4", "tools · read, write, edit, bash", false],
               ["1", "sequential loop · one request in flight", false],
@@ -412,7 +412,7 @@ export default class Landing extends React.Component<LandingProps, State> {
               ["1", "Go binary · go install and run", true],
             ].map(([num, cap, accent], i) => (
               <div key={i} data-reveal style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                <div className="serif" style={{ fontSize: "clamp(88px,11vw,148px)", lineHeight: 0.85, letterSpacing: "-0.05em", color: accent ? "var(--accent)" : undefined }}>{num as string}</div>
+                <div className="serif num" style={{ fontSize: "clamp(88px,11vw,148px)", lineHeight: 0.85, letterSpacing: "-0.05em", color: accent ? "var(--accent)" : undefined }}>{num as string}</div>
                 <div className="mono" style={{ fontSize: 13, color: "var(--fg-2)", borderTop: "1px solid var(--line-2)", paddingTop: 12 }}>{cap as string}</div>
               </div>
             ))}
@@ -421,7 +421,7 @@ export default class Landing extends React.Component<LandingProps, State> {
 
         {/* pillars index */}
         <section style={{ borderTop: "1px solid var(--line)" }}>
-          <div style={{ maxWidth: 1100, margin: "0 auto", padding: "48px 24px", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: "32px 28px" }}>
+          <div className="pillars" style={{ maxWidth: 1100, margin: "0 auto", padding: "48px 24px", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: "32px 28px" }}>
             {[
               ["#tools", "01", "You are in control", "read runs on its own. write, edit and bash wait for you."],
               ["#lockin", "02", "No lock-in", "One provider interface. Change the model with one variable."],
@@ -440,16 +440,16 @@ export default class Landing extends React.Component<LandingProps, State> {
 
         {/* the loop */}
         <section id="loop" style={{ borderTop: "1px solid var(--line)" }}>
-          <div style={sectionPad}>
+          <div className="sec" style={sectionPad}>
             <div data-reveal style={label}>the loop</div>
-            <h2 data-reveal style={{ ...h2, maxWidth: "20ch" }}>One sequential loop, one step at a time.</h2>
-            <p data-reveal style={{ ...lead, maxWidth: "62ch" }}>Karya keeps one model request in flight per session. Reads proceed on their own. Anything that writes a file or runs a command stops at the approval gate. A denial goes back to the model as a structured result, so it can try another approach or stop.</p>
-            <div data-reveal style={{ marginTop: 56, border: "1px solid var(--line-2)", padding: "clamp(18px,3vw,36px)" }}>
+            <h2 data-reveal className="h2" style={{ ...h2, maxWidth: "20ch" }}>One sequential loop, one step at a time.</h2>
+            <p data-reveal className="lead" style={{ ...lead, maxWidth: "62ch" }}>Karya keeps one model request in flight per session. Reads proceed on their own. Anything that writes a file or runs a command stops at the approval gate. A denial goes back to the model as a structured result, so it can try another approach or stop.</p>
+            <div data-reveal className="loop-box" style={{ marginTop: 56, border: "1px solid var(--line-2)", padding: "clamp(18px,3vw,36px)" }}>
               <div className="mono" style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "6px 16px", fontSize: 12.5, color: "var(--fg-3)", marginBottom: 28 }}>
                 <span>iteration {step.it} · step {this.state.loopI + 1} of 11</span>
                 <span>est. ${step.c.toFixed(4)}</span>
               </div>
-              <div className="mono" style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", gap: "20px 0", fontSize: 13.5 }}>
+              <div className="mono loop-nodes" style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", gap: "20px 0", fontSize: 13.5 }}>
                 {NODES.map(([lbl, sub, human], i) => {
                   const on = i === step.n,
                     past = i < step.n;
@@ -458,12 +458,17 @@ export default class Landing extends React.Component<LandingProps, State> {
                   const bg = on ? (human ? "var(--accent)" : "var(--fg)") : "transparent";
                   const color = on ? (human ? "var(--accent-ink)" : "var(--bg)") : past ? "var(--fg)" : "var(--fg-2)";
                   return (
-                    <div key={i} style={{ display: "flex", alignItems: "flex-start" }}>
+                    <div key={i} className="loop-node" style={{ display: "flex", alignItems: "flex-start" }}>
                       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                         <div style={{ border: `1px ${borderStyle} ${borderColor}`, background: bg, color, padding: "10px 14px", whiteSpace: "nowrap", transition: "background .25s,color .25s,border-color .25s" }}>{lbl}</div>
                         <div style={{ fontSize: 12, color: human ? "var(--accent)" : "var(--fg-3)", whiteSpace: "nowrap" }}>{sub}</div>
                       </div>
-                      {i < NODES.length - 1 && <div style={{ padding: 10, color: i < step.n ? "var(--accent)" : "var(--fg-3)", transition: "color .25s" }}>→</div>}
+                      {i < NODES.length - 1 && (
+                        <div className="loop-arrow" style={{ padding: 10, color: i < step.n ? "var(--accent)" : "var(--fg-3)", transition: "color .25s" }}>
+                          <span className="arrow-h">→</span>
+                          <span className="arrow-v">↓</span>
+                        </div>
+                      )}
                     </div>
                   );
                 })}
@@ -497,13 +502,13 @@ export default class Landing extends React.Component<LandingProps, State> {
 
         {/* approval gate */}
         <section id="gate" style={{ background: "var(--accent)", color: "var(--accent-ink)" }}>
-          <div ref={this.gateRef} style={{ maxWidth: 1200, margin: "0 auto", padding: "clamp(80px,11vw,152px) 24px", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,440px),1fr))", gap: "56px 64px", alignItems: "center" }}>
+          <div ref={this.gateRef} className="gate-grid" style={{ maxWidth: 1200, margin: "0 auto", padding: "clamp(80px,11vw,152px) 24px", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,440px),1fr))", gap: "56px 64px", alignItems: "center" }}>
             <div>
               <div className="mono" style={{ fontSize: 13 }}>the approval gate</div>
-              <h2 className="serif" style={{ fontWeight: 400, fontSize: "clamp(48px,7.4vw,108px)", lineHeight: 0.95, letterSpacing: "-0.04em", margin: "20px 0 28px", maxWidth: "11ch" }}>
+              <h2 className="serif gate-h2" style={{ fontWeight: 400, fontSize: "clamp(48px,7.4vw,108px)", lineHeight: 0.95, letterSpacing: "-0.04em", margin: "20px 0 28px", maxWidth: "11ch" }}>
                 Nothing changes until you press <em>a</em>.
               </h2>
-              <p className="serif" style={{ fontSize: 21, lineHeight: 1.5, margin: 0, maxWidth: "42ch", textWrap: "pretty" as never }}>write, edit and bash show a unified diff or the exact command, then stop and wait. Try it: press a or d on your keyboard, or click a key.</p>
+              <p className="serif gate-p" style={{ fontSize: 21, lineHeight: 1.5, margin: 0, maxWidth: "42ch", textWrap: "pretty" as never }}>write, edit and bash show a unified diff or the exact command, then stop and wait. Try it: press a or d on your keyboard, or click a key.</p>
             </div>
             <div style={{ display: "flex", flexDirection: "column", gap: 36, alignItems: "flex-start" }}>
               <div style={{ display: "flex", gap: 28, flexWrap: "wrap" }}>
@@ -530,9 +535,9 @@ export default class Landing extends React.Component<LandingProps, State> {
 
         {/* anatomy */}
         <section id="anatomy" style={{ borderTop: "1px solid var(--line)" }}>
-          <div style={sectionPad}>
+          <div className="sec" style={sectionPad}>
             <div data-reveal style={label}>anatomy of a harness</div>
-            <h2 data-reveal style={{ ...h2, margin: "18px 0 48px", maxWidth: "22ch" }}>The model is the brain. The harness is everything around it.</h2>
+            <h2 data-reveal className="h2" style={{ ...h2, margin: "18px 0 48px", maxWidth: "22ch" }}>The model is the brain. The harness is everything around it.</h2>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: "36px 32px" }}>
               {[
                 ["drives model and tool calls", "Streams text and assembles tool-call deltas as they arrive. One in-flight request per session."],
@@ -551,16 +556,16 @@ export default class Landing extends React.Component<LandingProps, State> {
 
         {/* 01 tools */}
         <section id="tools" style={{ borderTop: "1px solid var(--line)" }}>
-          <div style={sectionPad}>
+          <div className="sec" style={sectionPad}>
             <div data-reveal style={label}>01 · you are in control</div>
-            <h2 data-reveal style={{ ...h2, maxWidth: "20ch" }}>
+            <h2 data-reveal className="h2" style={{ ...h2, maxWidth: "20ch" }}>
               Four tools. Three of them <em style={em}>ask.</em>
             </h2>
-            <p data-reveal style={{ ...lead, maxWidth: "62ch", margin: "0 0 48px" }}>read runs automatically. write and edit show a unified diff, bash shows the exact command and its timeout, and each waits for you to press a key.</p>
+            <p data-reveal className="lead" style={{ ...lead, maxWidth: "62ch", margin: "0 0 48px" }}>read runs automatically. write and edit show a unified diff, bash shows the exact command and its timeout, and each waits for you to press a key.</p>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,420px),1fr))", gap: 1, background: "var(--line)", border: "1px solid var(--line)" }}>
-              <div data-reveal className="card-hover" style={toolCard}>
+              <div data-reveal className="card-hover tool-card" style={toolCard}>
                 <div style={toolHead}>
-                  <span style={{ fontSize: 30, fontWeight: 500 }}>read</span>
+                  <span className="tool-name" style={{ fontSize: 30, fontWeight: 500 }}>read</span>
                   <span style={{ fontSize: 12, border: "1px solid var(--line-2)", color: "var(--fg-2)", padding: "2px 8px" }}>auto</span>
                 </div>
                 <div style={toolDesc}>Returns bounded, line-numbered text. offset and limit page through large files.</div>
@@ -569,27 +574,27 @@ export default class Landing extends React.Component<LandingProps, State> {
   15 │ cmd.RunE = func(c *cobra.Command, …
   16 │   tasks := store.List()`}</pre>
               </div>
-              <div data-reveal className="card-hover" style={toolCard}>
+              <div data-reveal className="card-hover tool-card" style={toolCard}>
                 <div style={toolHead}>
-                  <span style={{ fontSize: 30, fontWeight: 500 }}>write</span>
+                  <span className="tool-name" style={{ fontSize: 30, fontWeight: 500 }}>write</span>
                   <span style={{ fontSize: 12, border: "1px solid var(--accent)", color: "var(--accent)", padding: "2px 8px" }}>asks</span>
                 </div>
                 <div style={toolDesc}>Writes to a temp file in the destination directory, then atomically replaces the target. File permissions are preserved.</div>
                 <pre style={toolPre}>{`cmd/.list_test.go.tmp → cmd/list_test.go
 mode 0644 kept · atomic replace`}</pre>
               </div>
-              <div data-reveal className="card-hover" style={toolCard}>
+              <div data-reveal className="card-hover tool-card" style={toolCard}>
                 <div style={toolHead}>
-                  <span style={{ fontSize: 30, fontWeight: 500 }}>edit</span>
+                  <span className="tool-name" style={{ fontSize: 30, fontWeight: 500 }}>edit</span>
                   <span style={{ fontSize: 12, border: "1px solid var(--accent)", color: "var(--accent)", padding: "2px 8px" }}>asks</span>
                 </div>
                 <div style={toolDesc}>old_text must match exactly once. Otherwise the tool returns not_found or ambiguous_match and the file is left untouched.</div>
                 <pre style={toolPre}>{`edit cmd/list.go
 error ambiguous_match  old_text found 2 times`}</pre>
               </div>
-              <div data-reveal className="card-hover" style={toolCard}>
+              <div data-reveal className="card-hover tool-card" style={toolCard}>
                 <div style={toolHead}>
-                  <span style={{ fontSize: 30, fontWeight: 500 }}>bash</span>
+                  <span className="tool-name" style={{ fontSize: 30, fontWeight: 500 }}>bash</span>
                   <span style={{ fontSize: 12, border: "1px solid var(--accent)", color: "var(--accent)", padding: "2px 8px" }}>asks</span>
                 </div>
                 <div style={toolDesc}>Captures stdout, stderr, exit code, duration and timeout status. Long output is truncated, keeping the tail where compiler and test errors live.</div>
@@ -614,14 +619,14 @@ output truncated, 48,213 bytes original
 
         {/* 02 lock-in */}
         <section id="lockin" style={{ borderTop: "1px solid var(--line)" }}>
-          <div style={{ ...sectionPad, display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,380px),1fr))", gap: "48px 64px", alignItems: "start" }}>
+          <div className="sec" style={{ ...sectionPad, display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,380px),1fr))", gap: "48px 64px", alignItems: "start" }}>
             <div>
               <div data-reveal style={label}>02 · no lock-in</div>
-              <h2 data-reveal style={{ ...h2, maxWidth: "16ch" }}>
+              <h2 data-reveal className="h2" style={{ ...h2, maxWidth: "16ch" }}>
                 Change the model with <em style={em}>one variable.</em>
               </h2>
-              <p data-reveal style={{ ...lead, maxWidth: "52ch", margin: "0 0 16px" }}>The agent loop depends on a single internal provider interface. Set HARNESS_MODEL and the loop, tools and approvals stay the same.</p>
-              <p data-reveal style={{ ...lead, maxWidth: "52ch", margin: "0 0 28px" }}>Sessions are stored in a canonical message format, never in a provider's wire types, so a log does not depend on the provider that wrote it.</p>
+              <p data-reveal className="lead" style={{ ...lead, maxWidth: "52ch", margin: "0 0 16px" }}>The agent loop depends on a single internal provider interface. Set HARNESS_MODEL and the loop, tools and approvals stay the same.</p>
+              <p data-reveal className="lead" style={{ ...lead, maxWidth: "52ch", margin: "0 0 28px" }}>Sessions are stored in a canonical message format, never in a provider's wire types, so a log does not depend on the provider that wrote it.</p>
               <pre style={{ margin: 0, background: "var(--bg-2)", border: "1px solid var(--line)", padding: "14px 16px", fontFamily: "var(--mono)", fontSize: 13, lineHeight: 1.7, overflowX: "auto" }}>
                 <span style={{ color: "var(--fg-3)" }}>$</span> export HARNESS_MODEL={model}{"\n"}
                 <span style={{ color: "var(--fg-3)" }}>$</span> export HARNESS_MAX_COST=1.00{"\n"}
@@ -634,14 +639,14 @@ output truncated, 48,213 bytes original
 
         {/* 03 sandbox */}
         <section id="sandbox" style={{ borderTop: "1px solid var(--line)" }}>
-          <div style={{ ...sectionPad, display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,380px),1fr))", gap: "48px 64px", alignItems: "start" }}>
+          <div className="sec" style={{ ...sectionPad, display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,380px),1fr))", gap: "48px 64px", alignItems: "start" }}>
             <div>
               <div data-reveal style={label}>03 · contained by default</div>
-              <h2 data-reveal style={{ ...h2, maxWidth: "16ch" }}>
+              <h2 data-reveal className="h2" style={{ ...h2, maxWidth: "16ch" }}>
                 A smaller <em style={em}>blast radius.</em>
               </h2>
-              <p data-reveal style={{ ...lead, maxWidth: "52ch", margin: "0 0 16px" }}>Every bash command, and every process it starts, runs under the operating system's sandbox: sandbox-exec on macOS, bubblewrap with seccomp on Linux. Writes are limited to the project root and a per-session temp directory. Network egress is denied unless you enable it.</p>
-              <p data-reveal style={{ ...lead, maxWidth: "52ch", margin: "0 0 28px" }}>The file tools are confined to the root. They reject absolute paths, paths that escape with .., and symlinks that resolve outside it.</p>
+              <p data-reveal className="lead" style={{ ...lead, maxWidth: "52ch", margin: "0 0 16px" }}>Every bash command, and every process it starts, runs under the operating system's sandbox: sandbox-exec on macOS, bubblewrap with seccomp on Linux. Writes are limited to the project root and a per-session temp directory. Network egress is denied unless you enable it.</p>
+              <p data-reveal className="lead" style={{ ...lead, maxWidth: "52ch", margin: "0 0 28px" }}>The file tools are confined to the root. They reject absolute paths, paths that escape with .., and symlinks that resolve outside it.</p>
               <div style={{ border: "1px solid var(--line-2)", padding: "14px 16px", maxWidth: "52ch" }}>
                 <div className="mono" style={{ fontSize: 12.5, color: "var(--fg-3)", marginBottom: 6 }}>note</div>
                 <div className="serif" style={{ fontSize: 17, lineHeight: 1.5, color: "var(--fg)" }}>The sandbox limits how much damage a mistaken command can do. It is a blast-radius limiter, not a security boundary, and it should not be relied on to contain hostile code.</div>
@@ -681,12 +686,12 @@ output truncated, 48,213 bytes original
 
         {/* 04 sessions */}
         <section id="sessions" style={{ borderTop: "1px solid var(--line)" }}>
-          <div style={sectionPad}>
+          <div className="sec" style={sectionPad}>
             <div data-reveal style={label}>04 · sessions that follow you</div>
-            <h2 data-reveal style={{ ...h2, maxWidth: "20ch" }}>
+            <h2 data-reveal className="h2" style={{ ...h2, maxWidth: "20ch" }}>
               Start on one machine. <em style={em}>Resume on another.</em>
             </h2>
-            <p data-reveal style={{ ...lead, maxWidth: "62ch", margin: "0 0 48px" }}>Sessions are append-only JSONL logs stored outside the project. They are keyed to the git remote URL rather than the local path, and the log contains no absolute paths or hostnames. On resume, Karya compares the recorded HEAD and dirty-tree flag with the live repository and tells the model what changed.</p>
+            <p data-reveal className="lead" style={{ ...lead, maxWidth: "62ch", margin: "0 0 48px" }}>Sessions are append-only JSONL logs stored outside the project. They are keyed to the git remote URL rather than the local path, and the log contains no absolute paths or hostnames. On resume, Karya compares the recorded HEAD and dirty-tree flag with the live repository and tells the model what changed.</p>
             <div className="mono" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,260px),1fr))", gap: 16, fontSize: 13, lineHeight: 1.7 }}>
               <div data-reveal style={{ border: "1px solid var(--line-2)" }}>
                 <div style={{ padding: "8px 14px", borderBottom: "1px solid var(--line)", color: "var(--fg-3)" }}>machine a · darwin</div>
@@ -723,17 +728,17 @@ output truncated, 48,213 bytes original
 
         {/* 05 cost */}
         <section id="cost" style={{ borderTop: "1px solid var(--line)" }}>
-          <div style={sectionPad}>
+          <div className="sec" style={sectionPad}>
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,380px),1fr))", gap: "32px 64px", alignItems: "end" }}>
               <div>
                 <div data-reveal style={label}>05 · observability and cost</div>
-                <h2 data-reveal style={{ ...h2, maxWidth: "16ch" }}>
+                <h2 data-reveal className="h2" style={{ ...h2, maxWidth: "16ch" }}>
                   Every turn has a <em style={em}>receipt.</em>
                 </h2>
-                <p data-reveal style={{ ...lead, maxWidth: "52ch" }}>Each turn records the model name, input and output tokens, estimated cost, duration and tool outcomes, in the session and in structured local logs. HARNESS_MAX_COST and HARNESS_MAX_STEPS stop the loop safely, say which limit was hit, and leave the session resumable.</p>
+                <p data-reveal className="lead" style={{ ...lead, maxWidth: "52ch" }}>Each turn records the model name, input and output tokens, estimated cost, duration and tool outcomes, in the session and in structured local logs. HARNESS_MAX_COST and HARNESS_MAX_STEPS stop the loop safely, say which limit was hit, and leave the session resumable.</p>
               </div>
               <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                <div className="serif" style={{ fontWeight: 400, fontSize: "clamp(64px,9.5vw,150px)", lineHeight: 0.9, letterSpacing: "-0.04em", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>{this.state.costT >= 1 ? "$0.02" : "$" + (0.02 * e).toFixed(4)}</div>
+                <div className="serif cost-big" style={{ fontWeight: 400, fontSize: "clamp(64px,9.5vw,150px)", lineHeight: 0.9, letterSpacing: "-0.04em", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>{this.state.costT >= 1 ? "$0.02" : "$" + (0.02 * e).toFixed(4)}</div>
                 <div className="mono" style={{ display: "flex", flexWrap: "wrap", gap: "8px 16px", alignItems: "center", fontSize: 13, color: "var(--fg-3)" }}>
                   <span>estimated cost of the task above · 4 turns · 41s</span>
                   <button onClick={this.playLedger} className="replay" style={{ font: "inherit", background: "none", border: "1px solid var(--line-2)", color: "var(--fg-2)", padding: "3px 10px", cursor: "pointer" }}>
@@ -794,11 +799,11 @@ session 7f3a2c is resumable: karya --resume 7f3a2c`}</pre>
 
         {/* open source */}
         <section id="source" style={{ borderTop: "1px solid var(--line)" }}>
-          <div style={sectionPad}>
+          <div className="sec" style={sectionPad}>
             <div data-reveal style={label}>open source</div>
-            <h2 data-reveal style={{ ...h2, maxWidth: "20ch" }}>Small enough to read.</h2>
-            <p data-reveal style={{ ...lead, maxWidth: "62ch", margin: "0 0 16px" }}>Four tools, one loop, one provider interface, one binary. The source is on GitHub under the license in the repository. Karya is pre-1.0, and interfaces may change between releases.</p>
-            <p data-reveal style={{ ...lead, maxWidth: "62ch", margin: "0 0 36px" }}>
+            <h2 data-reveal className="h2" style={{ ...h2, maxWidth: "20ch" }}>Small enough to read.</h2>
+            <p data-reveal className="lead" style={{ ...lead, maxWidth: "62ch", margin: "0 0 16px" }}>Four tools, one loop, one provider interface, one binary. The source is on GitHub under the license in the repository. Karya is pre-1.0, and interfaces may change between releases.</p>
+            <p data-reveal className="lead" style={{ ...lead, maxWidth: "62ch", margin: "0 0 36px" }}>
               Issues and pull requests are welcome. For anything larger than a bug fix, open an issue first so the change can be weighed against the{" "}
               <Link href="/roadmap" className="ha" style={{ color: "var(--fg)", textUnderlineOffset: 3 }}>
                 roadmap
@@ -815,11 +820,11 @@ session 7f3a2c is resumable: karya --resume 7f3a2c`}</pre>
 
         {/* closing CTA */}
         <section style={{ ...gridBg, borderTop: "1px solid var(--line)" }}>
-          <div style={{ maxWidth: 1200, margin: "0 auto", padding: "clamp(88px,12vw,168px) 24px", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 40 }}>
-            <h2 data-reveal className="serif" style={{ fontWeight: 400, fontSize: "clamp(56px,10vw,152px)", lineHeight: 0.92, letterSpacing: "-0.045em", margin: 0, maxWidth: "11ch" }}>
+          <div className="cta-wrap" style={{ maxWidth: 1200, margin: "0 auto", padding: "clamp(88px,12vw,168px) 24px", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 40 }}>
+            <h2 data-reveal className="serif cta-h2" style={{ fontWeight: 400, fontSize: "clamp(56px,10vw,152px)", lineHeight: 0.92, letterSpacing: "-0.045em", margin: 0, maxWidth: "11ch" }}>
               Stay in the <em style={em}>control seat.</em>
             </h2>
-            <div data-reveal className="mono" style={{ display: "flex", alignItems: "center", gap: 16, maxWidth: "100%", border: "1px solid var(--accent)", background: "var(--bg-2)", padding: "16px 16px 16px 22px", fontSize: "clamp(13px,1.6vw,17px)" }}>
+            <div data-reveal className="mono cmd-box" style={{ display: "flex", alignItems: "center", gap: 16, maxWidth: "100%", border: "1px solid var(--accent)", background: "var(--bg-2)", padding: "16px 16px 16px 22px", fontSize: "clamp(13px,1.6vw,17px)" }}>
               <span style={{ color: "var(--accent)" }}>$</span>
               <code style={{ overflowX: "auto", whiteSpace: "nowrap", minWidth: 0 }}>{INSTALL}</code>
               <button onClick={this.copy} className="btn-fill" style={{ font: "inherit", fontSize: 13, background: "var(--accent)", border: "1px solid var(--accent)", color: "var(--accent-ink)", padding: "6px 14px", cursor: "pointer", flex: "none" }}>

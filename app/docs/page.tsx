@@ -25,34 +25,34 @@ export default function Docs() {
       <SiteNav active="docs" />
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "0 24px", display: "flex", flexWrap: "wrap", gap: "0 64px", alignItems: "flex-start" }}>
         <aside className="mono docs-aside" style={{ flex: "1 0 200px", maxWidth: 220, top: 62, padding: "44px 0 24px", fontSize: 13, lineHeight: 1.5 }}>
-          <div style={{ ...dim, marginBottom: 10 }}>start</div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 2, marginBottom: 28 }}>
-            <a href="#top" style={{ color: "var(--fg)", textDecoration: "none", padding: "4px 0 4px 12px", borderLeft: "1px solid var(--accent)" }}>Getting started</a>
+          <div className="aside-label" style={{ ...dim, marginBottom: 10 }}>start</div>
+          <div className="aside-start" style={{ display: "flex", flexDirection: "column", gap: 2, marginBottom: 28 }}>
+            <a href="#top" className="active" style={{ color: "var(--fg)", textDecoration: "none", padding: "4px 0 4px 12px", borderLeft: "1px solid var(--accent)" }}>Getting started</a>
             <a href="#install" className="hl" style={sub}>Install</a>
             <a href="#configure" className="hl" style={sub}>Configure</a>
             <a href="#first-task" className="hl" style={sub}>First task</a>
             <a href="#approvals" className="hl" style={sub}>Approvals</a>
             <a href="#resume" className="hl" style={sub}>Resume</a>
           </div>
-          <div style={{ ...dim, marginBottom: 10 }}>concepts</div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 2, marginBottom: 28, color: "var(--fg-3)" }}>
+          <div className="aside-label aside-secondary" style={{ ...dim, marginBottom: 10 }}>concepts</div>
+          <div className="aside-secondary" style={{ display: "flex", flexDirection: "column", gap: 2, marginBottom: 28, color: "var(--fg-3)" }}>
             <span style={item}>The loop</span>
             <span style={item}>Tools</span>
             <span style={item}>Sandbox</span>
             <span style={item}>Sessions</span>
             <span style={item}>Cost and limits</span>
           </div>
-          <div style={{ ...dim, marginBottom: 10 }}>reference</div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 2, color: "var(--fg-3)" }}>
+          <div className="aside-label aside-secondary" style={{ ...dim, marginBottom: 10 }}>reference</div>
+          <div className="aside-secondary" style={{ display: "flex", flexDirection: "column", gap: 2, color: "var(--fg-3)" }}>
             <span style={item}>Environment</span>
             <span style={item}>CLI flags</span>
             <Link href="/roadmap" className="hl" style={{ ...item, color: "var(--fg-2)", textDecoration: "none" }}>Roadmap</Link>
           </div>
         </aside>
 
-        <main id="top" style={{ flex: "999 1 480px", minWidth: 0, maxWidth: 740, padding: "44px 0 112px" }}>
+        <main id="top" className="docs-main" style={{ flex: "999 1 480px", minWidth: 0, maxWidth: 740, padding: "44px 0 112px" }}>
           <div className="mono" style={{ fontSize: 13, color: "var(--fg-3)" }}>docs / start</div>
-          <h1 className="serif" style={{ fontWeight: 400, fontSize: "clamp(40px,5.6vw,60px)", lineHeight: 1.04, letterSpacing: "-0.022em", margin: "16px 0 20px" }}>Getting started</h1>
+          <h1 className="serif page-h1" style={{ fontWeight: 400, fontSize: "clamp(40px,5.6vw,60px)", lineHeight: 1.04, letterSpacing: "-0.022em", margin: "16px 0 20px" }}>Getting started</h1>
           <p style={{ ...p, fontSize: 20, lineHeight: 1.6, maxWidth: "62ch" }}>Install Karya, point it at a model, and run a first task inside a repository. Karya is pre-1.0; commands and variables may change before 1.0.</p>
 
           <h2 id="install" style={h2}>Install</h2>

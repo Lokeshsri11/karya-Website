@@ -7,6 +7,7 @@ type Theme = "dark" | "light";
 
 export default function SiteNav({ active = "home" }: { active?: "home" | "docs" | "roadmap" }) {
   const [theme, setTheme] = useState<Theme>("dark");
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     let t: Theme = "dark";
@@ -17,6 +18,18 @@ export default function SiteNav({ active = "home" }: { active?: "home" | "docs" 
     setTheme(t);
   }, []);
 
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+    const onResize = () => window.innerWidth > 720 && setOpen(false);
+    window.addEventListener("keydown", onKey);
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [open]);
+
   const toggle = () => {
     const t: Theme = theme === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = t;
@@ -26,12 +39,13 @@ export default function SiteNav({ active = "home" }: { active?: "home" | "docs" 
     setTheme(t);
   };
 
+  const close = () => setOpen(false);
   const isLight = theme === "light";
 
   return (
     <header style={{ position: "sticky", top: 0, zIndex: 20, background: "var(--bg)", borderBottom: "1px solid var(--line)" }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "14px 24px", display: "flex", alignItems: "center", gap: "12px 24px", flexWrap: "wrap" }}>
-        <Link href="/" aria-label="Karya home" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10, color: "var(--fg)" }}>
+        <Link href="/" aria-label="Karya home" onClick={close} style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10, color: "var(--fg)" }}>
           <span
             className="mono"
             style={{ position: "relative", display: "inline-flex", alignItems: "center", justifyContent: "center", width: 28, height: 28, boxSizing: "border-box", border: "1.5px solid var(--fg)", boxShadow: "0 3px 0 var(--accent)", fontSize: 15, fontWeight: 600, lineHeight: 1 }}
@@ -42,11 +56,30 @@ export default function SiteNav({ active = "home" }: { active?: "home" | "docs" 
             kārya
           </span>
         </Link>
-        <nav className="mono" style={{ flex: "none", display: "flex", gap: "8px 22px", marginLeft: "auto", alignItems: "center", flexWrap: "wrap", fontSize: 13.5 }}>
-          <Link href="/docs" className="hl" style={{ color: active === "docs" ? "var(--fg)" : "var(--fg-2)", textDecoration: "none" }}>
+        <button
+          type="button"
+          className="nav-burger"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          aria-controls="site-menu"
+          onClick={() => setOpen((o) => !o)}
+          style={{ marginLeft: "auto", width: 36, height: 30, border: "1px solid var(--line-2)", background: "var(--bg-2)", color: "var(--fg)", cursor: "pointer", padding: 0, display: "none", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 4 }}
+        >
+          {open ? (
+            <span className="mono" style={{ fontSize: 15, lineHeight: 1 }}>✕</span>
+          ) : (
+            <>
+              <span style={{ display: "block", width: 16, height: 1.5, background: "currentColor" }} />
+              <span style={{ display: "block", width: 16, height: 1.5, background: "currentColor" }} />
+              <span style={{ display: "block", width: 16, height: 1.5, background: "currentColor" }} />
+            </>
+          )}
+        </button>
+        <nav id="site-menu" className={`mono nav-links${open ? " open" : ""}`} style={{ flex: "none", display: "flex", gap: "8px 22px", marginLeft: "auto", alignItems: "center", flexWrap: "wrap", fontSize: 13.5 }}>
+          <Link href="/docs" className="hl" onClick={close} style={{ color: active === "docs" ? "var(--fg)" : "var(--fg-2)", textDecoration: "none" }}>
             Docs
           </Link>
-          <Link href="/roadmap" className="hl" style={{ color: active === "roadmap" ? "var(--fg)" : "var(--fg-2)", textDecoration: "none" }}>
+          <Link href="/roadmap" className="hl" onClick={close} style={{ color: active === "roadmap" ? "var(--fg)" : "var(--fg-2)", textDecoration: "none" }}>
             Roadmap
           </Link>
           <a href="https://github.com/prateek041/karya" className="hl" style={{ color: "var(--fg-2)", textDecoration: "none" }}>
@@ -57,7 +90,7 @@ export default function SiteNav({ active = "home" }: { active?: "home" | "docs" 
             role="switch"
             aria-checked={isLight}
             aria-label="Toggle light and dark theme"
-            className="hl"
+            className="hl nav-theme"
             style={{ font: "inherit", fontSize: 12, background: "none", border: "none", color: "var(--fg-2)", padding: 0, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }}
           >
             <span style={{ color: theme === "dark" ? "var(--fg)" : "var(--fg-3)", transition: "color .2s" }}>dark</span>
@@ -70,7 +103,8 @@ export default function SiteNav({ active = "home" }: { active?: "home" | "docs" 
           </button>
           <Link
             href="/docs#install"
-            className="btn-fill"
+            className="btn-fill nav-install"
+            onClick={close}
             style={{ background: "var(--accent)", color: "var(--accent-ink)", padding: "6px 14px", textDecoration: "none", fontWeight: 500, border: "1px solid var(--accent)" }}
           >
             Install

@@ -27,3 +27,54 @@ pre,code{font-family:var(--mono)}
 /* docs sidebar: sticky on wide screens, static below 820px (ResizeObserver in the design) */
 .docs-aside{position:sticky}
 @media (max-width:819px){.docs-aside{position:static}}
+
+/* ───────── mobile ───────── */
+.nav-burger{display:none}
+.arrow-v{display:none}
+@media (max-width:720px){
+  html{scroll-padding-top:70px}
+  /* nav: hamburger + dropdown panel */
+  .nav-burger{display:inline-flex!important}
+  .nav-links{display:none!important}
+  .nav-links.open{display:flex!important;flex:1 0 100%!important;flex-direction:column;align-items:stretch;gap:0!important;margin:12px 0 0!important;padding-top:4px;border-top:1px solid var(--line);font-size:15px!important}
+  .nav-links.open>a,.nav-links.open>button{padding:13px 0!important;border-bottom:1px solid var(--line);width:100%;justify-content:space-between}
+  .nav-links.open>.nav-install{margin-top:14px;text-align:center;border-bottom:none;padding:11px 0!important}
+  /* rhythm */
+  .sec{padding:56px 20px!important}
+  .hero-wrap{padding:40px 20px 48px!important}
+  .h2{font-size:36px!important;line-height:1.05!important;margin:14px 0 18px!important}
+  .lead,.hero-p{font-size:17px!important;line-height:1.55!important}
+  .hero-h1{font-size:44px!important;letter-spacing:-0.035em!important;margin:22px 0 26px!important}
+  .cmd-box{width:100%;gap:10px!important;padding:10px 10px 10px 14px!important;font-size:12.5px!important}
+  .cmd-box code{flex:1 1 auto}
+  .demo-box{margin-top:44px!important;padding:10px!important}
+  .demo-head{font-size:11px!important;margin-bottom:16px!important}
+  .chapters{font-size:10px!important;gap:4px!important;margin-top:12px!important}
+  .num-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:32px 20px!important;padding:48px 20px!important}
+  .num{font-size:64px!important}
+  .pillars{padding:36px 20px!important;gap:22px 20px!important}
+  .loop-box{padding:16px 14px!important;margin-top:36px!important}
+  .loop-nodes{flex-direction:column;gap:0!important}
+  .loop-node{flex-direction:column;align-items:flex-start!important;width:100%}
+  .loop-arrow{padding:4px 0 6px 14px!important}
+  .arrow-h{display:none}
+  .arrow-v{display:inline}
+  .gate-grid{padding:64px 20px!important;gap:40px!important}
+  .gate-h2{font-size:44px!important}
+  .gate-p{font-size:18px!important}
+  .tool-card{padding:20px!important}
+  .tool-name{font-size:24px!important}
+  .cost-big{font-size:56px!important}
+  .cta-wrap{padding:64px 20px!important;gap:28px!important}
+  .cta-h2{font-size:48px!important}
+  .footer-inner{padding:32px 20px 44px!important;gap:12px 22px!important}
+  .footer-note{flex:1 0 100%;margin-left:0!important;margin-top:8px}
+  .page-h1{font-size:38px!important}
+  .docs-main{padding-top:8px!important}
+  /* docs sidebar becomes a chip row */
+  .docs-aside{max-width:none!important;flex:1 0 100%!important;padding:20px 0 0!important}
+  .aside-secondary,.aside-label{display:none!important}
+  .aside-start{flex-direction:row!important;flex-wrap:wrap;gap:8px!important;margin-bottom:8px!important}
+  .aside-start a{border:1px solid var(--line-2)!important;padding:6px 10px!important;border-left:1px solid var(--line-2)!important}
+  .aside-start a.active{border-color:var(--accent)!important;color:var(--accent)!important}
+}

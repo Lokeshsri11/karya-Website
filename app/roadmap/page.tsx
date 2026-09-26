@@ -40,7 +40,7 @@ export default function Roadmap() {
       <SiteNav active="roadmap" />
       <section style={{ maxWidth: 1100, margin: "0 auto", padding: "clamp(56px,8vw,96px) 24px 24px" }}>
         <div className="mono" style={{ fontSize: 13, color: "var(--fg-3)" }}>roadmap</div>
-        <h1 className="serif" style={{ fontWeight: 400, fontSize: "clamp(44px,6.6vw,80px)", lineHeight: 1.02, letterSpacing: "-0.025em", margin: "18px 0 24px", maxWidth: "14ch", textWrap: "balance" as never }}>What exists, and what comes next.</h1>
+        <h1 className="serif page-h1" style={{ fontWeight: 400, fontSize: "clamp(44px,6.6vw,80px)", lineHeight: 1.02, letterSpacing: "-0.025em", margin: "18px 0 24px", maxWidth: "14ch", textWrap: "balance" as never }}>What exists, and what comes next.</h1>
         <p className="serif" style={{ fontSize: 20, lineHeight: 1.6, color: "var(--fg-2)", maxWidth: "60ch", margin: "0 0 24px", textWrap: "pretty" as never }}>Karya is pre-1.0. The MVP below is what the binary does today. Deferred items are planned and not built; each one is labelled roadmap wherever it appears on this site.</p>
         <div className="mono" style={{ display: "inline-flex", alignItems: "center", gap: 10, border: "1px solid var(--line-2)", padding: "6px 12px", fontSize: 13 }}>
           <span style={{ display: "inline-block", width: 8, height: 15, background: "var(--accent)" }} />

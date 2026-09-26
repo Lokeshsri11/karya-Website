@@ -245,7 +245,7 @@ export default class Terminal extends React.Component<TerminalProps, State> {
   render() {
     const mode = this.props.mode ?? "animated";
     const isStatic = mode === "static";
-    const frozen = isStatic || mode === "final" || this.state.narrow || this.state.reduced;
+    const frozen = isStatic || mode === "final" || this.state.reduced;
     const src = isStatic ? this.script("docs") : frozen ? this.script("final") : this.state.blocks;
     const status: Status = isStatic ? "approval" : frozen ? "done" : this.state.status;
     const labels: Partial<Record<Status, string>> = { thinking: "streaming", read: "read · runs without asking", running: "bash · running in sandbox" };
@@ -253,7 +253,7 @@ export default class Terminal extends React.Component<TerminalProps, State> {
     const isWaiting = status === "approval";
     const isBusy = !!labels[status];
     const usage = status === "done" ? `model ${this.props.model ?? "claude-sonnet-5"} · ${(!frozen && this.state.usageAlt) || "in 4,812 · out 1,093 · $0.02 · 41s"}` : "";
-    const waitText = this.props.interactive && !frozen ? "your turn · press a or d, or click" : "waiting on you · [a]pprove [d]eny";
+    const waitText = this.props.interactive && !frozen ? (this.state.narrow ? "your turn · tap a key" : "your turn · press a or d, or click") : "waiting on you · [a]pprove [d]eny";
 
     return (
       <div
@@ -263,13 +263,13 @@ export default class Terminal extends React.Component<TerminalProps, State> {
           position: "relative",
           boxSizing: "border-box",
           width: "100%",
-          height: frozen ? "auto" : (this.props.height ?? "580px"),
+          height: frozen ? "auto" : this.state.narrow ? "460px" : (this.props.height ?? "580px"),
           display: "flex",
           flexDirection: "column",
           background: "var(--term-bg)",
           border: "1px solid var(--line-2)",
-          padding: "22px 18px 14px",
-          fontSize: this.state.narrow ? "11.5px" : "13px",
+          padding: this.state.narrow ? "20px 12px 12px" : "22px 18px 14px",
+          fontSize: this.state.narrow ? "12px" : "13px",
           lineHeight: 1.6,
           color: "var(--fg)",
           textAlign: "left",
