@@ -329,9 +329,6 @@ export default class Landing extends React.Component<LandingProps, State> {
             <div className="mono" style={{ display: "flex", flexWrap: "wrap", gap: "10px 14px", alignItems: "center", fontSize: 12.5 }}>
               <span style={{ border: "1px solid var(--accent)", color: "var(--accent)", padding: "3px 10px" }}>pre-1.0</span>
               <span style={{ color: "var(--fg-2)" }}>open-source agent harness · single Go binary</span>
-              <Link href="/roadmap" className="ha" style={{ color: "var(--fg-2)", textUnderlineOffset: 3 }}>
-                roadmap →
-              </Link>
             </div>
             <h1 className="serif hero-h1" style={{ position: "relative", fontWeight: 400, fontSize: "clamp(48px,8.4vw,120px)", lineHeight: 0.95, letterSpacing: "-0.04em", margin: "28px 0 36px", maxWidth: "12ch" }}>
               <span aria-hidden="true" style={{ visibility: "hidden" }}>
@@ -804,11 +801,7 @@ session 7f3a2c is resumable: karya --resume 7f3a2c`}</pre>
             <h2 data-reveal className="h2" style={{ ...h2, maxWidth: "20ch" }}>Small enough to read.</h2>
             <p data-reveal className="lead" style={{ ...lead, maxWidth: "62ch", margin: "0 0 16px" }}>Four tools, one loop, one provider interface, one binary. The source is on GitHub under the license in the repository. Karya is pre-1.0, and interfaces may change between releases.</p>
             <p data-reveal className="lead" style={{ ...lead, maxWidth: "62ch", margin: "0 0 36px" }}>
-              Issues and pull requests are welcome. For anything larger than a bug fix, open an issue first so the change can be weighed against the{" "}
-              <Link href="/roadmap" className="ha" style={{ color: "var(--fg)", textUnderlineOffset: 3 }}>
-                roadmap
-              </Link>
-              .
+              Issues and pull requests are welcome. For anything larger than a bug fix, open an issue first so the change can be discussed before the work is done.
             </p>
             <div className="mono" style={{ display: "flex", flexWrap: "wrap", gap: "12px 28px", fontSize: 13.5 }}>
               <a href="https://github.com/prateek041/karya" className="ha" style={{ color: "var(--fg)", textUnderlineOffset: 4 }}>github.com/prateek041/karya ↗</a>
@@ -834,7 +827,6 @@ session 7f3a2c is resumable: karya --resume 7f3a2c`}</pre>
             <div data-reveal className="mono" style={{ display: "flex", flexWrap: "wrap", gap: "12px 32px", fontSize: 14 }}>
               <Link href="/docs" className="ha" style={{ color: "var(--fg)", textUnderlineOffset: 4 }}>Read the docs →</Link>
               <a href="https://github.com/prateek041/karya" className="ha" style={{ color: "var(--fg)", textUnderlineOffset: 4 }}>GitHub ↗</a>
-              <Link href="/roadmap" className="ha" style={{ color: "var(--fg)", textUnderlineOffset: 4 }}>Roadmap →</Link>
             </div>
           </div>
         </section>

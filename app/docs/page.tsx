@@ -46,7 +46,6 @@ export default function Docs() {
           <div className="aside-secondary" style={{ display: "flex", flexDirection: "column", gap: 2, color: "var(--fg-3)" }}>
             <span style={item}>Environment</span>
             <span style={item}>CLI flags</span>
-            <Link href="/roadmap" className="hl" style={{ ...item, color: "var(--fg-2)", textDecoration: "none" }}>Roadmap</Link>
           </div>
         </aside>
 
@@ -58,10 +57,7 @@ export default function Docs() {
           <h2 id="install" style={h2}>Install</h2>
           <p style={{ ...p, margin: "0 0 20px" }}>Karya is a single Go binary. Install it with the Go toolchain:</p>
           <pre style={pre}><span style={dim}>$</span> go install github.com/prateek041/karya/cmd/karya@latest</pre>
-          <p style={{ ...p, margin: "20px 0 0" }}>
-            A Homebrew tap and prebuilt release binaries are on the{" "}
-            <Link href="/roadmap" style={{ color: "var(--fg)", textUnderlineOffset: 3 }}>roadmap</Link>.
-          </p>
+          <p style={{ ...p, margin: "20px 0 0" }}>A Homebrew tap and prebuilt release binaries are planned.</p>
 
           <h2 id="configure" style={h2}>Configure</h2>
           <p style={{ ...p, margin: "0 0 28px" }}>Karya reads its configuration from environment variables. Only HARNESS_MODEL is required. The two limits are worth setting before your first session.</p>
@@ -136,7 +132,7 @@ export HARNESS_MAX_COST=1.00`}</pre>
 
           <div className="mono" style={{ marginTop: 72, paddingTop: 20, borderTop: "1px solid var(--line)", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 12, fontSize: 13 }}>
             <Link href="/" className="hl" style={{ color: "var(--fg-2)", textDecoration: "none" }}>← Overview</Link>
-            <Link href="/roadmap" className="hl" style={{ color: "var(--fg-2)", textDecoration: "none" }}>Roadmap →</Link>
+            <a href="https://github.com/prateek041/karya" className="hl" style={{ color: "var(--fg-2)", textDecoration: "none" }}>GitHub ↗</a>
           </div>
         </main>
       </div>

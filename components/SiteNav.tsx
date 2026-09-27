@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 
 type Theme = "dark" | "light";
 
-export default function SiteNav({ active = "home" }: { active?: "home" | "docs" | "roadmap" }) {
+export default function SiteNav({ active = "home" }: { active?: "home" | "docs" }) {
   const [theme, setTheme] = useState<Theme>("dark");
   const [open, setOpen] = useState(false);
 
@@ -78,9 +78,6 @@ export default function SiteNav({ active = "home" }: { active?: "home" | "docs" 
         <nav id="site-menu" className={`mono nav-links${open ? " open" : ""}`} style={{ flex: "none", display: "flex", gap: "8px 22px", marginLeft: "auto", alignItems: "center", flexWrap: "wrap", fontSize: 13.5 }}>
           <Link href="/docs" className="hl" onClick={close} style={{ color: active === "docs" ? "var(--fg)" : "var(--fg-2)", textDecoration: "none" }}>
             Docs
-          </Link>
-          <Link href="/roadmap" className="hl" onClick={close} style={{ color: active === "roadmap" ? "var(--fg)" : "var(--fg-2)", textDecoration: "none" }}>
-            Roadmap
           </Link>
           <a href="https://github.com/prateek041/karya" className="hl" style={{ color: "var(--fg-2)", textDecoration: "none" }}>
             GitHub
