@@ -21,7 +21,7 @@ pre,code{font-family:var(--mono)}
 .key-d:hover{background:var(--no);color:var(--term-bg)}
 .gate-btn:hover{background:var(--accent-ink)!important;color:var(--accent)!important}
 .replay:hover{color:var(--accent)!important;border-color:var(--accent)!important}
-.mail-card:hover{background:var(--bg-2)!important;color:var(--accent)!important}
+.mail-card:hover{background:var(--bg-2)!important;color:var(--accent)!important;border-color:var(--accent)!important}
 .noscroll{scrollbar-width:none}
 .noscroll::-webkit-scrollbar{display:none}
 
@@ -68,8 +68,8 @@ pre,code{font-family:var(--mono)}
   .cost-big{font-size:56px!important}
   .cta-wrap{padding:64px 20px!important;gap:28px!important}
   .cta-h2{font-size:48px!important}
-  .footer-contact{padding:40px 20px 4px!important;gap:20px!important}
-  .footer-ask{font-size:22px!important}
+  .footer-contact{padding:32px 20px 0!important;gap:12px!important}
+  .footer-ask{font-size:17px!important}
   .footer-inner{padding:32px 20px 44px!important;gap:12px 22px!important}
   .footer-note{flex:1 0 100%;margin-left:0!important;margin-top:8px}
   .page-h1{font-size:38px!important}
