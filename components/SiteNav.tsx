@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import Mark from "./Mark";
 
 type Theme = "dark" | "light";
 
@@ -46,12 +47,7 @@ export default function SiteNav({ active = "home" }: { active?: "home" | "docs" 
     <header style={{ position: "sticky", top: 0, zIndex: 20, background: "var(--bg)", borderBottom: "1px solid var(--line)" }}>
       <div style={{ maxWidth: 1100, margin: "0 auto", padding: "14px 24px", display: "flex", alignItems: "center", gap: "12px 24px", flexWrap: "wrap" }}>
         <Link href="/" aria-label="Karya home" onClick={close} style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10, color: "var(--fg)" }}>
-          <span
-            className="mono"
-            style={{ position: "relative", display: "inline-flex", alignItems: "center", justifyContent: "center", width: 28, height: 28, boxSizing: "border-box", border: "1.5px solid var(--fg)", boxShadow: "0 3px 0 var(--accent)", fontSize: 15, fontWeight: 600, lineHeight: 1 }}
-          >
-            k
-          </span>
+          <Mark size={30} />
           <span className="serif" style={{ fontSize: 24, fontWeight: 500, letterSpacing: "-0.02em", lineHeight: 1 }}>
             kārya
           </span>

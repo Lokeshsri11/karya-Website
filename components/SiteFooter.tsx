@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Mark from "./Mark";
 
 const EMAILS = ["prateek@usekarya.dev", "lokesh@usekarya.dev"];
 
@@ -20,9 +21,7 @@ export default function SiteFooter() {
       </div>
       <div className="mono footer-inner" style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 24px 56px", display: "flex", flexWrap: "wrap", gap: "14px 28px", alignItems: "baseline", fontSize: 13, color: "var(--fg-3)" }}>
         <span style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--fg)" }}>
-          <span style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", width: 24, height: 24, boxSizing: "border-box", border: "1.5px solid var(--fg)", boxShadow: "0 3px 0 var(--accent)", fontSize: 13, fontWeight: 600, lineHeight: 1 }}>
-            k
-          </span>
+          <Mark size={26} />
           <span className="serif" style={{ fontSize: 21, fontWeight: 500, letterSpacing: "-0.02em" }}>
             kārya
           </span>
