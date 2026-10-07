@@ -2,57 +2,57 @@ const desc: React.CSSProperties = { flex: "1 1 260px", fontFamily: "var(--serif)
 const row: React.CSSProperties = { display: "flex", flexWrap: "wrap", gap: "6px 28px", padding: "14px 0", borderBottom: "1px solid var(--line)" };
 const key: React.CSSProperties = { flex: "0 0 220px", display: "flex", flexDirection: "column", gap: 4 };
 
+type Status = "today" | "planned";
+const tag = (s: Status, note?: string) => (
+  <span style={{ color: s === "today" ? "var(--ok)" : "var(--fg-3)" }}>
+    {s === "today" ? "works today" : "planned"}
+    {note ? ` · ${note}` : ""}
+  </span>
+);
+
+const ENV: [string, Status, string | undefined, string][] = [
+  ["GEMINI_API_KEY", "today", "required", "Your Gemini API key. Karya also reads it from a .env file in the working directory; a real exported variable wins over the file."],
+  ["GOOGLE_API_KEY", "today", "optional", "Alternative name for the Gemini key. Wins if both are set."],
+  ["ANTHROPIC_API_KEY · OpenAI-compatible", "planned", "M4", "Anthropic and OpenAI-compatible providers (OpenRouter, DeepSeek, Qwen, Ollama, vLLM, LM Studio). Keys never reach logs, sessions or sync bundles."],
+];
+
+const FLAGS: [string, Status, string | undefined, string][] = [
+  ["karya", "today", undefined, "Start the TUI in the current directory, talking to the demo core."],
+  ["karya -live", "today", undefined, "Stream answers straight from Gemini, without the core. Threads are saved under $XDG_DATA_HOME/karya/threads."],
+  ["karya -demo", "today", undefined, "Play the scripted demo. No API key needed."],
+  ["karya -theme light", "today", undefined, "Colour theme: dark or light."],
+  ["--model · --mode · --max-cost · --max-steps", "planned", "M1–M3", "Pick the model and mode, and set hard budgets for the session."],
+  ["--root <dir> · --no-sandbox", "planned", "M2", "Choose the project root. Run bash without the sandbox, in which case every command asks."],
+  ["karya run \"<task>\" [--json]", "planned", "M1", "Run one task headless. Exit codes: 0 done and verified, 1 failed, 2 limit reached, 3 verification failed, 4 interrupted."],
+  ["karya resume [<id>] · sessions", "planned", "M1", "List and resume sessions, on this machine or another clone of the same repository."],
+  ["karya sync · doctor", "planned", "M4–M5", "End-to-end encrypted session sync, and a health check for the sandbox, keys and config."],
+];
+
+function Rows({ items }: { items: [string, Status, string | undefined, string][] }) {
+  return (
+    <div style={{ borderTop: "1px solid var(--line)" }}>
+      {items.map(([k, s, note, d]) => (
+        <div key={k} style={row}>
+          <div style={key}>
+            <span style={{ fontWeight: 500, wordBreak: "break-word" }}>{k}</span>
+            {tag(s, note)}
+          </div>
+          <div style={desc}>{d}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 export default function EnvTable({ showFlags = true }: { showFlags?: boolean }) {
   return (
     <div className="mono" style={{ fontSize: 13, color: "var(--fg)", textAlign: "left" }}>
       <div style={{ color: "var(--fg-3)", padding: "0 0 10px" }}>environment</div>
-      <div style={{ borderTop: "1px solid var(--line)" }}>
-        <div style={row}>
-          <div style={key}>
-            <span style={{ fontWeight: 500 }}>HARNESS_MODEL</span>
-            <span style={{ color: "var(--accent)" }}>required</span>
-          </div>
-          <div style={desc}>The model to run. The loop talks to it through one internal provider interface, so changing this value changes the model and nothing else.</div>
-        </div>
-        <div style={row}>
-          <div style={key}>
-            <span style={{ fontWeight: 500 }}>HARNESS_BASE_URL</span>
-            <span style={{ color: "var(--fg-3)" }}>optional</span>
-          </div>
-          <div style={desc}>Overrides the provider API endpoint.</div>
-        </div>
-        <div style={row}>
-          <div style={key}>
-            <span style={{ fontWeight: 500 }}>HARNESS_MAX_STEPS</span>
-            <span style={{ color: "var(--fg-3)" }}>safety limit · conservative default</span>
-          </div>
-          <div style={desc}>Maximum loop steps per session. When reached, the loop stops, reports the limit, and the session stays resumable.</div>
-        </div>
-        <div style={row}>
-          <div style={key}>
-            <span style={{ fontWeight: 500 }}>HARNESS_MAX_COST</span>
-            <span style={{ color: "var(--fg-3)" }}>session cost ceiling</span>
-          </div>
-          <div style={desc}>Estimated cost ceiling for the session. When reached, the loop stops, reports the limit, and the session stays resumable.</div>
-        </div>
-      </div>
+      <Rows items={ENV} />
       {showFlags && (
         <>
-          <div style={{ color: "var(--fg-3)", padding: "32px 0 10px" }}>flags</div>
-          <div style={{ borderTop: "1px solid var(--line)" }}>
-            <div style={row}>
-              <div style={{ flex: "0 0 220px", fontWeight: 500 }}>karya</div>
-              <div style={desc}>Start a session. The current directory becomes the project root and cannot change for the session.</div>
-            </div>
-            <div style={row}>
-              <div style={{ flex: "0 0 220px", fontWeight: 500 }}>karya --root &lt;path&gt;</div>
-              <div style={desc}>Use a different directory as the project root.</div>
-            </div>
-            <div style={row}>
-              <div style={{ flex: "0 0 220px", fontWeight: 500 }}>karya --resume &lt;session-id&gt;</div>
-              <div style={desc}>Resume a recorded session, on this machine or another clone of the same repository.</div>
-            </div>
-          </div>
+          <div style={{ color: "var(--fg-3)", padding: "32px 0 10px" }}>commands and flags</div>
+          <Rows items={FLAGS} />
         </>
       )}
     </div>

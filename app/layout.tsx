@@ -18,13 +18,18 @@ const serif = Newsreader({
   display: "swap",
 });
 
+const description =
+  "Karya is an open-source coding agent for your terminal, in a single Go binary. Commands run in an OS sandbox, every turn can be undone, budgets are enforced, and sessions follow you to any machine.";
+
 export const metadata: Metadata = {
-  title: "Karya — a coding agent that asks first",
-  description:
-    "Karya is an open-source agent harness that runs as a single Go binary in your terminal. Four tools, one sequential loop, one provider interface, and an approval gate in front of every side effect.",
+  metadataBase: new URL("https://usekarya.dev"),
+  title: "Karya — autonomy without the risk",
+  description,
+  openGraph: { title: "Karya — autonomy without the risk", description, url: "/", siteName: "Karya", type: "website" },
+  twitter: { card: "summary_large_image", title: "Karya — autonomy without the risk", description },
 };
 
-const themeScript = `try{document.documentElement.dataset.theme=localStorage.getItem('karya-theme')||'dark'}catch(e){}`;
+const themeScript = `try{document.documentElement.dataset.theme=localStorage.getItem('karya-theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')}catch(e){}`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

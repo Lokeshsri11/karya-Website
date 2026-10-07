@@ -1,7 +1,9 @@
 import Link from "next/link";
 import Mark from "./Mark";
+import { COMPANY, FOUNDERS } from "./company";
 
-const EMAILS = ["prateek@usekarya.dev", "lokesh@usekarya.dev"];
+const EMAILS = FOUNDERS.map((f) => f.email);
+const link: React.CSSProperties = { color: "var(--fg-2)", textDecoration: "none" };
 
 export default function SiteFooter() {
   return (
@@ -19,23 +21,43 @@ export default function SiteFooter() {
           ))}
         </span>
       </div>
-      <div className="mono footer-inner" style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 24px 56px", display: "flex", flexWrap: "wrap", gap: "14px 28px", alignItems: "baseline", fontSize: 13, color: "var(--fg-3)" }}>
+      <div className="mono footer-inner" style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 24px 28px", display: "flex", flexWrap: "wrap", gap: "14px 28px", alignItems: "baseline", fontSize: 13, color: "var(--fg-3)" }}>
         <span style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--fg)" }}>
           <Mark size={26} />
           <span className="serif" style={{ fontSize: 21, fontWeight: 500, letterSpacing: "-0.02em" }}>
             kārya
           </span>
         </span>
-        <Link href="/docs" className="hl" style={{ color: "var(--fg-2)", textDecoration: "none" }}>
+        <Link href="/docs" className="hl" style={link}>
           Docs
         </Link>
-        <a href="https://github.com/prateek041/karya" className="hl" style={{ color: "var(--fg-2)", textDecoration: "none" }}>
+        <Link href="/about" className="hl" style={link}>
+          About
+        </Link>
+        <a href={COMPANY.repo} className="hl" style={link}>
           GitHub
         </a>
-        <a href="https://github.com/prateek041/karya/blob/main/LICENSE" className="hl" style={{ color: "var(--fg-2)", textDecoration: "none" }}>
-          License
-        </a>
+        <Link href="/roadmap" className="hl" style={link}>
+          Roadmap
+        </Link>
+        <Link href="/privacy" className="hl" style={link}>
+          Privacy
+        </Link>
+        <Link href="/terms" className="hl" style={link}>
+          Terms
+        </Link>
         <span className="footer-note" style={{ marginLeft: "auto" }}>pre-1.0 · kārya, work done as duty</span>
+      </div>
+      <div className="mono footer-legal" style={{ maxWidth: 1100, margin: "0 auto", padding: "18px 24px 40px", borderTop: "1px solid var(--line)", display: "flex", flexWrap: "wrap", gap: "8px 24px", fontSize: 12.5, color: "var(--fg-3)" }}>
+        <span>
+          © {COMPANY.foundedYear} Karya · built by {FOUNDERS.map((f, i) => (
+            <span key={f.name}>
+              {i > 0 && " & "}
+              <a href={f.linkedin} className="hl" style={link}>{f.name}</a>
+            </span>
+          ))}
+        </span>
+        <span>{COMPANY.location} · founded {COMPANY.founded}</span>
       </div>
     </footer>
   );

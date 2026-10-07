@@ -81,3 +81,9 @@ pre,code{font-family:var(--mono)}
   .aside-start a{border:1px solid var(--line-2)!important;padding:6px 10px!important;border-left:1px solid var(--line-2)!important}
   .aside-start a.active{border-color:var(--accent)!important;color:var(--accent)!important}
 }
+
+/* faq disclosure */
+.faq summary::-webkit-details-marker{display:none}
+.faq[open] .faq-icon{transform:rotate(45deg)}
+.faq-icon{transition:transform .2s}
+.faq summary:hover{color:var(--accent)}

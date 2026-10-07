@@ -16,7 +16,7 @@ interface Block {
   pressed?: boolean;
 }
 
-type Status = "idle" | "thinking" | "read" | "approval" | "running" | "done";
+type Status = "idle" | "thinking" | "read" | "approval" | "running" | "verifying" | "done";
 
 export interface TerminalProps {
   mode?: "animated" | "final" | "static";
@@ -58,6 +58,8 @@ const OUT = [
   "?    github.com/acme/tasks/internal/ui      [no test files]",
 ];
 const SUMMARY = "Added a --json flag to list. It writes tasks as JSON and keeps the table as the default.\ngo test ./... passes.";
+const VERIFY = "· verify  go test ./... · go vet ./...  passed";
+const REPORT = "· report  1 file changed · 1 command · verify passed · /undo restores the tree";
 
 export default class Terminal extends React.Component<TerminalProps, State> {
   state: State = { blocks: [], input: "", cursor: true, narrow: false, reduced: false, status: "idle", usageAlt: null };
@@ -65,6 +67,7 @@ export default class Terminal extends React.Component<TerminalProps, State> {
   vpRef = React.createRef<HTMLDivElement>();
   uid = 0;
   alive = false;
+  gen = 0; // bumped on unmount so a loop from an earlier mount stops
   blinkT: ReturnType<typeof setInterval> | undefined;
   ro: ResizeObserver | undefined;
   pending: ((k: string) => void) | null = null;
@@ -86,6 +89,7 @@ export default class Terminal extends React.Component<TerminalProps, State> {
   }
   componentWillUnmount() {
     this.alive = false;
+    this.gen++;
     clearInterval(this.blinkT);
     this.ro && this.ro.disconnect();
   }
@@ -95,7 +99,8 @@ export default class Terminal extends React.Component<TerminalProps, State> {
   }
 
   wait(ms: number) {
-    return new Promise<void>((res, rej) => setTimeout(() => (this.alive ? res() : rej("stop")), ms));
+    const g = this.gen;
+    return new Promise<void>((res, rej) => setTimeout(() => (this.alive && this.gen === g ? res() : rej("stop")), ms));
   }
   push(b: Omit<Block, "id">) {
     const id = "b" + ++this.uid;
@@ -131,6 +136,7 @@ export default class Terminal extends React.Component<TerminalProps, State> {
   }
   decide(ms: number): Promise<string> {
     if (!this.props.interactive) return this.wait(ms).then(() => "a");
+    const g = this.gen;
     return new Promise((res, rej) => {
       let done = false;
       const fin = (k: string) => {
@@ -139,7 +145,7 @@ export default class Terminal extends React.Component<TerminalProps, State> {
         window.removeEventListener("keydown", kh);
         clearTimeout(to);
         this.pending = null;
-        this.alive ? res(k) : rej("stop");
+        this.alive && this.gen === g ? res(k) : rej("stop");
       };
       const kh = (e: KeyboardEvent) => {
         const tg = e.target && (e.target as HTMLElement).tagName;
@@ -201,13 +207,7 @@ export default class Terminal extends React.Component<TerminalProps, State> {
     this.setState({ status: "thinking" });
     await this.wait(900);
     this.ch(4);
-    const b = this.push({ kind: "approval", tool: "bash", target: "project root", command: "go test ./...", timeout: "120s", status: "pending" });
-    this.setState({ status: "approval" });
-    const kb = await this.decide(2200);
-    if (kb === "d") return this.denied(b, "bash", "The edit is in place but the tests have not run. Approve go test ./... when you are ready.", "in 3,197 · out 681 · $0.01 · 22s");
-    this.patch(b, { pressed: true });
-    await this.wait(260);
-    this.patch(b, { status: "approved" });
+    this.push({ kind: "trace", text: "· bash  go test ./...  sandboxed · network off · runs without asking" });
     this.setState({ status: "running" });
     await this.wait(900);
     this.ch(5);
@@ -216,10 +216,14 @@ export default class Terminal extends React.Component<TerminalProps, State> {
       await this.wait(420);
     }
     this.push({ kind: "trace", text: "· bash  exit 0  3.8s" });
+    this.setState({ status: "verifying" });
+    await this.wait(900);
+    this.push({ kind: "trace", text: VERIFY });
     this.setState({ status: "thinking" });
     await this.wait(700);
     this.ch(6);
     await this.stream(this.push({ kind: "text", text: "" }), SUMMARY);
+    this.push({ kind: "trace", text: REPORT });
     this.setState({ status: "done" });
   }
   script(which: "docs" | "final"): Block[] {
@@ -233,10 +237,12 @@ export default class Terminal extends React.Component<TerminalProps, State> {
     if (which !== "docs") {
       b.push(
         { kind: "trace", text: "· edit  cmd/list.go  1 replacement  ok" },
-        { kind: "approval", tool: "bash", target: "project root", command: "go test ./...", timeout: "120s", status: "approved" },
+        { kind: "trace", text: "· bash  go test ./...  sandboxed · network off · runs without asking" },
         ...OUT.map((t) => ({ kind: "output" as const, text: t })),
         { kind: "trace", text: "· bash  exit 0  3.8s" },
+        { kind: "trace", text: VERIFY },
         { kind: "text", text: SUMMARY },
+        { kind: "trace", text: REPORT },
       );
     }
     return b.map((x, i) => ({ id: "s" + i, ...x }));
@@ -248,11 +254,11 @@ export default class Terminal extends React.Component<TerminalProps, State> {
     const frozen = isStatic || mode === "final" || this.state.reduced;
     const src = isStatic ? this.script("docs") : frozen ? this.script("final") : this.state.blocks;
     const status: Status = isStatic ? "approval" : frozen ? "done" : this.state.status;
-    const labels: Partial<Record<Status, string>> = { thinking: "streaming", read: "read · runs without asking", running: "bash · running in sandbox" };
+    const labels: Partial<Record<Status, string>> = { thinking: "streaming", read: "read · runs without asking", running: "bash · running in sandbox", verifying: "verifying · repo checks" };
     const input = frozen ? "" : this.state.input;
     const isWaiting = status === "approval";
     const isBusy = !!labels[status];
-    const usage = status === "done" ? `model ${this.props.model ?? "claude-sonnet-5"} · ${(!frozen && this.state.usageAlt) || "in 4,812 · out 1,093 · $0.02 · 41s"}` : "";
+    const usage = status === "done" ? `model ${this.props.model ?? "gemini-3.5-flash-lite"} · ${(!frozen && this.state.usageAlt) || "in 4,812 · out 1,093 · $0.02 · 41s"}` : "";
     const waitText = this.props.interactive && !frozen ? (this.state.narrow ? "your turn · tap a key" : "your turn · press a or d, or click") : "waiting on you · [a]pprove [d]eny";
 
     return (
