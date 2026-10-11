@@ -369,7 +369,7 @@ export default class Landing extends React.Component<LandingProps, State> {
             <div className="mono" style={{ display: "flex", flexWrap: "wrap", gap: "10px 14px", alignItems: "center", fontSize: 12.5 }}>
               <Link href="/roadmap" className="ha" style={{ border: "1px solid var(--accent)", color: "var(--accent)", padding: "3px 10px", textDecoration: "none" }}>in development · see the roadmap →</Link>
               <span style={{ color: "var(--fg-2)" }}>open-source terminal coding agent · single Go binary</span>
-              <span style={{ color: "var(--fg-2)" }}>· bring your own key · Claude (Anthropic API) is the next provider after Gemini</span>
+              <span style={{ color: "var(--fg-2)" }}>bring your own key · Claude (Anthropic API) is the next provider after Gemini</span>
             </div>
             <h1 className="serif hero-h1" style={{ position: "relative", fontWeight: 400, fontSize: "clamp(48px,8.4vw,120px)", lineHeight: 0.95, letterSpacing: "-0.04em", margin: "28px 0 36px", maxWidth: "12ch" }}>
               <span aria-hidden="true" style={{ visibility: "hidden" }}>
@@ -612,8 +612,8 @@ export default class Landing extends React.Component<LandingProps, State> {
               The terminal UI is real. <em style={em}>Take it for a spin.</em>
             </h2>
             <p data-reveal className="lead" style={{ ...lead, maxWidth: "62ch", margin: "0 0 28px" }}>The agent is still being built, but the TUI already runs: side-by-side diffs, threads, @ file mentions, ! shell commands, $EDITOR prompts and queued messages. The demo needs no API key.</p>
-            <pre data-reveal style={{ margin: "0 0 40px", display: "inline-block", maxWidth: "100%", background: "var(--bg-2)", border: "1px solid var(--accent)", padding: "12px 18px", fontFamily: "var(--mono)", fontSize: 14, lineHeight: 1.8, overflowX: "auto" }}>
-              <span style={{ color: "var(--accent)" }}>$</span> {INSTALL}{"\n"}
+            <pre data-reveal className="try-cmd" style={{ margin: "0 0 40px", display: "inline-block", maxWidth: "100%", background: "var(--bg-2)", border: "1px solid var(--accent)", padding: "12px 18px", fontFamily: "var(--mono)", fontSize: 14, lineHeight: 1.8, overflowX: "auto" }}>
+              <span style={{ color: "var(--accent)" }}>$</span> {INSTALL.split("/").map((part, k) => (k ? <React.Fragment key={k}>/<wbr />{part}</React.Fragment> : part))}{"\n"}
               <span style={{ color: "var(--accent)" }}>$</span> karya -demo
             </pre>
             <div data-reveal>
