@@ -9,6 +9,7 @@ export const COMPANY = {
 
 export const FOUNDERS = [
   {
+    id: "prateek",
     name: "Prateek Singh",
     role: "Co-founder & CEO",
     email: "prateek@usekarya.dev",
@@ -18,6 +19,7 @@ export const FOUNDERS = [
     site: "https://www.prateeksingh.tech",
   },
   {
+    id: "lokesh",
     name: "Lokesh Srivastava",
     role: "Co-founder & CTO",
     email: "lokesh@usekarya.dev",

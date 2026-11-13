@@ -6,7 +6,7 @@ import Mark from "./Mark";
 
 type Theme = "dark" | "light";
 
-export default function SiteNav({ active = "home" }: { active?: "home" | "docs" | "roadmap" | "about" }) {
+export default function SiteNav({ active = "home" }: { active?: "home" | "docs" | "roadmap" | "blog" | "about" }) {
   const [theme, setTheme] = useState<Theme>("dark");
   const [open, setOpen] = useState(false);
 
@@ -86,6 +86,9 @@ export default function SiteNav({ active = "home" }: { active?: "home" | "docs" 
           </Link>
           <Link href="/roadmap" onClick={close} className={navLink(active === "roadmap")}>
             Roadmap
+          </Link>
+          <Link href="/blog" onClick={close} className={navLink(active === "blog")}>
+            Blog
           </Link>
           <Link href="/about" onClick={close} className={navLink(active === "about")}>
             About

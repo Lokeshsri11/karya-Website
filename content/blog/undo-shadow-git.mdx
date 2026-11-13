@@ -1,0 +1,42 @@
+---
+title: "How /undo covers bash: a shadow git for every turn"
+summary: "Before a turn's first side effect, Karya snapshots the working tree outside your project. Here is why, and what it still can't take back."
+date: "2026-11-14"
+author: prateek
+tags: [engineering]
+milestone: M3
+draft: true
+---
+
+[Sample post. Replace this opening with the moment that made /undo necessary.]
+
+Most agents can revert the files their edit tool touched. That leaves out everything bash did: generated code, a rewritten lockfile, a deleted directory. Karya lets sandboxed commands run without asking, so the undo has to cover them too.
+
+## Why a shadow git
+
+Before a turn's first side effect, Karya snapshots the working tree to a git directory *outside* your project. Your own repository, index and history are never touched. `/undo` restores the last snapshot, `/rewind` goes back several turns, and `/redo` puts it all back.
+
+```
+turn 3 · snapshot 9c1e04 · before first side effect
+· edit  cmd/list.go  ok
+· bash  go generate ./...  sandboxed  exit 0
+· write internal/gen/list_gen.go  ok
+
+› /undo
+✓ restored the tree to 9c1e04 · 3 files
+```
+
+> Let it run. Take it back.
+
+## What it can't undo
+
+Files your project ignores, and anything outside the project root, are reported as not covered rather than silently skipped.
+
+<Note>/undo is planned for milestone M3. Today the TUI and the scripted demo run; the [roadmap](/roadmap) shows where each piece is.</Note>
+
+## Try it
+
+```
+$ go install github.com/prateek041/karya/cmd/karya@latest
+$ karya -demo
+```

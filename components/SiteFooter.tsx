@@ -38,6 +38,9 @@ export default function SiteFooter() {
         <Link href="/docs" className={link}>
           Docs
         </Link>
+        <Link href="/blog" className={link}>
+          Blog
+        </Link>
         <Link href="/about" className={link}>
           About
         </Link>
