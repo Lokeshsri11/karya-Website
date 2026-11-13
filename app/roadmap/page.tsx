@@ -30,67 +30,71 @@ const MILESTONES: [string, Status, string, string[]][] = [
 
 const LATER = ["Interactive commands (PTY)", "Parallel tool calls", "Branching sessions", "Hooks and skills", "Sub-agents", "Editor clients", "GitHub Action", "Container and remote executors", "Native Windows sandbox"];
 
-const chip = (s: Status): React.CSSProperties => ({
-  border: `1px solid ${s === "done" ? "var(--ok)" : s === "now" ? "var(--accent)" : "var(--line-2)"}`,
-  color: s === "done" ? "var(--ok)" : s === "now" ? "var(--accent)" : "var(--fg-3)",
-  padding: "2px 8px",
-  fontSize: 12,
-});
+const chip = (s: Status) =>
+  `px-2 py-[2px] text-[12px] border ${s === "done" ? "border-ok text-ok" : s === "now" ? "border-accent text-accent" : "border-line-2 text-fg-3"}`;
 const label = { done: "works today", now: "in progress", next: "planned" };
-const h2: React.CSSProperties = { fontFamily: "var(--serif)", fontWeight: 400, fontSize: 32, lineHeight: 1.15, margin: "64px 0 20px", paddingTop: 24, borderTop: "1px solid var(--line)" };
-const li: React.CSSProperties = { fontFamily: "var(--serif)", fontSize: 17, lineHeight: 1.55, color: "var(--fg-2)" };
+const h2 = "mt-16 mr-0 mb-5 ml-0 border-t border-line pt-6 font-serif text-[32px] leading-[1.15] font-normal";
+const li = "font-serif text-[17px] leading-[1.55] text-fg-2";
 
 export default function Roadmap() {
   return (
-    <div style={{ background: "var(--bg)", color: "var(--fg)", minHeight: "100vh" }}>
+    <div className="min-h-screen bg-bg text-fg">
       <SiteNav active="roadmap" />
-      <main style={{ maxWidth: 860, margin: "0 auto", padding: "44px 24px 112px" }}>
-        <div className="mono" style={{ fontSize: 13, color: "var(--fg-3)" }}>roadmap</div>
-        <h1 className="serif page-h1" style={{ fontWeight: 400, fontSize: "clamp(40px,5.6vw,60px)", lineHeight: 1.04, letterSpacing: "-0.022em", margin: "16px 0 20px" }}>
-          What works, and <em style={{ color: "var(--accent)" }}>what&apos;s next.</em>
+      <main className="mx-auto my-0 max-w-[860px] px-6 pt-11 pb-28">
+        <div className="font-mono text-[13px] text-fg-3">roadmap</div>
+        <h1 className="mt-4 mr-0 mb-5 ml-0 font-serif text-[clamp(40px,5.6vw,60px)] leading-[1.04] font-normal tracking-[-0.022em] mobile:text-[38px]">
+          What works, and <em className="text-accent">what&apos;s next.</em>
         </h1>
-        <p className="serif" style={{ fontSize: 20, lineHeight: 1.6, color: "var(--fg-2)", maxWidth: "62ch", margin: 0 }}>
+        <p className="m-0 max-w-[62ch] font-serif text-[20px] leading-[1.6] text-fg-2">
           Karya is built in milestones, and each one ends in something that runs. The landing page describes the product at launch. This page is the honest version of where it is today.
         </p>
 
-        <h2 style={h2}>Works today</h2>
-        <ul className="mono" style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 10, fontSize: 13.5 }}>
+        <h2 className={h2}>Works today</h2>
+        <ul className="m-0 flex list-none flex-col gap-[10px] p-0 font-mono text-[13.5px]">
           {DONE.map((d) => (
-            <li key={d} style={{ display: "flex", gap: 12 }}>
-              <span style={{ color: "var(--ok)" }}>✓</span>
+            <li key={d} className="flex gap-3">
+              <span className="text-ok">✓</span>
               <span>{d}</span>
             </li>
           ))}
         </ul>
 
-        <h2 style={h2}>To launch</h2>
-        <div style={{ display: "flex", flexDirection: "column" }}>
+        <h2 className={h2}>To launch</h2>
+        <div className="flex flex-col">
           {MILESTONES.map(([id, s, title, items]) => (
-            <section key={id} style={{ display: "flex", flexWrap: "wrap", gap: "12px 28px", padding: "24px 0", borderBottom: "1px solid var(--line)", borderLeft: s === "now" ? "2px solid var(--accent)" : "2px solid transparent", paddingLeft: 16 }}>
-              <div className="mono" style={{ flex: "0 0 160px", display: "flex", flexDirection: "column", gap: 8, alignItems: "flex-start" }}>
-                <span style={{ fontSize: 13, color: "var(--fg-3)" }}>{id}</span>
-                <span className="serif" style={{ fontSize: 22, lineHeight: 1.2, color: "var(--fg)" }}>{title}</span>
-                <span style={chip(s)}>{label[s]}</span>
+            <section key={id} className={`flex flex-wrap gap-x-7 gap-y-3 border-b border-l-2 border-b-line py-6 pr-0 pl-4 ${s === "now" ? "border-l-accent" : "border-l-transparent"}`}>
+              <div className="flex flex-[0_0_160px] flex-col items-start gap-2 font-mono">
+                <span className="text-[13px] text-fg-3">{id}</span>
+                <span className="font-serif text-[22px] leading-[1.2] text-fg">{title}</span>
+                <span className={chip(s)}>{label[s]}</span>
               </div>
-              <ul style={{ flex: "1 1 280px", minWidth: 0, margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 4 }}>
+              <ul className="m-0 flex min-w-0 flex-[1_1_280px] flex-col gap-1 pl-[18px]">
                 {items.map((i) => (
-                  <li key={i} style={li}>{i}</li>
+                  <li key={i} className={li}>
+                    {i}
+                  </li>
                 ))}
               </ul>
             </section>
           ))}
         </div>
 
-        <h2 style={h2}>After launch</h2>
-        <div className="mono" style={{ display: "flex", flexWrap: "wrap", gap: 10, fontSize: 13 }}>
+        <h2 className={h2}>After launch</h2>
+        <div className="flex flex-wrap gap-[10px] font-mono text-[13px]">
           {LATER.map((l) => (
-            <span key={l} style={{ border: "1px solid var(--line-2)", padding: "5px 10px", color: "var(--fg-2)" }}>{l}</span>
+            <span key={l} className="border border-line-2 px-[10px] py-[5px] text-fg-2">
+              {l}
+            </span>
           ))}
         </div>
 
-        <div className="mono" style={{ marginTop: 72, paddingTop: 20, borderTop: "1px solid var(--line)", display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: 12, fontSize: 13 }}>
-          <Link href="/" className="hl" style={{ color: "var(--fg-2)", textDecoration: "none" }}>← Overview</Link>
-          <a href="https://github.com/prateek041/karya" className="hl" style={{ color: "var(--fg-2)", textDecoration: "none" }}>Follow along on GitHub ↗</a>
+        <div className="mt-[72px] flex flex-wrap justify-between gap-3 border-t border-line pt-5 font-mono text-[13px]">
+          <Link href="/" className="text-fg-2 no-underline hover:text-fg">
+            ← Overview
+          </Link>
+          <a href="https://github.com/prateek041/karya" className="text-fg-2 no-underline hover:text-fg">
+            Follow along on GitHub ↗
+          </a>
         </div>
       </main>
       <SiteFooter />

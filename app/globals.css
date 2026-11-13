@@ -1,94 +1,137 @@
-:root{--bg:#14120f;--bg-2:#1b1915;--term-bg:#0f0e0c;--line:#2a2620;--line-2:#3d372e;--fg:#ede6d9;--fg-2:#b9b0a0;--fg-3:#8c8374;--accent:#d9a14b;--accent-ink:#17130d;--ok:#93c47d;--ok-bg:#1a2416;--no:#e5806f;--no-bg:#2b1915;color-scheme:dark}
-html[data-theme="light"]{--bg:#f5f1e8;--bg-2:#ede7db;--term-bg:#fbf9f4;--line:#ddd5c6;--line-2:#c4b9a5;--fg:#1d1a16;--fg-2:#4b4439;--fg-3:#6e6557;--accent:#9c600d;--accent-ink:#fffaf0;--ok:#3a7330;--ok-bg:#e1ebd6;--no:#a5402d;--no-bg:#f4e0d9;color-scheme:light}
-:root{--mono:var(--font-mono),'IBM Plex Mono',ui-monospace,monospace;--serif:var(--font-serif),Newsreader,Georgia,serif}
-*,*::before,*::after{box-sizing:border-box}
-html{scroll-behavior:smooth;scroll-padding-top:80px}
-body{margin:0;background:var(--bg);color:var(--fg);-webkit-font-smoothing:antialiased;font-family:var(--serif)}
-a{color:var(--fg)}
-a:hover{color:var(--accent)}
-::selection{background:var(--accent);color:var(--accent-ink)}
-.mono{font-family:var(--mono)}
-.serif{font-family:var(--serif)}
-button{font-family:inherit}
-pre,code{font-family:var(--mono)}
+/* Tailwind v4 without preflight: the design was built on browser defaults
+   (heading/paragraph/list margins, button styles), so the reset would change it. */
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
 
-/* hover states ported from style-hover attributes */
-.hl:hover{color:var(--fg)!important}
-.ha:hover{color:var(--accent)!important}
-.btn-fill:hover{background:transparent!important;color:var(--accent)!important}
-.card-hover:hover{background:var(--bg-2)!important}
-.key-a:hover{background:var(--ok);color:var(--term-bg)}
-.key-d:hover{background:var(--no);color:var(--term-bg)}
-.gate-btn:hover{background:var(--accent-ink)!important;color:var(--accent)!important}
-.replay:hover{color:var(--accent)!important;border-color:var(--accent)!important}
-.mail-card:hover{background:var(--bg-2)!important;color:var(--accent)!important;border-color:var(--accent)!important}
-.noscroll{scrollbar-width:none}
-.noscroll::-webkit-scrollbar{display:none}
-
-/* docs sidebar: sticky on wide screens, static below 820px (ResizeObserver in the design) */
-.docs-aside{position:sticky}
-@media (max-width:819px){.docs-aside{position:static}}
-
-/* ───────── mobile ───────── */
-.nav-burger{display:none}
-.arrow-v{display:none}
-@media (max-width:720px){
-  html{scroll-padding-top:70px}
-  /* nav: hamburger + dropdown panel */
-  .nav-burger{display:inline-flex!important}
-  .nav-links{display:none!important}
-  .nav-links.open{display:flex!important;flex:1 0 100%!important;flex-direction:column;align-items:stretch;gap:0!important;margin:12px 0 0!important;padding-top:4px;border-top:1px solid var(--line);font-size:15px!important}
-  .nav-links.open>a,.nav-links.open>button{padding:13px 0!important;border-bottom:1px solid var(--line);width:100%;justify-content:space-between}
-  .nav-links.open>.nav-install{margin-top:14px;text-align:center;border-bottom:none;padding:11px 0!important}
-  /* rhythm */
-  .sec{padding:56px 20px!important}
-  .hero-wrap{padding:40px 20px 48px!important}
-  .h2{font-size:36px!important;line-height:1.05!important;margin:14px 0 18px!important}
-  .lead,.hero-p{font-size:17px!important;line-height:1.55!important}
-  .hero-h1{font-size:44px!important;letter-spacing:-0.035em!important;margin:22px 0 26px!important}
-  .cmd-box{width:100%;gap:10px!important;padding:10px 10px 10px 14px!important;font-size:12.5px!important}
-  .cmd-box code{white-space:normal!important;overflow-wrap:anywhere}
-  .try-cmd{white-space:pre-wrap;overflow-wrap:break-word;font-size:12.5px!important}
-  .cmd-box code{flex:1 1 auto}
-  .demo-box{margin-top:44px!important;padding:10px!important}
-  .demo-head{font-size:11px!important;margin-bottom:16px!important}
-  .chapters{font-size:10px!important;gap:4px!important;margin-top:12px!important}
-  .num-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:32px 20px!important;padding:48px 20px!important}
-  .num{font-size:64px!important}
-  .pillars{padding:36px 20px!important;gap:22px 20px!important}
-  .loop-box{padding:16px 14px!important;margin-top:36px!important}
-  .loop-nodes{flex-direction:column;gap:0!important}
-  .loop-node{flex-direction:column;align-items:flex-start!important;width:100%}
-  .loop-arrow{padding:4px 0 6px 14px!important}
-  .arrow-h{display:none}
-  .arrow-v{display:inline}
-  .gate-grid{padding:64px 20px!important;gap:40px!important}
-  .gate-h2{font-size:44px!important}
-  .gate-p{font-size:18px!important}
-  .tool-card{padding:20px!important}
-  .tool-name{font-size:24px!important}
-  .cost-big{font-size:56px!important}
-  .cta-wrap{padding:64px 20px!important;gap:28px!important}
-  .cta-h2{font-size:48px!important}
-  .footer-contact{padding:32px 20px 0!important;gap:12px!important}
-  .footer-ask{font-size:17px!important}
-  .footer-inner{padding:32px 20px 44px!important;gap:12px 22px!important}
-  .footer-note{flex:1 0 100%;margin-left:0!important;margin-top:8px}
-  .page-h1{font-size:38px!important}
-  .docs-main{padding-top:8px!important}
-  /* docs sidebar becomes a chip row */
-  .docs-aside{max-width:none!important;flex:1 0 100%!important;padding:20px 0 0!important}
-  .aside-secondary,.aside-label{display:none!important}
-  .aside-start{flex-direction:row!important;flex-wrap:wrap;gap:8px!important;margin-bottom:8px!important}
-  .aside-start a{border:1px solid var(--line-2)!important;padding:6px 10px!important;border-left:1px solid var(--line-2)!important}
-  .aside-start a.active{border-color:var(--accent)!important;color:var(--accent)!important}
+/* ───────── colour tokens (dark default, light via data-theme) ───────── */
+:root {
+  --bg: #14120f;
+  --bg-2: #1b1915;
+  --term-bg: #0f0e0c;
+  --line: #2a2620;
+  --line-2: #3d372e;
+  --fg: #ede6d9;
+  --fg-2: #b9b0a0;
+  --fg-3: #8c8374;
+  --accent: #d9a14b;
+  --accent-ink: #17130d;
+  --ok: #93c47d;
+  --ok-bg: #1a2416;
+  --no: #e5806f;
+  --no-bg: #2b1915;
+  color-scheme: dark;
+}
+html[data-theme="light"] {
+  --bg: #f5f1e8;
+  --bg-2: #ede7db;
+  --term-bg: #fbf9f4;
+  --line: #ddd5c6;
+  --line-2: #c4b9a5;
+  --fg: #1d1a16;
+  --fg-2: #4b4439;
+  --fg-3: #6e6557;
+  --accent: #9c600d;
+  --accent-ink: #fffaf0;
+  --ok: #3a7330;
+  --ok-bg: #e1ebd6;
+  --no: #a5402d;
+  --no-bg: #f4e0d9;
+  color-scheme: light;
 }
 
-/* faq disclosure */
-.faq summary::-webkit-details-marker{display:none}
-.faq[open] .faq-icon{transform:rotate(45deg)}
-.faq-icon{transition:transform .2s}
-.faq summary:hover{color:var(--accent)}
+/* Expose the tokens to Tailwind: bg-bg, text-fg-2, border-line, text-accent … */
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-2: var(--bg-2);
+  --color-term: var(--term-bg);
+  --color-line: var(--line);
+  --color-line-2: var(--line-2);
+  --color-fg: var(--fg);
+  --color-fg-2: var(--fg-2);
+  --color-fg-3: var(--fg-3);
+  --color-accent: var(--accent);
+  --color-accent-ink: var(--accent-ink);
+  --color-ok: var(--ok);
+  --color-ok-bg: var(--ok-bg);
+  --color-no: var(--no);
+  --color-no-bg: var(--no-bg);
 
-/* TUI frame: half-block pixel cells (see TuiFrame) */
-.tui-cell{display:inline-block;width:1ch;height:1.3em;vertical-align:top;background:linear-gradient(var(--t) 50%,var(--b) 50%)}
+  /* next/font sets --font-plex and --font-newsreader on <html> */
+  --font-mono: var(--font-plex), "IBM Plex Mono", ui-monospace, monospace;
+  --font-serif: var(--font-newsreader), Newsreader, Georgia, serif;
+}
+
+/* Breakpoints used by the design (max-width, inclusive) */
+@custom-variant mobile (@media (max-width: 720px));
+@custom-variant narrow (@media (max-width: 819px));
+
+/* ───────── base ───────── */
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
+  }
+  @media (max-width: 720px) {
+    html {
+      scroll-padding-top: 70px;
+    }
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    -webkit-font-smoothing: antialiased;
+    font-family: var(--font-serif);
+  }
+  a {
+    color: var(--fg);
+  }
+  a:hover {
+    color: var(--accent);
+  }
+  ::selection {
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+  /* every button in the design inherits its font; sizes come from utilities */
+  button {
+    font: inherit;
+  }
+  pre,
+  code {
+    font-family: var(--font-mono);
+  }
+}
+
+/* ───────── custom utilities ───────── */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* square grid behind the hero and the closing CTA */
+@utility bg-grid {
+  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 72px 72px;
+  background-position: center -1px;
+}
+
+/* ───────── components ───────── */
+@layer components {
+  /* TUI frame: half-block pixel cells, emitted as raw HTML by TuiFrame */
+  .tui-cell {
+    display: inline-block;
+    width: 1ch;
+    height: 1.3em;
+    vertical-align: top;
+    background: linear-gradient(var(--t) 50%, var(--b) 50%);
+  }
+}

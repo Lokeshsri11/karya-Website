@@ -43,45 +43,54 @@ export default function SiteNav({ active = "home" }: { active?: "home" | "docs" 
   const close = () => setOpen(false);
   const isLight = theme === "light";
 
+  // Links in the open mobile panel become full-width rows.
+  const row = open ? "mobile:w-full mobile:justify-between mobile:py-[13px] mobile:px-0" : "";
+  const rowLine = open ? "mobile:border-b mobile:border-line" : "";
+  const navLink = (on: boolean) => `${on ? "text-fg" : "text-fg-2"} no-underline hover:text-fg ${row} ${rowLine}`;
+
   return (
-    <header style={{ position: "sticky", top: 0, zIndex: 20, background: "var(--bg)", borderBottom: "1px solid var(--line)" }}>
-      <div style={{ maxWidth: 1100, margin: "0 auto", padding: "14px 24px", display: "flex", alignItems: "center", gap: "12px 24px", flexWrap: "wrap" }}>
-        <Link href="/" aria-label="Karya home" onClick={close} style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: 10, color: "var(--fg)" }}>
+    <header className="sticky top-0 z-20 border-b border-line bg-bg">
+      <div className="mx-auto my-0 flex max-w-[1100px] flex-wrap items-center gap-x-6 gap-y-3 px-6 py-[14px]">
+        <Link href="/" aria-label="Karya home" onClick={close} className="flex items-center gap-[10px] text-fg no-underline">
           <Mark size={30} />
-          <span className="serif" style={{ fontSize: 24, fontWeight: 500, letterSpacing: "-0.02em", lineHeight: 1 }}>
-            kārya
-          </span>
+          <span className="font-serif text-[24px] leading-none font-medium tracking-[-0.02em]">kārya</span>
         </Link>
         <button
           type="button"
-          className="nav-burger"
           aria-label={open ? "Close menu" : "Open menu"}
           aria-expanded={open}
           aria-controls="site-menu"
           onClick={() => setOpen((o) => !o)}
-          style={{ marginLeft: "auto", width: 36, height: 30, border: "1px solid var(--line-2)", background: "var(--bg-2)", color: "var(--fg)", cursor: "pointer", padding: 0, display: "none", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 4 }}
+          className="ml-auto hidden h-[30px] w-9 cursor-pointer flex-col items-center justify-center gap-1 border border-line-2 bg-bg-2 p-0 text-fg mobile:inline-flex"
         >
           {open ? (
-            <span className="mono" style={{ fontSize: 15, lineHeight: 1 }}>✕</span>
+            <span className="font-mono text-[15px] leading-none">✕</span>
           ) : (
             <>
-              <span style={{ display: "block", width: 16, height: 1.5, background: "currentColor" }} />
-              <span style={{ display: "block", width: 16, height: 1.5, background: "currentColor" }} />
-              <span style={{ display: "block", width: 16, height: 1.5, background: "currentColor" }} />
+              <span className="block h-[1.5px] w-4 bg-current" />
+              <span className="block h-[1.5px] w-4 bg-current" />
+              <span className="block h-[1.5px] w-4 bg-current" />
             </>
           )}
         </button>
-        <nav id="site-menu" className={`mono nav-links${open ? " open" : ""}`} style={{ flex: "none", display: "flex", gap: "8px 22px", marginLeft: "auto", alignItems: "center", flexWrap: "wrap", fontSize: 13.5 }}>
-          <Link href="/docs" className="hl" onClick={close} style={{ color: active === "docs" ? "var(--fg)" : "var(--fg-2)", textDecoration: "none" }}>
+        <nav
+          id="site-menu"
+          className={`ml-auto flex flex-none flex-wrap items-center gap-x-[22px] gap-y-2 font-mono text-[13.5px] ${
+            open
+              ? "mobile:m-0 mobile:mt-3 mobile:flex-[1_0_100%] mobile:flex-col mobile:items-stretch mobile:gap-0 mobile:border-t mobile:border-line mobile:pt-1 mobile:text-[15px]"
+              : "mobile:hidden"
+          }`}
+        >
+          <Link href="/docs" onClick={close} className={navLink(active === "docs")}>
             Docs
           </Link>
-          <Link href="/roadmap" className="hl" onClick={close} style={{ color: active === "roadmap" ? "var(--fg)" : "var(--fg-2)", textDecoration: "none" }}>
+          <Link href="/roadmap" onClick={close} className={navLink(active === "roadmap")}>
             Roadmap
           </Link>
-          <Link href="/about" className="hl" onClick={close} style={{ color: active === "about" ? "var(--fg)" : "var(--fg-2)", textDecoration: "none" }}>
+          <Link href="/about" onClick={close} className={navLink(active === "about")}>
             About
           </Link>
-          <a href="https://github.com/prateek041/karya" className="hl" style={{ color: "var(--fg-2)", textDecoration: "none" }}>
+          <a href="https://github.com/prateek041/karya" className={navLink(false)}>
             GitHub
           </a>
           <button
@@ -89,22 +98,24 @@ export default function SiteNav({ active = "home" }: { active?: "home" | "docs" 
             role="switch"
             aria-checked={isLight}
             aria-label="Toggle light and dark theme"
-            className="hl nav-theme"
-            style={{ font: "inherit", fontSize: 12, background: "none", border: "none", color: "var(--fg-2)", padding: 0, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }}
+            className={`flex cursor-pointer items-center gap-2 border-none bg-transparent p-0 text-[12px] text-fg-2 hover:text-fg ${row}`}
           >
-            <span style={{ color: theme === "dark" ? "var(--fg)" : "var(--fg-3)", transition: "color .2s" }}>dark</span>
-            <span style={{ position: "relative", display: "inline-block", width: 40, height: 22, border: "1px solid var(--line-2)", background: "var(--bg-2)", boxSizing: "border-box" }}>
+            <span className={`${theme === "dark" ? "text-fg" : "text-fg-3"} [transition:color_.2s]`}>dark</span>
+            <span className="relative inline-block box-border h-[22px] w-10 border border-line-2 bg-bg-2">
               <span
-                style={{ position: "absolute", top: 3, left: 3, width: 14, height: 14, background: "var(--accent)", transform: `translateX(${isLight ? "18px" : "0px"})`, transition: "transform .22s cubic-bezier(.2,.7,.2,1)" }}
+                className={`absolute top-[3px] left-[3px] h-[14px] w-[14px] bg-accent [transition:transform_.22s_cubic-bezier(.2,.7,.2,1)] ${
+                  isLight ? "[transform:translateX(18px)]" : "[transform:translateX(0px)]"
+                }`}
               />
             </span>
-            <span style={{ color: isLight ? "var(--fg)" : "var(--fg-3)", transition: "color .2s" }}>light</span>
+            <span className={`${isLight ? "text-fg" : "text-fg-3"} [transition:color_.2s]`}>light</span>
           </button>
           <Link
             href="/docs#install"
-            className="btn-fill nav-install"
             onClick={close}
-            style={{ background: "var(--accent)", color: "var(--accent-ink)", padding: "6px 14px", textDecoration: "none", fontWeight: 500, border: "1px solid var(--accent)" }}
+            className={`border border-accent bg-accent px-[14px] py-[6px] font-medium text-accent-ink no-underline hover:bg-transparent hover:text-accent ${
+              open ? "mobile:mt-[14px] mobile:w-full mobile:justify-between mobile:px-0 mobile:py-[11px] mobile:text-center" : ""
+            }`}
           >
             Install
           </Link>

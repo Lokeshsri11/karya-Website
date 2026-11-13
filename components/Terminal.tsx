@@ -261,58 +261,50 @@ export default class Terminal extends React.Component<TerminalProps, State> {
     const usage = status === "done" ? `model ${this.props.model ?? "gemini-3.5-flash-lite"} · ${(!frozen && this.state.usageAlt) || "in 4,812 · out 1,093 · $0.02 · 41s"}` : "";
     const waitText = this.props.interactive && !frozen ? (this.state.narrow ? "your turn · tap a key" : "your turn · press a or d, or click") : "waiting on you · [a]pprove [d]eny";
 
+    const narrow = this.state.narrow;
+    // A custom height prop wins; otherwise the frame is fixed while animating.
+    const height = frozen ? "h-auto" : narrow ? "h-[460px]" : this.props.height ? "" : "h-[580px]";
+
     return (
       <div
         ref={this.rootRef}
-        className="mono"
-        style={{
-          position: "relative",
-          boxSizing: "border-box",
-          width: "100%",
-          height: frozen ? "auto" : this.state.narrow ? "460px" : (this.props.height ?? "580px"),
-          display: "flex",
-          flexDirection: "column",
-          background: "var(--term-bg)",
-          border: "1px solid var(--line-2)",
-          padding: this.state.narrow ? "20px 12px 12px" : "22px 18px 14px",
-          fontSize: this.state.narrow ? "12px" : "13px",
-          lineHeight: 1.6,
-          color: "var(--fg)",
-          textAlign: "left",
-        }}
+        style={!frozen && !narrow && this.props.height ? { height: this.props.height } : undefined}
+        className={`relative box-border flex w-full flex-col border border-line-2 bg-term text-left font-mono leading-[1.6] text-fg ${height} ${
+          narrow ? "px-3 pt-5 pb-3 text-[12px]" : "px-[18px] pt-[22px] pb-[14px] text-[13px]"
+        }`}
       >
-        <div style={{ position: "absolute", top: "-0.85em", left: 12, right: 12, display: "flex", justifyContent: "space-between", gap: 12, pointerEvents: "none" }}>
-          <span style={{ background: "var(--term-bg)", padding: "0 8px", fontWeight: 600 }}>Karya</span>
-          <span style={{ background: "var(--term-bg)", padding: "0 8px", color: "var(--fg-3)" }}>{this.props.root ?? "~/src/tasks"}</span>
+        <div className="pointer-events-none absolute top-[-0.85em] right-3 left-3 flex justify-between gap-3">
+          <span className="bg-term px-2 py-0 font-semibold">Karya</span>
+          <span className="bg-term px-2 py-0 text-fg-3">{this.props.root ?? "~/src/tasks"}</span>
         </div>
-        <div ref={this.vpRef} className="noscroll" style={{ flex: "1 1 auto", minHeight: 0, overflowY: "auto", display: "flex", flexDirection: "column" }}>
+        <div ref={this.vpRef} className="no-scrollbar flex min-h-0 flex-[1_1_auto] flex-col overflow-y-auto">
           {src.map((b) => {
             if (b.kind === "user")
               return (
-                <div key={b.id} style={{ display: "flex", gap: 10, margin: "0 0 10px", fontWeight: 500 }}>
-                  <span style={{ color: "var(--accent)" }}>›</span>
-                  <span style={{ whiteSpace: "pre-wrap" }}>{b.text}</span>
+                <div key={b.id} className="mt-0 mr-0 mb-[10px] ml-0 flex gap-[10px] font-medium">
+                  <span className="text-accent">›</span>
+                  <span className="whitespace-pre-wrap">{b.text}</span>
                 </div>
               );
-            if (b.kind === "text") return <div key={b.id} style={{ whiteSpace: "pre-wrap", margin: "0 0 8px" }}>{b.text}</div>;
-            if (b.kind === "trace") return <div key={b.id} style={{ color: "var(--fg-3)", margin: "0 0 8px", whiteSpace: "pre-wrap" }}>{b.text}</div>;
-            if (b.kind === "output") return <div key={b.id} style={{ color: "var(--fg-2)", whiteSpace: "pre-wrap" }}>{b.text}</div>;
+            if (b.kind === "text") return <div key={b.id} className="mt-0 mr-0 mb-2 ml-0 whitespace-pre-wrap">{b.text}</div>;
+            if (b.kind === "trace") return <div key={b.id} className="mt-0 mr-0 mb-2 ml-0 whitespace-pre-wrap text-fg-3">{b.text}</div>;
+            if (b.kind === "output") return <div key={b.id} className="whitespace-pre-wrap text-fg-2">{b.text}</div>;
             return (
               <ApprovalCard key={b.id} tool={b.tool} target={b.target} diff={b.diff} command={b.command} timeout={b.timeout} status={b.status} pressed={b.pressed} onApprove={this.approveFn} onDeny={this.denyFn} />
             );
           })}
         </div>
-        <div style={{ display: "flex", gap: "4px 16px", flexWrap: "wrap", marginTop: 10, paddingTop: 8, borderTop: "1px solid var(--line)", fontSize: "0.92em", color: "var(--fg-3)", minHeight: "1.6em" }}>
-          {isWaiting && <span style={{ color: "var(--accent)" }}>{waitText}</span>}
+        <div className="mt-[10px] flex min-h-[1.6em] flex-wrap gap-x-4 gap-y-1 border-t border-line pt-2 text-[0.92em] text-fg-3">
+          {isWaiting && <span className="text-accent">{waitText}</span>}
           {isBusy && <span>{labels[status]}</span>}
-          <span style={{ marginLeft: "auto" }}>{usage}</span>
+          <span className="ml-auto">{usage}</span>
         </div>
-        <div style={{ display: "flex", alignItems: "flex-start", gap: 10, marginTop: 8, padding: "7px 10px", border: "1px solid var(--line-2)" }}>
-          <span style={{ color: "var(--accent)" }}>›</span>
-          <div style={{ minWidth: 0, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+        <div className="mt-2 flex items-start gap-[10px] border border-line-2 px-[10px] py-[7px]">
+          <span className="text-accent">›</span>
+          <div className="min-w-0 whitespace-pre-wrap [word-break:break-word]">
             {input ? <span>{input}</span> : null}
-            <span style={{ display: "inline-block", width: "0.62em", height: "1.2em", verticalAlign: "-0.22em", background: "var(--accent)", opacity: this.state.cursor ? 1 : 0 }} />
-            {!input ? <span style={{ color: "var(--fg-3)" }}>arise, resolved to fight</span> : null}
+            <span className={`inline-block h-[1.2em] w-[0.62em] bg-accent align-[-0.22em] ${this.state.cursor ? "opacity-100" : "opacity-0"}`} />
+            {!input ? <span className="text-fg-3">arise, resolved to fight</span> : null}
           </div>
         </div>
       </div>
