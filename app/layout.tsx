@@ -23,10 +23,10 @@ const description =
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://usekarya.dev"),
-  title: "Karya — autonomy without the risk",
+  title: "Karya: autonomy without the risk",
   description,
-  openGraph: { title: "Karya — autonomy without the risk", description, url: "/", siteName: "Karya", type: "website" },
-  twitter: { card: "summary_large_image", title: "Karya — autonomy without the risk", description },
+  openGraph: { title: "Karya: autonomy without the risk", description, url: "/", siteName: "Karya", type: "website" },
+  twitter: { card: "summary_large_image", title: "Karya: autonomy without the risk", description },
 };
 
 const themeScript = `try{document.documentElement.dataset.theme=localStorage.getItem('karya-theme')||(matchMedia('(prefers-color-scheme: light)').matches?'light':'dark')}catch(e){}`;

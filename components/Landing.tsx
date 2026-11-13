@@ -381,8 +381,6 @@ export default class Landing extends React.Component<LandingProps, State> {
               <Link href="/roadmap" className="border border-accent px-[10px] py-[3px] text-accent no-underline hover:text-accent">
                 in development · see the roadmap →
               </Link>
-              <span className="text-fg-2">open-source terminal coding agent · single Go binary</span>
-              <span className="text-fg-2">bring your own key · Claude (Anthropic API) is the next provider after Gemini</span>
             </div>
             <h1 className="relative mt-7 mb-9 max-w-[12ch] font-serif text-[clamp(48px,8.4vw,120px)] leading-[0.95] font-normal tracking-[-0.04em] mobile:mt-[22px] mobile:mb-[26px] mobile:text-[44px] mobile:tracking-[-0.035em]">
               <span aria-hidden="true" className="invisible">
@@ -396,7 +394,7 @@ export default class Landing extends React.Component<LandingProps, State> {
               </span>
             </h1>
             <p data-reveal className="m-0 max-w-[56ch] font-serif text-[clamp(19px,2.1vw,24px)] leading-[1.5] text-pretty text-fg-2 mobile:text-[17px] mobile:leading-[1.55]">
-              Karya is a coding agent for your terminal. Commands run freely inside an OS sandbox, every turn can be undone, budgets are enforced before you overspend, and sessions follow you to any machine. You review the diffs. You stop answering "may I run ls?"
+              Karya is an opinionated engineering harness for AI agents that work on problems with you. Actions run freely inside a protected sandbox by default, so agents can get real work done without asking at every step. Budgets, thinking limits and built-in observability keep you in control.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-4">
               <div className={`${cmdBox} gap-[14px] py-3 pr-3 pl-[18px] text-[14px]`}>
@@ -410,9 +408,6 @@ export default class Landing extends React.Component<LandingProps, State> {
                 Read the docs →
               </Link>
             </div>
-            <p className="mt-4 mb-0 max-w-[78ch] font-mono text-[12.5px] leading-[1.6] text-fg-3">
-              Today this installs the TUI preview with a demo core. The agent loop, sandbox and undo land in milestones M1–M3. The demo below shows the target behavior.
-            </p>
             <div data-reveal className="mt-[72px] border border-line-2 bg-bg-2 p-[clamp(12px,2.4vw,32px)] mobile:mt-11 mobile:p-[10px]">
               <div className="mb-[22px] flex flex-wrap justify-between gap-x-4 gap-y-[6px] font-mono text-[12px] text-fg-3 mobile:mb-4 mobile:text-[11px]">
                 <span className="flex items-center gap-2">
