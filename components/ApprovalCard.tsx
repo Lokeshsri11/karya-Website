@@ -23,60 +23,63 @@ export default function ApprovalCard(p: ApprovalCardProps) {
   const pending = st === "pending";
   const isDiff = lines.length > 0;
   const isCommand = !lines.length && !!p.command;
-  const borderColor = pending ? "var(--accent)" : "var(--line-2)";
-  const statusColor = pending ? "var(--accent)" : st === "approved" ? "var(--ok)" : "var(--no)";
+  const borderColor = pending ? "border-accent" : "border-line-2";
+  const statusColor = pending ? "text-accent" : st === "approved" ? "text-ok" : "text-no";
   const statusLabel = pending ? "awaiting approval" : st === "approved" ? "✓ approved" : "✕ denied";
   const showKeys = pending && !p.pressed;
   const showPressed = pending && !!p.pressed;
+  const line = "whitespace-pre px-[10px] py-0";
+  const keyRow = "flex gap-[18px] border-t border-line px-[10px] py-[6px] text-fg-2";
+  const key = "-mx-[3px] my-0 cursor-pointer px-[3px] py-0";
 
   return (
-    <div className="mono" style={{ border: `1px solid ${borderColor}`, margin: "6px 0 10px", background: "var(--bg-2)", fontSize: "0.96em", lineHeight: 1.55, color: "var(--fg)", textAlign: "left" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "4px 12px", flexWrap: "wrap", padding: "6px 10px", borderBottom: "1px solid var(--line)" }}>
-        <div style={{ display: "flex", gap: 10, alignItems: "baseline", minWidth: 0 }}>
-          <span style={{ fontWeight: 600 }}>{p.tool ?? "edit"}</span>
-          <span style={{ color: "var(--fg-2)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.target ?? ""}</span>
+    <div className={`mt-[6px] mr-0 mb-[10px] ml-0 border bg-bg-2 text-left font-mono text-[0.96em] leading-[1.55] text-fg ${borderColor}`}>
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-line px-[10px] py-[6px]">
+        <div className="flex min-w-0 items-baseline gap-[10px]">
+          <span className="font-semibold">{p.tool ?? "edit"}</span>
+          <span className="overflow-hidden text-ellipsis whitespace-nowrap text-fg-2">{p.target ?? ""}</span>
         </div>
-        <span style={{ color: statusColor }}>{statusLabel}</span>
+        <span className={statusColor}>{statusLabel}</span>
       </div>
       {isDiff && (
-        <div style={{ padding: "6px 0", overflowX: "auto" }}>
+        <div className="overflow-x-auto px-0 py-[6px]">
           {lines.map((l, i) =>
             l.isHunk ? (
-              <div key={i} style={{ whiteSpace: "pre", padding: "0 10px", color: "var(--fg-3)" }}>{l.text}</div>
+              <div key={i} className={`${line} text-fg-3`}>{l.text}</div>
             ) : l.isCtx ? (
-              <div key={i} style={{ whiteSpace: "pre", padding: "0 10px", color: "var(--fg-2)" }}>{l.text}</div>
+              <div key={i} className={`${line} text-fg-2`}>{l.text}</div>
             ) : l.isAdd ? (
-              <div key={i} style={{ whiteSpace: "pre", padding: "0 10px", color: "var(--ok)", background: "var(--ok-bg)", minWidth: "max-content" }}>{l.text}</div>
+              <div key={i} className={`${line} min-w-max bg-ok-bg text-ok`}>{l.text}</div>
             ) : (
-              <div key={i} style={{ whiteSpace: "pre", padding: "0 10px", color: "var(--no)", background: "var(--no-bg)", minWidth: "max-content" }}>{l.text}</div>
+              <div key={i} className={`${line} min-w-max bg-no-bg text-no`}>{l.text}</div>
             ),
           )}
         </div>
       )}
       {isCommand && (
-        <div style={{ padding: "9px 10px 8px", display: "flex", flexDirection: "column", gap: 2 }}>
-          <div style={{ whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
-            <span style={{ color: "var(--fg-3)" }}>$ </span>
+        <div className="flex flex-col gap-[2px] px-[10px] pt-[9px] pb-2">
+          <div className="whitespace-pre-wrap [word-break:break-word]">
+            <span className="text-fg-3">$ </span>
             {p.command}
           </div>
-          <div style={{ color: "var(--fg-3)" }}>timeout {p.timeout ?? "120s"} · sandboxed · network off</div>
+          <div className="text-fg-3">timeout {p.timeout ?? "120s"} · sandboxed · network off</div>
         </div>
       )}
       {showKeys && (
-        <div style={{ display: "flex", gap: 18, padding: "6px 10px", borderTop: "1px solid var(--line)", color: "var(--fg-2)" }}>
-          <span onClick={() => p.onApprove && p.onApprove()} className="key-a" style={{ cursor: "pointer", padding: "0 3px", margin: "0 -3px" }}>
-            <span style={{ color: "inherit" }}>[a]</span>pprove
+        <div className={keyRow}>
+          <span onClick={() => p.onApprove && p.onApprove()} className={`${key} hover:bg-ok hover:text-term`}>
+            <span className="text-inherit">[a]</span>pprove
           </span>
-          <span onClick={() => p.onDeny && p.onDeny()} className="key-d" style={{ cursor: "pointer", padding: "0 3px", margin: "0 -3px" }}>
-            <span style={{ color: "inherit" }}>[d]</span>eny
+          <span onClick={() => p.onDeny && p.onDeny()} className={`${key} hover:bg-no hover:text-term`}>
+            <span className="text-inherit">[d]</span>eny
           </span>
         </div>
       )}
       {showPressed && (
-        <div style={{ display: "flex", gap: 18, padding: "6px 10px", borderTop: "1px solid var(--line)", color: "var(--fg-2)" }}>
-          <span style={{ background: "var(--ok)", color: "var(--term-bg)", padding: "0 3px" }}>[a]pprove</span>
+        <div className={keyRow}>
+          <span className="bg-ok px-[3px] py-0 text-term">[a]pprove</span>
           <span>
-            <span style={{ color: "var(--no)" }}>[d]</span>eny
+            <span className="text-no">[d]</span>eny
           </span>
         </div>
       )}

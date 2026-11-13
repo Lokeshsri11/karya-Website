@@ -100,22 +100,32 @@ const ATTEMPTS: Attempt[] = [
   { cmd: "read ../../etc/hosts", res: "✕ rejected · path escapes the project root", ok: false, rows: ["etc"] },
 ];
 
-/* shared inline style fragments, copied from the design */
-const label: React.CSSProperties = { fontFamily: "var(--mono)", fontSize: 13, color: "var(--fg-3)" };
-const h2: React.CSSProperties = { fontFamily: "var(--serif)", fontWeight: 400, fontSize: "clamp(40px,6.2vw,78px)", lineHeight: 1, letterSpacing: "-0.018em", margin: "18px 0 22px", textWrap: "balance" as never };
-const lead: React.CSSProperties = { fontFamily: "var(--serif)", fontSize: 19, lineHeight: 1.6, color: "var(--fg-2)", margin: 0, textWrap: "pretty" as never };
-const sectionPad: React.CSSProperties = { maxWidth: 1100, margin: "0 auto", padding: "clamp(72px,10vw,128px) 24px" };
-const em: React.CSSProperties = { color: "var(--accent)" };
-const toolPre: React.CSSProperties = { margin: 0, marginTop: "auto", background: "var(--bg-2)", padding: "10px 12px", fontFamily: "var(--mono)", fontSize: 12.5, lineHeight: 1.55, color: "var(--fg-2)", whiteSpace: "pre-wrap", wordBreak: "break-word", overflow: "hidden" };
-const toolCard: React.CSSProperties = { background: "var(--bg)", padding: "clamp(24px,3vw,40px)", display: "flex", flexDirection: "column", gap: 14, transition: "background .2s" };
-const toolHead: React.CSSProperties = { display: "flex", justifyContent: "space-between", alignItems: "center", fontFamily: "var(--mono)" };
-const toolDesc: React.CSSProperties = { fontFamily: "var(--serif)", fontSize: 17, lineHeight: 1.5, color: "var(--fg-2)" };
-const pill: React.CSSProperties = { border: "1px solid var(--line-2)", padding: "3px 9px", color: "var(--fg-2)" };
-const th: React.CSSProperties = { fontWeight: 400, padding: "12px 16px" };
-const thR: React.CSSProperties = { ...th, textAlign: "right" };
-const td: React.CSSProperties = { padding: "12px 16px" };
-const tdR: React.CSSProperties = { ...td, textAlign: "right" };
-const gridBg: React.CSSProperties = { backgroundImage: "linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px)", backgroundSize: "72px 72px", backgroundPosition: "center -1px" };
+/* shared class lists (the design's repeated style fragments) */
+const label = "font-mono text-[13px] text-fg-3";
+// section heading; margins are added per use, mobile margins always win
+const h2 = "font-serif font-normal text-[clamp(40px,6.2vw,78px)] leading-none tracking-[-0.018em] text-balance mobile:mt-[14px] mobile:mb-[18px] mobile:text-[36px] mobile:leading-[1.05]";
+const h2m = "mt-[18px] mb-[22px]";
+const lead = "font-serif text-[19px] leading-[1.6] text-pretty text-fg-2 mobile:text-[17px] mobile:leading-[1.55]";
+const sectionPad = "mx-auto my-0 max-w-[1100px] px-6 py-[clamp(72px,10vw,128px)] mobile:px-5 mobile:py-14";
+const split2 = "grid grid-cols-[repeat(auto-fit,minmax(min(100%,380px),1fr))] items-start gap-x-16 gap-y-12";
+const em = "text-accent";
+const toolPre = "m-0 mt-auto overflow-hidden bg-bg-2 px-3 py-[10px] font-mono text-[12.5px] leading-[1.55] whitespace-pre-wrap [word-break:break-word] text-fg-2";
+const toolCard = "flex flex-col gap-[14px] bg-bg p-[clamp(24px,3vw,40px)] [transition:background_.2s] hover:bg-bg-2 mobile:p-5";
+const toolHead = "flex items-center justify-between font-mono";
+const toolDesc = "font-serif text-[17px] leading-[1.5] text-fg-2";
+const pill = "border border-line-2 px-[9px] py-[3px] text-fg-2";
+const th = "px-4 py-3 font-normal";
+const thFirst = "pt-3 pr-4 pb-3 pl-0 font-normal";
+const thLast = "pt-3 pr-0 pb-3 pl-4 font-normal";
+const thR = `${th} text-right`;
+const td = "px-4 py-3";
+const tdFirst = "pt-3 pr-4 pb-3 pl-0";
+const tdLast = "pt-3 pr-0 pb-3 pl-4";
+const tdR = `${td} text-right`;
+const cmdBox = "flex max-w-full items-center border border-accent bg-bg-2 font-mono mobile:w-full mobile:gap-[10px] mobile:py-[10px] mobile:pr-[10px] mobile:pl-[14px] mobile:text-[12.5px]";
+const cmdCode = "min-w-0 overflow-x-auto whitespace-nowrap mobile:flex-[1_1_auto] mobile:whitespace-normal mobile:[overflow-wrap:anywhere]";
+const copyBtn = "flex-none cursor-pointer border border-accent bg-accent text-accent-ink hover:bg-transparent hover:text-accent";
+const textLink = "font-mono underline-offset-4 hover:text-accent";
 
 export interface LandingProps {
   headline?: string;
@@ -131,7 +141,7 @@ interface State {
   cur: boolean;
   chapter: number;
   loopI: number;
-  sbLines: { text: string; color: string }[];
+  sbLines: { text: string; color: string }[]; // color is a Tailwind text class
   sbActive: Attempt | null;
   ledger: number;
   costT: number;
@@ -222,9 +232,9 @@ export default class Landing extends React.Component<LandingProps, State> {
     let a = 0;
     const next = () => {
       const at = ATTEMPTS[a];
-      this.setState((s) => ({ sbActive: null, sbLines: [...s.sbLines, { text: at.cmd, color: "var(--fg)" }].slice(-7) }));
+      this.setState((s) => ({ sbActive: null, sbLines: [...s.sbLines, { text: at.cmd, color: "text-fg" }].slice(-7) }));
       this.t(() => {
-        this.setState((s) => ({ sbActive: at, sbLines: [...s.sbLines, { text: "  " + at.res, color: at.ok ? "var(--ok)" : "var(--no)" }].slice(-7) }));
+        this.setState((s) => ({ sbActive: at, sbLines: [...s.sbLines, { text: "  " + at.res, color: at.ok ? "text-ok" : "text-no" }].slice(-7) }));
         this.t(() => {
           a = (a + 1) % ATTEMPTS.length;
           next();
@@ -354,66 +364,69 @@ export default class Landing extends React.Component<LandingProps, State> {
     const headB = B.slice(0, Math.max(0, n - A.length));
     const chapterLabel = ch >= 0 ? "chapter " + (ch + 1) + "/7 · " + CHAPTERS[ch] : "one loop · sandboxed commands · one approval";
     const ticker = [...TICKER, ...TICKER];
-    const bigTicker = [...BIG, ...BIG].map((text, i) => ({ text, color: i % 2 ? "transparent" : "var(--fg)", stroke: i % 2 ? "1.5px var(--fg-2)" : "0", fstyle: i % 2 ? "normal" : "italic" }));
+    // alternate filled italic words with outlined upright ones
+    const bigTicker = [...BIG, ...BIG].map((text, i) => ({ text, cls: i % 2 ? "text-transparent [-webkit-text-stroke:1.5px_var(--fg-2)] not-italic" : "text-fg [-webkit-text-stroke:0] italic" }));
     const gp = this.state.gatePress;
     const gateMsg = this.state.gateKey === "a" ? "✓ approved · edit applied · /undo can still take it back" : this.state.gateKey === "d" ? "✕ denied · file untouched · your reason goes to the model" : "› waiting on you · [a]pprove [d]eny";
-    const rowOp = (k: number) => (lg >= k ? 1 : 0.1);
+    const rowOp = (k: number) => (lg >= k ? "opacity-100" : "opacity-10");
 
     return (
-      <div ref={this.rootRef} style={{ background: "var(--bg)", color: "var(--fg)", minHeight: "100vh", overflowX: "hidden" }}>
+      <div ref={this.rootRef} className="min-h-screen overflow-x-hidden bg-bg text-fg">
         <SiteNav active="home" />
 
         {/* hero */}
-        <section style={{ ...gridBg, borderBottom: "1px solid var(--line)" }}>
-          <div className="hero-wrap" style={{ maxWidth: 1200, margin: "0 auto", padding: "clamp(56px,8vw,104px) 24px clamp(56px,7vw,96px)" }}>
-            <div className="mono" style={{ display: "flex", flexWrap: "wrap", gap: "10px 14px", alignItems: "center", fontSize: 12.5 }}>
-              <Link href="/roadmap" className="ha" style={{ border: "1px solid var(--accent)", color: "var(--accent)", padding: "3px 10px", textDecoration: "none" }}>in development · see the roadmap →</Link>
-              <span style={{ color: "var(--fg-2)" }}>open-source terminal coding agent · single Go binary</span>
-              <span style={{ color: "var(--fg-2)" }}>bring your own key · Claude (Anthropic API) is the next provider after Gemini</span>
+        <section className="bg-grid border-b border-line">
+          <div className="mx-auto my-0 max-w-[1200px] px-6 pt-[clamp(56px,8vw,104px)] pb-[clamp(56px,7vw,96px)] mobile:px-5 mobile:pt-10 mobile:pb-12">
+            <div className="flex flex-wrap items-center gap-x-[14px] gap-y-[10px] font-mono text-[12.5px]">
+              <Link href="/roadmap" className="border border-accent px-[10px] py-[3px] text-accent no-underline hover:text-accent">
+                in development · see the roadmap →
+              </Link>
+              <span className="text-fg-2">open-source terminal coding agent · single Go binary</span>
+              <span className="text-fg-2">bring your own key · Claude (Anthropic API) is the next provider after Gemini</span>
             </div>
-            <h1 className="serif hero-h1" style={{ position: "relative", fontWeight: 400, fontSize: "clamp(48px,8.4vw,120px)", lineHeight: 0.95, letterSpacing: "-0.04em", margin: "28px 0 36px", maxWidth: "12ch" }}>
-              <span aria-hidden="true" style={{ visibility: "hidden" }}>
+            <h1 className="relative mt-7 mb-9 max-w-[12ch] font-serif text-[clamp(48px,8.4vw,120px)] leading-[0.95] font-normal tracking-[-0.04em] mobile:mt-[22px] mobile:mb-[26px] mobile:text-[44px] mobile:tracking-[-0.035em]">
+              <span aria-hidden="true" className="invisible">
                 {A}
                 <em>{B}</em>&nbsp;
               </span>
-              <span style={{ position: "absolute", left: 0, top: 0, right: 0 }}>
+              <span className="absolute top-0 right-0 left-0">
                 {headA}
-                <em style={em}>{headB}</em>
-                <span style={{ display: "inline-block", width: "0.07em", height: "0.76em", marginLeft: "0.05em", background: "var(--accent)", verticalAlign: "-0.04em", opacity: this.state.cur ? 1 : 0 }} />
+                <em className={em}>{headB}</em>
+                <span className={`ml-[0.05em] inline-block h-[0.76em] w-[0.07em] bg-accent align-[-0.04em] ${this.state.cur ? "opacity-100" : "opacity-0"}`} />
               </span>
             </h1>
-            <p data-reveal className="serif hero-p" style={{ fontSize: "clamp(19px,2.1vw,24px)", lineHeight: 1.5, color: "var(--fg-2)", maxWidth: "56ch", margin: 0, textWrap: "pretty" as never }}>
+            <p data-reveal className="m-0 max-w-[56ch] font-serif text-[clamp(19px,2.1vw,24px)] leading-[1.5] text-pretty text-fg-2 mobile:text-[17px] mobile:leading-[1.55]">
               Karya is a coding agent for your terminal. Commands run freely inside an OS sandbox, every turn can be undone, budgets are enforced before you overspend, and sessions follow you to any machine. You review the diffs. You stop answering "may I run ls?"
             </p>
-            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "16px 28px", marginTop: 40 }}>
-              <div className="mono cmd-box" style={{ display: "flex", alignItems: "center", gap: 14, maxWidth: "100%", border: "1px solid var(--accent)", background: "var(--bg-2)", padding: "12px 12px 12px 18px", fontSize: 14 }}>
-                <span style={{ color: "var(--accent)" }}>$</span>
-                <code style={{ overflowX: "auto", whiteSpace: "nowrap", minWidth: 0 }}>{INSTALL}</code>
-                <button onClick={this.copy} className="btn-fill" style={{ font: "inherit", fontSize: 12.5, background: "var(--accent)", border: "1px solid var(--accent)", color: "var(--accent-ink)", padding: "5px 12px", cursor: "pointer", flex: "none" }}>
+            <div className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-4">
+              <div className={`${cmdBox} gap-[14px] py-3 pr-3 pl-[18px] text-[14px]`}>
+                <span className="text-accent">$</span>
+                <code className={cmdCode}>{INSTALL}</code>
+                <button onClick={this.copy} className={`${copyBtn} px-3 py-[5px] text-[12.5px]`}>
                   {copyLabel}
                 </button>
               </div>
-              <Link href="/docs" className="mono ha" style={{ fontSize: 14, color: "var(--fg)", textUnderlineOffset: 4 }}>
+              <Link href="/docs" className={`${textLink} text-[14px] text-fg`}>
                 Read the docs →
               </Link>
             </div>
-            <p className="mono" style={{ fontSize: 12.5, color: "var(--fg-3)", margin: "16px 0 0", maxWidth: "78ch", lineHeight: 1.6 }}>
+            <p className="mt-4 mb-0 max-w-[78ch] font-mono text-[12.5px] leading-[1.6] text-fg-3">
               Today this installs the TUI preview with a demo core. The agent loop, sandbox and undo land in milestones M1–M3. The demo below shows the target behavior.
             </p>
-            <div data-reveal className="demo-box" style={{ marginTop: 72, border: "1px solid var(--line-2)", background: "var(--bg-2)", padding: "clamp(12px,2.4vw,32px)" }}>
-              <div className="mono demo-head" style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "6px 16px", fontSize: 12, color: "var(--fg-3)", marginBottom: 22 }}>
-                <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ display: "inline-block", width: 8, height: 8, background: "var(--accent)" }} />
-                  demo · when it asks, press <span style={{ border: "1px solid var(--accent)", color: "var(--accent)", padding: "0 6px" }}>a</span> or <span style={{ border: "1px solid var(--fg-3)", color: "var(--fg-2)", padding: "0 6px" }}>d</span>
+            <div data-reveal className="mt-[72px] border border-line-2 bg-bg-2 p-[clamp(12px,2.4vw,32px)] mobile:mt-11 mobile:p-[10px]">
+              <div className="mb-[22px] flex flex-wrap justify-between gap-x-4 gap-y-[6px] font-mono text-[12px] text-fg-3 mobile:mb-4 mobile:text-[11px]">
+                <span className="flex items-center gap-2">
+                  <span className="inline-block h-2 w-2 bg-accent" />
+                  demo · when it asks, press <span className="border border-accent px-[6px] py-0 text-accent">a</span> or <span className="border border-fg-3 px-[6px] py-0 text-fg-2">d</span>
                 </span>
                 <span>{chapterLabel}</span>
               </div>
               <Terminal mode={termMode} model={model} interactive onChapter={this.onChapter} />
-              <div className="mono chapters" style={{ display: "grid", gridTemplateColumns: "repeat(7,minmax(0,1fr))", gap: 6, marginTop: 18, fontSize: 11.5 }}>
+              <div className="mt-[18px] grid grid-cols-[repeat(7,minmax(0,1fr))] gap-[6px] font-mono text-[11.5px] mobile:mt-3 mobile:gap-1 mobile:text-[10px]">
                 {CHAPTERS.map((c, i) => (
-                  <div key={c} style={{ display: "flex", flexDirection: "column", gap: 7, minWidth: 0 }}>
-                    <div style={{ height: 2, background: i < ch ? "var(--fg-2)" : i === ch ? "var(--accent)" : "var(--line-2)", transition: "background .3s" }} />
-                    <span style={{ color: i === ch ? "var(--accent)" : i < ch ? "var(--fg-2)" : "var(--fg-3)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", transition: "color .3s" }}>{c}</span>
+                  <div key={c} className="flex min-w-0 flex-col gap-[7px]">
+                    <div className={`h-[2px] [transition:background_.3s] ${i < ch ? "bg-fg-2" : i === ch ? "bg-accent" : "bg-line-2"}`} />
+                    <span className={`overflow-hidden text-ellipsis whitespace-nowrap [transition:color_.3s] ${i === ch ? "text-accent" : i < ch ? "text-fg-2" : "text-fg-3"}`}>{c}</span>
                   </div>
                 ))}
               </div>
@@ -422,46 +435,46 @@ export default class Landing extends React.Component<LandingProps, State> {
         </section>
 
         {/* ticker */}
-        <div style={{ background: "var(--fg)", color: "var(--bg)", overflow: "hidden" }}>
-          <div ref={this.marqueeRef} style={{ display: "flex", width: "max-content", willChange: "transform" }}>
+        <div className="overflow-hidden bg-fg text-bg">
+          <div ref={this.marqueeRef} className="flex w-max will-change-transform">
             {ticker.map((t, i) => (
-              <span key={i} className="mono" style={{ display: "flex", alignItems: "center", gap: 22, padding: "18px 22px 18px 0", fontSize: 15, whiteSpace: "nowrap" }}>
-                <span style={{ display: "inline-block", width: 8, height: 8, background: "var(--accent)" }} />
+              <span key={i} className="flex items-center gap-[22px] py-[18px] pr-[22px] pl-0 font-mono text-[15px] whitespace-nowrap">
+                <span className="inline-block h-2 w-2 bg-accent" />
                 {t}
               </span>
             ))}
           </div>
         </div>
-        <div style={{ overflow: "hidden", borderBottom: "1px solid var(--line)", padding: "clamp(20px,3vw,40px) 0" }}>
-          <div ref={this.marquee2Ref} style={{ display: "flex", width: "max-content", willChange: "transform" }}>
+        <div className="overflow-hidden border-b border-line px-0 py-[clamp(20px,3vw,40px)]">
+          <div ref={this.marquee2Ref} className="flex w-max will-change-transform">
             {bigTicker.map((t, i) => (
-              <span key={i} className="serif" style={{ display: "flex", alignItems: "center", gap: "0.35em", paddingRight: "0.35em", fontSize: "clamp(64px,10vw,150px)", lineHeight: 1.05, letterSpacing: "-0.04em", whiteSpace: "nowrap", color: t.color, WebkitTextStroke: t.stroke, fontStyle: t.fstyle }}>
+              <span key={i} className={`flex items-center gap-[0.35em] pr-[0.35em] font-serif text-[clamp(64px,10vw,150px)] leading-[1.05] tracking-[-0.04em] whitespace-nowrap ${t.cls}`}>
                 {t.text}
-                <span style={{ display: "inline-block", width: "0.16em", height: "0.16em", background: "var(--accent)" }} />
+                <span className="inline-block h-[0.16em] w-[0.16em] bg-accent" />
               </span>
             ))}
           </div>
         </div>
 
         {/* the problem */}
-        <section id="problem" style={{ borderBottom: "1px solid var(--line)" }}>
-          <div className="sec" style={sectionPad}>
-            <div data-reveal style={label}>the problem</div>
-            <h2 data-reveal className="h2" style={{ ...h2, maxWidth: "18ch" }}>
-              Babysit it, or <em style={em}>hope for the best.</em>
+        <section id="problem" className="border-b border-line">
+          <div className={sectionPad}>
+            <div data-reveal className={label}>the problem</div>
+            <h2 data-reveal className={`${h2} ${h2m} max-w-[18ch]`}>
+              Babysit it, or <em className={em}>hope for the best.</em>
             </h2>
-            <p data-reveal className="lead" style={{ ...lead, maxWidth: "62ch", margin: "0 0 48px" }}>Most coding agents make you pick one. Approve every command and you spend the afternoon pressing y. Skip the prompts and a stray command runs on your real machine. Karya takes a third path: let it run, inside walls, with a way back.</p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,280px),1fr))", gap: 16 }}>
+            <p data-reveal className={`${lead} mt-0 mb-12 max-w-[62ch]`}>Most coding agents make you pick one. Approve every command and you spend the afternoon pressing y. Skip the prompts and a stray command runs on your real machine. Karya takes a third path: let it run, inside walls, with a way back.</p>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-4">
               {PATHS.map((pth) => (
-                <div key={pth.name} data-reveal style={{ border: `1px solid ${pth.us ? "var(--accent)" : "var(--line-2)"}`, background: pth.us ? "var(--bg-2)" : "transparent", display: "flex", flexDirection: "column" }}>
-                  <div style={{ padding: "16px 18px", borderBottom: "1px solid var(--line)" }}>
-                    <div className="mono" style={{ fontSize: 12, color: pth.us ? "var(--accent)" : "var(--fg-3)" }}>{pth.tag}</div>
-                    <div className="serif" style={{ fontSize: 26, lineHeight: 1.2, marginTop: 4, fontStyle: pth.us ? "italic" : "normal", color: pth.us ? "var(--accent)" : "var(--fg)" }}>{pth.name}</div>
+                <div key={pth.name} data-reveal className={`flex flex-col border ${pth.us ? "border-accent bg-bg-2" : "border-line-2 bg-transparent"}`}>
+                  <div className="border-b border-line px-[18px] py-4">
+                    <div className={`font-mono text-[12px] ${pth.us ? "text-accent" : "text-fg-3"}`}>{pth.tag}</div>
+                    <div className={`mt-1 font-serif text-[26px] leading-[1.2] ${pth.us ? "text-accent italic" : "text-fg not-italic"}`}>{pth.name}</div>
                   </div>
                   {pth.rows.map((v, k) => (
-                    <div key={k} style={{ padding: "12px 18px", borderBottom: k < pth.rows.length - 1 ? "1px solid var(--line)" : "none", display: "flex", flexDirection: "column", gap: 3 }}>
-                      <span className="mono" style={{ fontSize: 11.5, color: "var(--fg-3)" }}>{PATH_ROWS[k]}</span>
-                      <span className="mono" style={{ fontSize: 14, color: pth.us ? "var(--ok)" : "var(--fg-2)" }}>
+                    <div key={k} className={`flex flex-col gap-[3px] px-[18px] py-3 ${k < pth.rows.length - 1 ? "border-b border-line" : ""}`}>
+                      <span className="font-mono text-[11.5px] text-fg-3">{PATH_ROWS[k]}</span>
+                      <span className={`font-mono text-[14px] ${pth.us ? "text-ok" : "text-fg-2"}`}>
                         {pth.us ? "✓ " : ""}
                         {v}
                       </span>
@@ -474,25 +487,25 @@ export default class Landing extends React.Component<LandingProps, State> {
         </section>
 
         {/* numbers */}
-        <section style={{ borderBottom: "1px solid var(--line)" }}>
-          <div className="num-grid" style={{ maxWidth: 1100, margin: "0 auto", padding: "clamp(56px,8vw,104px) 24px", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(200px,1fr))", gap: "48px 28px" }}>
+        <section className="border-b border-line">
+          <div className="mx-auto my-0 grid max-w-[1100px] grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-x-7 gap-y-12 px-6 py-[clamp(56px,8vw,104px)] mobile:grid-cols-[repeat(2,minmax(0,1fr))] mobile:gap-x-5 mobile:gap-y-8 mobile:px-5 mobile:py-12">
             {[
               ["7", "tools · read, list, search, write, edit, bash, fetch", false],
               ["3", "modes · plan, default, accept-edits", false],
               ["1", "provider interface · Gemini, Anthropic, OpenAI-compatible", false],
               ["1", "Go binary · go install and run", true],
             ].map(([num, cap, accent], i) => (
-              <div key={i} data-reveal style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-                <div className="serif num" style={{ fontSize: "clamp(88px,11vw,148px)", lineHeight: 0.85, letterSpacing: "-0.05em", color: accent ? "var(--accent)" : undefined }}>{num as string}</div>
-                <div className="mono" style={{ fontSize: 13, color: "var(--fg-2)", borderTop: "1px solid var(--line-2)", paddingTop: 12 }}>{cap as string}</div>
+              <div key={i} data-reveal className="flex flex-col gap-[14px]">
+                <div className={`font-serif text-[clamp(88px,11vw,148px)] leading-[0.85] tracking-[-0.05em] mobile:text-[64px] ${accent ? "text-accent" : ""}`}>{num as string}</div>
+                <div className="border-t border-line-2 pt-3 font-mono text-[13px] text-fg-2">{cap as string}</div>
               </div>
             ))}
           </div>
         </section>
 
         {/* pillars index */}
-        <section style={{ borderTop: "1px solid var(--line)" }}>
-          <div className="pillars" style={{ maxWidth: 1100, margin: "0 auto", padding: "48px 24px", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(180px,1fr))", gap: "32px 28px" }}>
+        <section className="border-t border-line">
+          <div className="mx-auto my-0 grid max-w-[1100px] grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-x-7 gap-y-8 px-6 py-12 mobile:gap-x-5 mobile:gap-y-[22px] mobile:px-5 mobile:py-9">
             {[
               ["#sandbox", "01", "Contained, not interrogated", "Shell commands run in the OS sandbox without asking. Edits show a diff."],
               ["#undo", "02", "Every turn can be undone", "/undo restores the tree, including what bash changed."],
@@ -500,70 +513,72 @@ export default class Landing extends React.Component<LandingProps, State> {
               ["#sessions", "04", "Sessions that follow you", "Resume on any machine. Sync is end-to-end encrypted."],
               ["#lockin", "05", "No lock-in", "One provider interface. Switch models mid-session."],
             ].map(([href, num, title, sub]) => (
-              <a key={href} href={href} style={{ textDecoration: "none", color: "var(--fg)", display: "flex", flexDirection: "column", gap: 8 }}>
-                <span className="mono" style={{ fontSize: 12.5, color: "var(--fg-3)" }}>{num}</span>
-                <span className="serif" style={{ fontSize: 21, lineHeight: 1.2 }}>{title}</span>
-                <span className="serif" style={{ fontSize: 16, lineHeight: 1.45, color: "var(--fg-2)" }}>{sub}</span>
+              <a key={href} href={href} className="flex flex-col gap-2 text-fg no-underline">
+                <span className="font-mono text-[12.5px] text-fg-3">{num}</span>
+                <span className="font-serif text-[21px] leading-[1.2]">{title}</span>
+                <span className="font-serif text-[16px] leading-[1.45] text-fg-2">{sub}</span>
               </a>
             ))}
           </div>
         </section>
 
         {/* the loop */}
-        <section id="loop" style={{ borderTop: "1px solid var(--line)" }}>
-          <div className="sec" style={sectionPad}>
-            <div data-reveal style={label}>the loop</div>
-            <h2 data-reveal className="h2" style={{ ...h2, maxWidth: "20ch" }}>One sequential loop, one step at a time.</h2>
-            <p data-reveal className="lead" style={{ ...lead, maxWidth: "62ch" }}>Karya keeps one model request in flight per session, and tool calls run one at a time in the order the model asked. Each call passes through the mode and the sandbox: reads and sandboxed commands run, edits in default mode wait for you. When the model stops asking for tools, your repo's checks run, and only then is the task reported done.</p>
-            <div data-reveal className="loop-box" style={{ marginTop: 56, border: "1px solid var(--line-2)", padding: "clamp(18px,3vw,36px)" }}>
-              <div className="mono" style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "6px 16px", fontSize: 12.5, color: "var(--fg-3)", marginBottom: 28 }}>
-                <span>iteration {step.it} · step {this.state.loopI + 1} of 11</span>
+        <section id="loop" className="border-t border-line">
+          <div className={sectionPad}>
+            <div data-reveal className={label}>the loop</div>
+            <h2 data-reveal className={`${h2} ${h2m} max-w-[20ch]`}>One sequential loop, one step at a time.</h2>
+            <p data-reveal className={`${lead} m-0 max-w-[62ch]`}>Karya keeps one model request in flight per session, and tool calls run one at a time in the order the model asked. Each call passes through the mode and the sandbox: reads and sandboxed commands run, edits in default mode wait for you. When the model stops asking for tools, your repo's checks run, and only then is the task reported done.</p>
+            <div data-reveal className="mt-14 border border-line-2 p-[clamp(18px,3vw,36px)] mobile:mt-9 mobile:px-[14px] mobile:py-4">
+              <div className="mb-7 flex flex-wrap justify-between gap-x-4 gap-y-[6px] font-mono text-[12.5px] text-fg-3">
+                <span>
+                  iteration {step.it} · step {this.state.loopI + 1} of 11
+                </span>
                 <span>est. ${step.c.toFixed(4)}</span>
               </div>
-              <div className="mono loop-nodes" style={{ display: "flex", flexWrap: "wrap", alignItems: "flex-start", gap: "20px 0", fontSize: 13.5 }}>
+              <div className="flex flex-wrap items-start gap-x-0 gap-y-5 font-mono text-[13.5px] mobile:flex-col mobile:gap-0">
                 {NODES.map(([lbl, sub, human], i) => {
                   const on = i === step.n,
                     past = i < step.n;
-                  const borderStyle = human && !on ? "dashed" : "solid";
-                  const borderColor = on ? (human ? "var(--accent)" : "var(--fg)") : human ? "var(--accent)" : past ? "var(--fg-3)" : "var(--line-2)";
-                  const bg = on ? (human ? "var(--accent)" : "var(--fg)") : "transparent";
-                  const color = on ? (human ? "var(--accent-ink)" : "var(--bg)") : past ? "var(--fg)" : "var(--fg-2)";
+                  const borderStyle = human && !on ? "border-dashed" : "border-solid";
+                  const borderColor = on ? (human ? "border-accent" : "border-fg") : human ? "border-accent" : past ? "border-fg-3" : "border-line-2";
+                  const bg = on ? (human ? "bg-accent" : "bg-fg") : "bg-transparent";
+                  const color = on ? (human ? "text-accent-ink" : "text-bg") : past ? "text-fg" : "text-fg-2";
                   return (
-                    <div key={i} className="loop-node" style={{ display: "flex", alignItems: "flex-start" }}>
-                      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                        <div style={{ border: `1px ${borderStyle} ${borderColor}`, background: bg, color, padding: "10px 14px", whiteSpace: "nowrap", transition: "background .25s,color .25s,border-color .25s" }}>{lbl}</div>
-                        <div style={{ fontSize: 12, color: human ? "var(--accent)" : "var(--fg-3)", whiteSpace: "nowrap" }}>{sub}</div>
+                    <div key={i} className="flex items-start mobile:w-full mobile:flex-col mobile:items-start">
+                      <div className="flex flex-col gap-2">
+                        <div className={`border px-[14px] py-[10px] whitespace-nowrap [transition:background_.25s,color_.25s,border-color_.25s] ${borderStyle} ${borderColor} ${bg} ${color}`}>{lbl}</div>
+                        <div className={`text-[12px] whitespace-nowrap ${human ? "text-accent" : "text-fg-3"}`}>{sub}</div>
                       </div>
                       {i < NODES.length - 1 && (
-                        <div className="loop-arrow" style={{ padding: 10, color: i < step.n ? "var(--accent)" : "var(--fg-3)", transition: "color .25s" }}>
-                          <span className="arrow-h">→</span>
-                          <span className="arrow-v">↓</span>
+                        <div className={`p-[10px] [transition:color_.25s] mobile:pt-1 mobile:pr-0 mobile:pb-[6px] mobile:pl-[14px] ${i < step.n ? "text-accent" : "text-fg-3"}`}>
+                          <span className="mobile:hidden">→</span>
+                          <span className="hidden mobile:inline">↓</span>
                         </div>
                       )}
                     </div>
                   );
                 })}
               </div>
-              <div className="mono" style={{ marginTop: 28, paddingTop: 16, borderTop: "1px solid var(--line)", fontSize: 14, display: "flex", gap: 12, alignItems: "baseline", minHeight: "1.6em" }}>
-                <span style={{ color: "var(--accent)" }}>›</span>
+              <div className="mt-7 flex min-h-[1.6em] items-baseline gap-3 border-t border-line pt-4 font-mono text-[14px]">
+                <span className="text-accent">›</span>
                 <span>{step.cap}</span>
               </div>
             </div>
-            <div className="mono" style={{ marginTop: 16, fontSize: 12.5, color: "var(--fg-3)" }}>↺ model → tool call → policy → result repeats until the model answers or a limit is hit · failed checks go back to the model</div>
-            <div className="mono" style={{ marginTop: 36, paddingTop: 20, borderTop: "1px solid var(--line)", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "10px 10px", fontSize: 12.5 }}>
-              <span style={{ color: "var(--fg-3)", marginRight: 8 }}>exits on</span>
-              <span style={pill}>verified answer</span>
-              <span style={pill}>max steps</span>
-              <span style={pill}>max cost</span>
-              <span style={pill}>loop detected</span>
-              <span style={pill}>interrupted</span>
-              <span style={{ marginLeft: "auto", display: "flex", gap: 18, color: "var(--fg-3)" }}>
+            <div className="mt-4 font-mono text-[12.5px] text-fg-3">↺ model → tool call → policy → result repeats until the model answers or a limit is hit · failed checks go back to the model</div>
+            <div className="mt-9 flex flex-wrap items-center gap-[10px] border-t border-line pt-5 font-mono text-[12.5px]">
+              <span className="mr-2 text-fg-3">exits on</span>
+              <span className={pill}>verified answer</span>
+              <span className={pill}>max steps</span>
+              <span className={pill}>max cost</span>
+              <span className={pill}>loop detected</span>
+              <span className={pill}>interrupted</span>
+              <span className="ml-auto flex gap-[18px] text-fg-3">
                 <span>
-                  <span style={{ display: "inline-block", width: 10, height: 10, border: "1px solid var(--line-2)", verticalAlign: -1, marginRight: 6 }} />
+                  <span className="mr-[6px] inline-block h-[10px] w-[10px] border border-line-2 align-[-1px]" />
                   automatic
                 </span>
                 <span>
-                  <span style={{ display: "inline-block", width: 10, height: 10, border: "1px dashed var(--accent)", verticalAlign: -1, marginRight: 6 }} />
+                  <span className="mr-[6px] inline-block h-[10px] w-[10px] border border-dashed border-accent align-[-1px]" />
                   waits on you (edits in default mode)
                 </span>
               </span>
@@ -572,49 +587,50 @@ export default class Landing extends React.Component<LandingProps, State> {
         </section>
 
         {/* approval gate */}
-        <section id="gate" style={{ background: "var(--accent)", color: "var(--accent-ink)" }}>
-          <div ref={this.gateRef} className="gate-grid" style={{ maxWidth: 1200, margin: "0 auto", padding: "clamp(80px,11vw,152px) 24px", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,440px),1fr))", gap: "56px 64px", alignItems: "center" }}>
+        <section id="gate" className="bg-accent text-accent-ink">
+          <div ref={this.gateRef} className="mx-auto my-0 grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(min(100%,440px),1fr))] items-center gap-x-16 gap-y-14 px-6 py-[clamp(80px,11vw,152px)] mobile:gap-10 mobile:px-5 mobile:py-16">
             <div>
-              <div className="mono" style={{ fontSize: 13 }}>the one prompt that matters</div>
-              <h2 className="serif gate-h2" style={{ fontWeight: 400, fontSize: "clamp(48px,7.4vw,108px)", lineHeight: 0.95, letterSpacing: "-0.04em", margin: "20px 0 28px", maxWidth: "11ch" }}>
+              <div className="font-mono text-[13px]">the one prompt that matters</div>
+              <h2 className="mt-5 mb-7 max-w-[11ch] font-serif text-[clamp(48px,7.4vw,108px)] leading-[0.95] font-normal tracking-[-0.04em] mobile:text-[44px]">
                 Your files change when you press <em>a</em>.
               </h2>
-              <p className="serif gate-p" style={{ fontSize: 21, lineHeight: 1.5, margin: 0, maxWidth: "42ch", textWrap: "pretty" as never }}>In default mode, write and edit show a unified diff and wait. Commands don't ask: they run in the sandbox, and anything that tries to leave it always asks. Try it: press a or d on your keyboard, or click a key.</p>
+              <p className="m-0 max-w-[42ch] font-serif text-[21px] leading-[1.5] text-pretty mobile:text-[18px]">In default mode, write and edit show a unified diff and wait. Commands don't ask: they run in the sandbox, and anything that tries to leave it always asks. Try it: press a or d on your keyboard, or click a key.</p>
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 36, alignItems: "flex-start" }}>
-              <div style={{ display: "flex", gap: 28, flexWrap: "wrap" }}>
+            <div className="flex flex-col items-start gap-9">
+              <div className="flex flex-wrap gap-7">
                 {(["a", "d"] as const).map((k) => (
                   <button
                     key={k}
                     onClick={() => this.pressGate(k)}
                     aria-label={k === "a" ? "approve" : "deny"}
-                    className="gate-btn"
-                    style={{ font: "inherit", cursor: "pointer", width: "clamp(128px,14vw,176px)", height: "clamp(128px,14vw,176px)", background: "transparent", color: "var(--accent-ink)", border: "2px solid var(--accent-ink)", boxShadow: `0 ${gp === k ? "0px" : "10px"} 0 var(--accent-ink)`, transform: `translateY(${gp === k ? "10px" : "0px"})`, transition: "transform .09s,box-shadow .09s", display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-start", padding: "16px 18px", textAlign: "left" }}
+                    className={`flex h-[clamp(128px,14vw,176px)] w-[clamp(128px,14vw,176px)] cursor-pointer flex-col items-start justify-between border-2 border-accent-ink bg-transparent px-[18px] py-4 text-left text-accent-ink [transition:transform_.09s,box-shadow_.09s] hover:bg-accent-ink hover:text-accent ${
+                      gp === k ? "[box-shadow:0_0px_0_var(--accent-ink)] [transform:translateY(10px)]" : "[box-shadow:0_10px_0_var(--accent-ink)] [transform:translateY(0px)]"
+                    }`}
                   >
-                    <span className="mono" style={{ fontSize: "clamp(56px,6vw,80px)", lineHeight: 1, fontWeight: 500 }}>{k}</span>
-                    <span className="mono" style={{ fontSize: 13 }}>{k === "a" ? "approve" : "deny"}</span>
+                    <span className="font-mono text-[clamp(56px,6vw,80px)] leading-none font-medium">{k}</span>
+                    <span className="font-mono text-[13px]">{k === "a" ? "approve" : "deny"}</span>
                   </button>
                 ))}
               </div>
-              <div className="mono" style={{ width: "100%", boxSizing: "border-box", border: "2px solid var(--accent-ink)", padding: "14px 16px", fontSize: 14, lineHeight: 1.6, display: "flex", flexDirection: "column", gap: 4 }}>
+              <div className="box-border flex w-full flex-col gap-1 border-2 border-accent-ink px-4 py-[14px] font-mono text-[14px] leading-[1.6]">
                 <span>edit cmd/list.go · +5 −0</span>
-                <span style={{ fontWeight: 600 }}>{gateMsg}</span>
+                <span className="font-semibold">{gateMsg}</span>
               </div>
             </div>
           </div>
         </section>
 
         {/* real tui */}
-        <section id="today" style={{ borderTop: "1px solid var(--line)" }}>
-          <div className="sec" style={sectionPad}>
-            <div data-reveal style={label}>try it today</div>
-            <h2 data-reveal className="h2" style={{ ...h2, maxWidth: "18ch" }}>
-              The terminal UI is real. <em style={em}>Take it for a spin.</em>
+        <section id="today" className="border-t border-line">
+          <div className={sectionPad}>
+            <div data-reveal className={label}>try it today</div>
+            <h2 data-reveal className={`${h2} ${h2m} max-w-[18ch]`}>
+              The terminal UI is real. <em className={em}>Take it for a spin.</em>
             </h2>
-            <p data-reveal className="lead" style={{ ...lead, maxWidth: "62ch", margin: "0 0 28px" }}>The agent is still being built, but the TUI already runs: side-by-side diffs, threads, @ file mentions, ! shell commands, $EDITOR prompts and queued messages. The demo needs no API key.</p>
-            <pre data-reveal className="try-cmd" style={{ margin: "0 0 40px", display: "inline-block", maxWidth: "100%", background: "var(--bg-2)", border: "1px solid var(--accent)", padding: "12px 18px", fontFamily: "var(--mono)", fontSize: 14, lineHeight: 1.8, overflowX: "auto" }}>
-              <span style={{ color: "var(--accent)" }}>$</span> {INSTALL.split("/").map((part, k) => (k ? <React.Fragment key={k}>/<wbr />{part}</React.Fragment> : part))}{"\n"}
-              <span style={{ color: "var(--accent)" }}>$</span> karya -demo
+            <p data-reveal className={`${lead} mt-0 mb-7 max-w-[62ch]`}>The agent is still being built, but the TUI already runs: side-by-side diffs, threads, @ file mentions, ! shell commands, $EDITOR prompts and queued messages. The demo needs no API key.</p>
+            <pre data-reveal className="mt-0 mb-10 inline-block max-w-full overflow-x-auto border border-accent bg-bg-2 px-[18px] py-3 font-mono text-[14px] leading-[1.8] mobile:text-[12.5px] mobile:whitespace-pre-wrap mobile:[overflow-wrap:break-word]">
+              <span className="text-accent">$</span> {INSTALL.split("/").map((part, k) => (k ? <React.Fragment key={k}>/<wbr />{part}</React.Fragment> : part))}{"\n"}
+              <span className="text-accent">$</span> karya -demo
             </pre>
             <div data-reveal>
               <TuiFrame />
@@ -623,20 +639,20 @@ export default class Landing extends React.Component<LandingProps, State> {
         </section>
 
         {/* anatomy */}
-        <section id="anatomy" style={{ borderTop: "1px solid var(--line)" }}>
-          <div className="sec" style={sectionPad}>
-            <div data-reveal style={label}>anatomy of a harness</div>
-            <h2 data-reveal className="h2" style={{ ...h2, margin: "18px 0 48px", maxWidth: "22ch" }}>The model is the brain. The harness is everything around it.</h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(220px,1fr))", gap: "36px 32px" }}>
+        <section id="anatomy" className="border-t border-line">
+          <div className={sectionPad}>
+            <div data-reveal className={label}>anatomy of a harness</div>
+            <h2 data-reveal className={`${h2} mt-[18px] mb-12 max-w-[22ch]`}>The model is the brain. The harness is everything around it.</h2>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-x-8 gap-y-9">
               {[
                 ["drives model and tool calls", "Streams text and assembles tool-call deltas as they arrive. One in-flight request per session."],
                 ["manages state and context", "Canonical messages. Tool output is capped with the full copy kept readable. Compaction near the context limit is visible, and every turn goes to a JSONL log."],
                 ["applies policy", "Three modes, the OS sandbox around shell commands, a network allowlist, and file paths confined to the project root."],
                 ["keeps the task moving", "A sequential loop that runs until your checks pass or a limit is reached. Steer it mid-turn without interrupting."],
               ].map(([t, d]) => (
-                <div key={t} data-reveal style={{ borderTop: "1px solid var(--fg-3)", paddingTop: 18, display: "flex", flexDirection: "column", gap: 12 }}>
-                  <div className="mono" style={{ fontSize: 13 }}>{t}</div>
-                  <div className="serif" style={{ fontSize: 17, lineHeight: 1.5, color: "var(--fg-2)" }}>{d}</div>
+                <div key={t} data-reveal className="flex flex-col gap-3 border-t border-fg-3 pt-[18px]">
+                  <div className="font-mono text-[13px]">{t}</div>
+                  <div className="font-serif text-[17px] leading-[1.5] text-fg-2">{d}</div>
                 </div>
               ))}
             </div>
@@ -644,57 +660,57 @@ export default class Landing extends React.Component<LandingProps, State> {
         </section>
 
         {/* modes and tools */}
-        <section id="tools" style={{ borderTop: "1px solid var(--line)" }}>
-          <div className="sec" style={sectionPad}>
-            <div data-reveal style={label}>modes and tools</div>
-            <h2 data-reveal className="h2" style={{ ...h2, maxWidth: "20ch" }}>
-              Seven tools. Only edits <em style={em}>ask.</em>
+        <section id="tools" className="border-t border-line">
+          <div className={sectionPad}>
+            <div data-reveal className={label}>modes and tools</div>
+            <h2 data-reveal className={`${h2} ${h2m} max-w-[20ch]`}>
+              Seven tools. Only edits <em className={em}>ask.</em>
             </h2>
-            <p data-reveal className="lead" style={{ ...lead, maxWidth: "62ch", margin: "0 0 48px" }}>Reads, searches and sandboxed commands run on their own. write and edit show a unified diff and wait. Anything that tries to leave the sandbox, like an unsandboxed run or a domain off the allowlist, always asks. shift+tab cycles the mode.</p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,420px),1fr))", gap: 1, background: "var(--line)", border: "1px solid var(--line)" }}>
+            <p data-reveal className={`${lead} mt-0 mb-12 max-w-[62ch]`}>Reads, searches and sandboxed commands run on their own. write and edit show a unified diff and wait. Anything that tries to leave the sandbox, like an unsandboxed run or a domain off the allowlist, always asks. shift+tab cycles the mode.</p>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] gap-px border border-line bg-line">
               {TOOLS.map(([name, badge, asks, d, ex]) => (
-                <div key={name} data-reveal className="card-hover tool-card" style={toolCard}>
-                  <div style={toolHead}>
-                    <span className="tool-name" style={{ fontSize: 30, fontWeight: 500 }}>{name}</span>
-                    <span style={{ fontSize: 12, border: `1px solid ${asks ? "var(--accent)" : "var(--line-2)"}`, color: asks ? "var(--accent)" : "var(--fg-2)", padding: "2px 8px" }}>{badge}</span>
+                <div key={name} data-reveal className={toolCard}>
+                  <div className={toolHead}>
+                    <span className="text-[30px] font-medium mobile:text-[24px]">{name}</span>
+                    <span className={`border px-2 py-[2px] text-[12px] ${asks ? "border-accent text-accent" : "border-line-2 text-fg-2"}`}>{badge}</span>
                   </div>
-                  <div style={toolDesc}>{d}</div>
-                  <pre style={toolPre}>{ex}</pre>
+                  <div className={toolDesc}>{d}</div>
+                  <pre className={toolPre}>{ex}</pre>
                 </div>
               ))}
             </div>
-            <div data-reveal style={{ marginTop: 56, overflowX: "auto", borderTop: "1px solid var(--fg-3)" }}>
-              <table className="mono" style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, whiteSpace: "nowrap", textAlign: "left" }}>
+            <div data-reveal className="mt-14 overflow-x-auto border-t border-fg-3">
+              <table className="w-full border-collapse text-left font-mono text-[13px] whitespace-nowrap">
                 <thead>
-                  <tr style={{ color: "var(--fg-3)" }}>
-                    <th style={{ ...th, padding: "12px 16px 12px 0" }}>mode</th>
-                    <th style={th}>read · list · search</th>
-                    <th style={th}>write · edit</th>
-                    <th style={th}>bash</th>
-                    <th style={{ ...th, padding: "12px 0 12px 16px" }}>fetch</th>
+                  <tr className="text-fg-3">
+                    <th className={thFirst}>mode</th>
+                    <th className={th}>read · list · search</th>
+                    <th className={th}>write · edit</th>
+                    <th className={th}>bash</th>
+                    <th className={thLast}>fetch</th>
                   </tr>
                 </thead>
                 <tbody>
                   {MODES.map(([m, r, w, b, f]) => (
-                    <tr key={m} style={{ borderTop: "1px solid var(--line)" }}>
-                      <td style={{ ...td, padding: "12px 16px 12px 0", fontWeight: 500 }}>{m}</td>
-                      <td style={{ ...td, color: "var(--fg-2)" }}>{r}</td>
-                      <td style={{ ...td, color: w.startsWith("ask") ? "var(--accent)" : "var(--fg-2)" }}>{w}</td>
-                      <td style={{ ...td, color: b.startsWith("ask") ? "var(--accent)" : "var(--fg-2)" }}>{b}</td>
-                      <td style={{ ...td, padding: "12px 0 12px 16px", color: f === "ask" ? "var(--accent)" : "var(--fg-2)" }}>{f}</td>
+                    <tr key={m} className="border-t border-line">
+                      <td className={`${tdFirst} font-medium`}>{m}</td>
+                      <td className={`${td} text-fg-2`}>{r}</td>
+                      <td className={`${td} ${w.startsWith("ask") ? "text-accent" : "text-fg-2"}`}>{w}</td>
+                      <td className={`${td} ${b.startsWith("ask") ? "text-accent" : "text-fg-2"}`}>{b}</td>
+                      <td className={`${tdLast} ${f === "ask" ? "text-accent" : "text-fg-2"}`}>{f}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <div style={{ marginTop: 64, display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,340px),1fr))", gap: "32px 48px", alignItems: "start" }}>
+            <div className="mt-16 grid grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] items-start gap-x-12 gap-y-8">
               <div>
-                <h3 className="serif" style={{ fontWeight: 400, fontSize: 28, lineHeight: 1.2, margin: "0 0 14px" }}>A denial is information.</h3>
-                <p data-reveal className="serif" style={{ fontSize: 18, lineHeight: 1.6, color: "var(--fg-2)", maxWidth: "52ch", margin: 0, textWrap: "pretty" as never }}>Approve once, for this session, or always (saved as a rule). Or deny with a reason: the call does not run, and your reason goes back to the model so it can propose something else or stop.</p>
+                <h3 className="mt-0 mb-[14px] font-serif text-[28px] leading-[1.2] font-normal">A denial is information.</h3>
+                <p data-reveal className="m-0 max-w-[52ch] font-serif text-[18px] leading-[1.6] text-pretty text-fg-2">Approve once, for this session, or always (saved as a rule). Or deny with a reason: the call does not run, and your reason goes back to the model so it can propose something else or stop.</p>
               </div>
-              <div style={{ fontSize: 13 }}>
+              <div className="text-[13px]">
                 <ApprovalCard tool="edit" target="cmd/list.go" diff={["@@ -14,3 +14,3 @@", "-    return printTable(c.OutOrStdout(), tasks)", "+    return printJSON(c.OutOrStdout(), tasks)"]} status="denied" />
-                <pre style={{ margin: 0, border: "1px solid var(--line)", padding: "10px 12px", fontFamily: "var(--mono)", fontSize: 12.5, lineHeight: 1.55, color: "var(--fg-2)", whiteSpace: "pre-wrap", wordBreak: "break-word", overflow: "hidden" }}>{`tool_result → model
+                <pre className="m-0 overflow-hidden border border-line px-3 py-[10px] font-mono text-[12.5px] leading-[1.55] whitespace-pre-wrap [word-break:break-word] text-fg-2">{`tool_result → model
 { "tool": "edit", "status": "denied", "reason": "keep the table as the default" }`}</pre>
               </div>
             </div>
@@ -702,45 +718,47 @@ export default class Landing extends React.Component<LandingProps, State> {
         </section>
 
         {/* 01 sandbox */}
-        <section id="sandbox" style={{ borderTop: "1px solid var(--line)" }}>
-          <div className="sec" style={{ ...sectionPad, display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,380px),1fr))", gap: "48px 64px", alignItems: "start" }}>
+        <section id="sandbox" className="border-t border-line">
+          <div className={`${sectionPad} ${split2}`}>
             <div>
-              <div data-reveal style={label}>01 · contained by default</div>
-              <h2 data-reveal className="h2" style={{ ...h2, maxWidth: "16ch" }}>
-                Contained, <em style={em}>not interrogated.</em>
+              <div data-reveal className={label}>01 · contained by default</div>
+              <h2 data-reveal className={`${h2} ${h2m} max-w-[16ch]`}>
+                Contained, <em className={em}>not interrogated.</em>
               </h2>
-              <p data-reveal className="lead" style={{ ...lead, maxWidth: "52ch", margin: "0 0 16px" }}>Most agents either ask before every command or run them on your host. Karya does neither: every bash command, and every process it starts, runs under the operating system's sandbox, so it can run without asking. sandbox-exec on macOS, bubblewrap with seccomp on Linux and WSL2. Writes are limited to the project root and a per-session temp directory, and .git stays read-only. Network is off except for allowlisted domains, with profiles for go, npm, pypi and cargo. A missing sandbox fails closed.</p>
-              <p data-reveal className="lead" style={{ ...lead, maxWidth: "52ch", margin: "0 0 28px" }}>The file tools are confined to the root. They reject absolute paths, paths that escape with .., and symlinks that resolve outside it.</p>
-              <div style={{ border: "1px solid var(--line-2)", padding: "14px 16px", maxWidth: "52ch" }}>
-                <div className="mono" style={{ fontSize: 12.5, color: "var(--fg-3)", marginBottom: 6 }}>note</div>
-                <div className="serif" style={{ fontSize: 17, lineHeight: 1.5, color: "var(--fg)" }}>The sandbox limits how much damage a mistaken command can do. It is a blast-radius limiter, not a security boundary, and it should not be relied on to contain hostile code.</div>
+              <p data-reveal className={`${lead} mt-0 mb-4 max-w-[52ch]`}>Most agents either ask before every command or run them on your host. Karya does neither: every bash command, and every process it starts, runs under the operating system's sandbox, so it can run without asking. sandbox-exec on macOS, bubblewrap with seccomp on Linux and WSL2. Writes are limited to the project root and a per-session temp directory, and .git stays read-only. Network is off except for allowlisted domains, with profiles for go, npm, pypi and cargo. A missing sandbox fails closed.</p>
+              <p data-reveal className={`${lead} mt-0 mb-7 max-w-[52ch]`}>The file tools are confined to the root. They reject absolute paths, paths that escape with .., and symlinks that resolve outside it.</p>
+              <div className="max-w-[52ch] border border-line-2 px-4 py-[14px]">
+                <div className="mb-[6px] font-mono text-[12.5px] text-fg-3">note</div>
+                <div className="font-serif text-[17px] leading-[1.5] text-fg">The sandbox limits how much damage a mistaken command can do. It is a blast-radius limiter, not a security boundary, and it should not be relied on to contain hostile code.</div>
               </div>
             </div>
-            <div data-reveal className="mono" style={{ display: "flex", flexDirection: "column", gap: 12, fontSize: 12.5, lineHeight: 1.7, minWidth: 0 }}>
-              <div style={{ border: "1px solid var(--line-2)", background: "var(--term-bg)" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", flexWrap: "wrap", gap: "4px 16px", padding: "8px 14px", borderBottom: "1px solid var(--line)", color: "var(--fg-3)" }}>
+            <div data-reveal className="flex min-w-0 flex-col gap-3 font-mono text-[12.5px] leading-[1.7]">
+              <div className="border border-line-2 bg-term">
+                <div className="flex flex-wrap justify-between gap-x-4 gap-y-1 border-b border-line px-[14px] py-2 text-fg-3">
                   <span>sandbox bubblewrap+seccomp · profile go</span>
                   <span>live</span>
                 </div>
-                <div style={{ padding: "12px 14px", overflowX: "auto", overflowY: "hidden" }}>
+                <div className="overflow-x-auto overflow-y-hidden px-[14px] py-3">
                   {ROWS.map(([id, path, note, status, kind]) => {
                     const hit = !!(act && act.rows.includes(id));
-                    const bg = hit ? (act!.ok ? "var(--ok-bg)" : "var(--no-bg)") : "transparent";
-                    const color = hit ? (act!.ok ? "var(--ok)" : "var(--no)") : kind === "w" ? "var(--fg)" : kind === "p" ? "var(--fg-2)" : "var(--fg-3)";
+                    const bg = hit ? (act!.ok ? "bg-ok-bg" : "bg-no-bg") : "bg-transparent";
+                    const color = hit ? (act!.ok ? "text-ok" : "text-no") : kind === "w" ? "text-fg" : kind === "p" ? "text-fg-2" : "text-fg-3";
                     return (
-                      <div key={id} style={{ display: "flex", justifyContent: "space-between", gap: 12, whiteSpace: "pre", padding: "0 6px", margin: "0 -6px", background: bg, color, transition: "background .3s,color .3s" }}>
+                      <div key={id} className={`-mx-[6px] my-0 flex justify-between gap-3 px-[6px] py-0 whitespace-pre [transition:background_.3s,color_.3s] ${bg} ${color}`}>
                         <span>
                           {path}
-                          <span style={{ opacity: 0.7 }}>{note}</span>
+                          <span className="opacity-70">{note}</span>
                         </span>
-                        <span style={{ fontWeight: kind === "w" || hit ? 600 : 400 }}>{hit ? (act!.ok ? "✓ " : "✕ ") + status : status}</span>
+                        <span className={kind === "w" || hit ? "font-semibold" : "font-normal"}>{hit ? (act!.ok ? "✓ " : "✕ ") + status : status}</span>
                       </div>
                     );
                   })}
                 </div>
-                <div style={{ borderTop: "1px solid var(--line)", padding: "12px 14px", height: "11.9em", overflow: "hidden", display: "flex", flexDirection: "column", justifyContent: "flex-end" }}>
+                <div className="flex h-[11.9em] flex-col justify-end overflow-hidden border-t border-line px-[14px] py-3">
                   {this.state.sbLines.map((l, i) => (
-                    <div key={i} style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", color: l.color }}>{l.text}</div>
+                    <div key={i} className={`whitespace-pre-wrap [word-break:break-word] ${l.color}`}>
+                      {l.text}
+                    </div>
                   ))}
                 </div>
               </div>
@@ -749,162 +767,164 @@ export default class Landing extends React.Component<LandingProps, State> {
         </section>
 
         {/* 02 undo */}
-        <section id="undo" style={{ borderTop: "1px solid var(--line)" }}>
-          <div className="sec" style={{ ...sectionPad, display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,380px),1fr))", gap: "48px 64px", alignItems: "start" }}>
+        <section id="undo" className="border-t border-line">
+          <div className={`${sectionPad} ${split2}`}>
             <div>
-              <div data-reveal style={label}>02 · every turn can be undone</div>
-              <h2 data-reveal className="h2" style={{ ...h2, maxWidth: "16ch" }}>
-                Let it run. <em style={em}>Take it back.</em>
+              <div data-reveal className={label}>02 · every turn can be undone</div>
+              <h2 data-reveal className={`${h2} ${h2m} max-w-[16ch]`}>
+                Let it run. <em className={em}>Take it back.</em>
               </h2>
-              <p data-reveal className="lead" style={{ ...lead, maxWidth: "52ch", margin: "0 0 16px" }}>Before a turn's first side effect, Karya snapshots the working tree to a shadow git directory outside your project. /undo restores it, /rewind goes back several turns, /redo puts it all back. It covers every tool, bash included.</p>
-              <p data-reveal className="lead" style={{ ...lead, maxWidth: "52ch", margin: 0 }}>Every tool call is written to the log before it runs. If Karya crashes mid-call, resume marks the call as outcome unknown and never repeats it on its own.</p>
+              <p data-reveal className={`${lead} mt-0 mb-4 max-w-[52ch]`}>Before a turn's first side effect, Karya snapshots the working tree to a shadow git directory outside your project. /undo restores it, /rewind goes back several turns, /redo puts it all back. It covers every tool, bash included.</p>
+              <p data-reveal className={`${lead} m-0 max-w-[52ch]`}>Every tool call is written to the log before it runs. If Karya crashes mid-call, resume marks the call as outcome unknown and never repeats it on its own.</p>
             </div>
-            <pre data-reveal style={{ margin: 0, border: "1px solid var(--line-2)", background: "var(--term-bg)", padding: "14px 16px", fontFamily: "var(--mono)", fontSize: 13, lineHeight: 1.75, color: "var(--fg-2)", overflowX: "auto", minWidth: 0 }}>
-              <span style={{ color: "var(--fg-3)" }}>turn 3 · snapshot 9c1e04 · before first side effect{"\n"}</span>
+            <pre data-reveal className="m-0 min-w-0 overflow-x-auto border border-line-2 bg-term px-4 py-[14px] font-mono text-[13px] leading-[1.75] text-fg-2">
+              <span className="text-fg-3">turn 3 · snapshot 9c1e04 · before first side effect{"\n"}</span>
               {"· edit  cmd/list.go  ok\n· bash  go generate ./...  sandboxed  exit 0\n· write internal/gen/list_gen.go  ok\n\n"}
-              <span style={{ color: "var(--accent)" }}>›</span>
-              <span style={{ color: "var(--fg)" }}> /undo{"\n"}</span>
-              <span style={{ color: "var(--ok)" }}>✓ restored the tree to 9c1e04 · 3 files{"\n"}</span>
-              <span style={{ color: "var(--fg-3)" }}>  not covered: .gitignored build/ (reported, untouched)</span>
+              <span className="text-accent">›</span>
+              <span className="text-fg"> /undo{"\n"}</span>
+              <span className="text-ok">✓ restored the tree to 9c1e04 · 3 files{"\n"}</span>
+              <span className="text-fg-3">  not covered: .gitignored build/ (reported, untouched)</span>
             </pre>
           </div>
         </section>
 
         {/* 03 cost */}
-        <section id="cost" style={{ borderTop: "1px solid var(--line)" }}>
-          <div className="sec" style={sectionPad}>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,380px),1fr))", gap: "32px 64px", alignItems: "end" }}>
+        <section id="cost" className="border-t border-line">
+          <div className={sectionPad}>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,380px),1fr))] items-end gap-x-16 gap-y-8">
               <div>
-                <div data-reveal style={label}>03 · cost you can predict</div>
-                <h2 data-reveal className="h2" style={{ ...h2, maxWidth: "16ch" }}>
-                  Budgets, <em style={em}>enforced.</em>
+                <div data-reveal className={label}>03 · cost you can predict</div>
+                <h2 data-reveal className={`${h2} ${h2m} max-w-[16ch]`}>
+                  Budgets, <em className={em}>enforced.</em>
                 </h2>
-                <p data-reveal className="lead" style={{ ...lead, maxWidth: "52ch" }}>Limits on steps, tokens, cost and time are enforced while the task runs, not reported after. Hitting one stops the turn, says which limit fired, and leaves the session resumable. Loop detection pauses a turn after three identical calls or the same failure three times. Every task ends with a report: files changed, commands run, checks, tokens, cost and duration.</p>
+                <p data-reveal className={`${lead} m-0 max-w-[52ch]`}>Limits on steps, tokens, cost and time are enforced while the task runs, not reported after. Hitting one stops the turn, says which limit fired, and leaves the session resumable. Loop detection pauses a turn after three identical calls or the same failure three times. Every task ends with a report: files changed, commands run, checks, tokens, cost and duration.</p>
               </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                <div className="serif cost-big" style={{ fontWeight: 400, fontSize: "clamp(64px,9.5vw,150px)", lineHeight: 0.9, letterSpacing: "-0.04em", fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>{this.state.costT >= 1 ? "$0.02" : "$" + (0.02 * e).toFixed(4)}</div>
-                <div className="mono" style={{ display: "flex", flexWrap: "wrap", gap: "8px 16px", alignItems: "center", fontSize: 13, color: "var(--fg-3)" }}>
+              <div className="flex flex-col gap-[6px]">
+                <div className="font-serif text-[clamp(64px,9.5vw,150px)] leading-[0.9] font-normal tracking-[-0.04em] whitespace-nowrap tabular-nums mobile:text-[56px]">{this.state.costT >= 1 ? "$0.02" : "$" + (0.02 * e).toFixed(4)}</div>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[13px] text-fg-3">
                   <span>estimated cost of the task above · 4 turns · 41s</span>
-                  <button onClick={this.playLedger} className="replay" style={{ font: "inherit", background: "none", border: "1px solid var(--line-2)", color: "var(--fg-2)", padding: "3px 10px", cursor: "pointer" }}>
+                  <button onClick={this.playLedger} className="cursor-pointer border border-line-2 bg-transparent px-[10px] py-[3px] text-fg-2 hover:border-accent hover:text-accent">
                     replay
                   </button>
                 </div>
               </div>
             </div>
-            <div data-reveal style={{ marginTop: 56, overflowX: "auto", overflowY: "hidden", borderTop: "1px solid var(--fg-3)" }}>
-              <table className="mono" style={{ width: "100%", borderCollapse: "collapse", fontSize: 13, whiteSpace: "nowrap" }}>
+            <div data-reveal className="mt-14 overflow-x-auto overflow-y-hidden border-t border-fg-3">
+              <table className="w-full border-collapse font-mono text-[13px] whitespace-nowrap">
                 <thead>
-                  <tr style={{ color: "var(--fg-3)", textAlign: "left" }}>
-                    <th style={{ ...th, padding: "12px 16px 12px 0" }}>turn</th>
-                    <th style={th}>model</th>
-                    <th style={thR}>in</th>
-                    <th style={thR}>out</th>
-                    <th style={thR}>cost</th>
-                    <th style={thR}>duration</th>
-                    <th style={th}>tool</th>
-                    <th style={{ ...th, padding: "12px 0 12px 16px" }}>outcome</th>
+                  <tr className="text-left text-fg-3">
+                    <th className={thFirst}>turn</th>
+                    <th className={th}>model</th>
+                    <th className={thR}>in</th>
+                    <th className={thR}>out</th>
+                    <th className={thR}>cost</th>
+                    <th className={thR}>duration</th>
+                    <th className={th}>tool</th>
+                    <th className={thLast}>outcome</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {[
-                    [1, "812", "188", "$0.0034", "4.2s", "read", "ok · auto", "var(--fg-2)", false],
-                    [2, "1,046", "421", "$0.0061", "9.8s", "edit", "approved", "var(--ok)", false],
-                    [3, "1,297", "96", "$0.0034", "18.3s", "bash", "sandboxed · exit 0", "var(--ok)", false],
-                    [4, "1,657", "388", "$0.0071", "8.7s", "verify", "passed · done", "var(--ok)", false],
-                  ].map(([k, i, o, c, d, tool, out, outColor, toolDim]) => (
-                    <tr key={k as number} style={{ borderTop: "1px solid var(--line)", opacity: rowOp(k as number), transition: "opacity .5s" }}>
-                      <td style={{ ...td, padding: "12px 16px 12px 0" }}>{k as number}</td>
-                      <td style={{ ...td, color: "var(--fg-2)" }}>{model}</td>
-                      <td style={tdR}>{i as string}</td>
-                      <td style={tdR}>{o as string}</td>
-                      <td style={tdR}>{c as string}</td>
-                      <td style={tdR}>{d as string}</td>
-                      <td style={{ ...td, color: toolDim ? "var(--fg-3)" : undefined }}>{tool as string}</td>
-                      <td style={{ ...td, padding: "12px 0 12px 16px", color: outColor as string }}>{out as string}</td>
+                  {(
+                    [
+                      [1, "812", "188", "$0.0034", "4.2s", "read", "ok · auto", "text-fg-2"],
+                      [2, "1,046", "421", "$0.0061", "9.8s", "edit", "approved", "text-ok"],
+                      [3, "1,297", "96", "$0.0034", "18.3s", "bash", "sandboxed · exit 0", "text-ok"],
+                      [4, "1,657", "388", "$0.0071", "8.7s", "verify", "passed · done", "text-ok"],
+                    ] as const
+                  ).map(([k, i, o, c, d, tool, out, outColor]) => (
+                    <tr key={k} className={`border-t border-line [transition:opacity_.5s] ${rowOp(k)}`}>
+                      <td className={tdFirst}>{k}</td>
+                      <td className={`${td} text-fg-2`}>{model}</td>
+                      <td className={tdR}>{i}</td>
+                      <td className={tdR}>{o}</td>
+                      <td className={tdR}>{c}</td>
+                      <td className={tdR}>{d}</td>
+                      <td className={td}>{tool}</td>
+                      <td className={`${tdLast} ${outColor}`}>{out}</td>
                     </tr>
                   ))}
-                  <tr style={{ borderTop: "1px solid var(--fg-3)", fontWeight: 500, fontVariantNumeric: "tabular-nums" }}>
-                    <td style={{ ...td, padding: "12px 16px 12px 0" }}>total</td>
-                    <td style={td}></td>
-                    <td style={tdR}>{Math.round(4812 * e).toLocaleString("en-US")}</td>
-                    <td style={tdR}>{Math.round(1093 * e).toLocaleString("en-US")}</td>
-                    <td style={tdR}>{"$" + (0.02 * e).toFixed(4)}</td>
-                    <td style={tdR}>{(41 * e).toFixed(1) + "s"}</td>
-                    <td style={td}></td>
-                    <td style={{ ...td, padding: "12px 0 12px 16px" }}></td>
+                  <tr className="border-t border-fg-3 font-medium tabular-nums">
+                    <td className={tdFirst}>total</td>
+                    <td className={td}></td>
+                    <td className={tdR}>{Math.round(4812 * e).toLocaleString("en-US")}</td>
+                    <td className={tdR}>{Math.round(1093 * e).toLocaleString("en-US")}</td>
+                    <td className={tdR}>{"$" + (0.02 * e).toFixed(4)}</td>
+                    <td className={tdR}>{(41 * e).toFixed(1) + "s"}</td>
+                    <td className={td}></td>
+                    <td className={tdLast}></td>
                   </tr>
                 </tbody>
               </table>
             </div>
-            <pre style={{ margin: "32px 0 0", border: "1px solid var(--line-2)", padding: "12px 16px", fontFamily: "var(--mono)", fontSize: 13, lineHeight: 1.7, color: "var(--fg-2)", overflowX: "auto" }}>{`stopped  --max-cost reached ($1.00)
+            <pre className="mt-8 mb-0 overflow-x-auto border border-line-2 px-4 py-3 font-mono text-[13px] leading-[1.7] text-fg-2">{`stopped  --max-cost reached ($1.00)
 session 7f3a2c is resumable: karya resume 7f3a2c`}</pre>
           </div>
         </section>
 
         {/* 04 sessions */}
-        <section id="sessions" style={{ borderTop: "1px solid var(--line)" }}>
-          <div className="sec" style={sectionPad}>
-            <div data-reveal style={label}>04 · sessions that follow you</div>
-            <h2 data-reveal className="h2" style={{ ...h2, maxWidth: "20ch" }}>
-              Start on one machine. <em style={em}>Resume on another.</em>
+        <section id="sessions" className="border-t border-line">
+          <div className={sectionPad}>
+            <div data-reveal className={label}>04 · sessions that follow you</div>
+            <h2 data-reveal className={`${h2} ${h2m} max-w-[20ch]`}>
+              Start on one machine. <em className={em}>Resume on another.</em>
             </h2>
-            <p data-reveal className="lead" style={{ ...lead, maxWidth: "62ch", margin: "0 0 48px" }}>Sessions are append-only JSONL logs stored outside the project. They are keyed to the git remote rather than the local path, and contain no absolute paths, hostnames or secrets. karya sync moves them through a folder, bucket or git ref you own, end-to-end encrypted, so the target never sees plaintext. On resume, Karya compares the recorded HEAD and dirty-tree flag with the live repository and tells the model what changed.</p>
-            <div className="mono" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,260px),1fr))", gap: 16, fontSize: 13, lineHeight: 1.7 }}>
-              <div data-reveal style={{ border: "1px solid var(--line-2)" }}>
-                <div style={{ padding: "8px 14px", borderBottom: "1px solid var(--line)", color: "var(--fg-3)" }}>machine a · darwin</div>
-                <div style={{ padding: "12px 14px", whiteSpace: "pre", overflowX: "auto" }}>
-                  <span style={{ color: "var(--fg-3)" }}>$</span> cd ~/src/tasks{"\n"}
-                  <span style={{ color: "var(--fg-3)" }}>$</span> karya{"\n"}
-                  <span style={{ color: "var(--fg-3)" }}>{"session 7f3a2c\nHEAD a1b2c3 · clean"}</span>
+            <p data-reveal className={`${lead} mt-0 mb-12 max-w-[62ch]`}>Sessions are append-only JSONL logs stored outside the project. They are keyed to the git remote rather than the local path, and contain no absolute paths, hostnames or secrets. karya sync moves them through a folder, bucket or git ref you own, end-to-end encrypted, so the target never sees plaintext. On resume, Karya compares the recorded HEAD and dirty-tree flag with the live repository and tells the model what changed.</p>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,260px),1fr))] gap-4 font-mono text-[13px] leading-[1.7]">
+              <div data-reveal className="border border-line-2">
+                <div className="border-b border-line px-[14px] py-2 text-fg-3">machine a · darwin</div>
+                <div className="overflow-x-auto px-[14px] py-3 whitespace-pre">
+                  <span className="text-fg-3">$</span> cd ~/src/tasks{"\n"}
+                  <span className="text-fg-3">$</span> karya{"\n"}
+                  <span className="text-fg-3">{"session 7f3a2c\nHEAD a1b2c3 · clean"}</span>
                 </div>
               </div>
-              <div style={{ border: "1px dashed var(--line-2)", display: "flex", flexDirection: "column", justifyContent: "center", gap: 6, padding: "16px 14px" }}>
-                <div style={{ color: "var(--fg-3)" }}>session key</div>
-                <div style={{ fontSize: 14, fontWeight: 500, wordBreak: "break-all" }}>github.com/acme/tasks</div>
-                <div style={{ color: "var(--fg-3)" }}>
+              <div className="flex flex-col justify-center gap-[6px] border border-dashed border-line-2 px-[14px] py-4">
+                <div className="text-fg-3">session key</div>
+                <div className="text-[14px] font-medium break-all">github.com/acme/tasks</div>
+                <div className="text-fg-3">
                   7f3a2c.jsonl · append-only
                   <br />
                   stored outside the project
                 </div>
               </div>
-              <div data-reveal style={{ border: "1px solid var(--line-2)" }}>
-                <div style={{ padding: "8px 14px", borderBottom: "1px solid var(--line)", color: "var(--fg-3)" }}>machine b · linux</div>
-                <div style={{ padding: "12px 14px", whiteSpace: "pre", overflowX: "auto" }}>
-                  <span style={{ color: "var(--fg-3)" }}>$</span> cd ~/work/tasks{"\n"}
-                  <span style={{ color: "var(--fg-3)" }}>$</span> karya resume 7f3a2c{"\n"}
-                  <span style={{ color: "var(--fg-3)" }}>HEAD d4e5f6 · dirty</span>
+              <div data-reveal className="border border-line-2">
+                <div className="border-b border-line px-[14px] py-2 text-fg-3">machine b · linux</div>
+                <div className="overflow-x-auto px-[14px] py-3 whitespace-pre">
+                  <span className="text-fg-3">$</span> cd ~/work/tasks{"\n"}
+                  <span className="text-fg-3">$</span> karya resume 7f3a2c{"\n"}
+                  <span className="text-fg-3">HEAD d4e5f6 · dirty</span>
                 </div>
               </div>
             </div>
-            <div className="mono" style={{ marginTop: 16, border: "1px solid var(--accent)", padding: "14px 16px", fontSize: 13, lineHeight: 1.7 }}>
-              <div style={{ color: "var(--fg-3)" }}>drift note, sent to the model on resume</div>
-              <div style={{ marginTop: 4 }}>HEAD moved from a1b2c3 to d4e5f6, working tree dirty, platform changed from darwin to linux.</div>
+            <div className="mt-4 border border-accent px-4 py-[14px] font-mono text-[13px] leading-[1.7]">
+              <div className="text-fg-3">drift note, sent to the model on resume</div>
+              <div className="mt-1">HEAD moved from a1b2c3 to d4e5f6, working tree dirty, platform changed from darwin to linux.</div>
             </div>
           </div>
         </section>
 
         {/* 05 lock-in */}
-        <section id="lockin" style={{ borderTop: "1px solid var(--line)" }}>
-          <div className="sec" style={{ ...sectionPad, display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,380px),1fr))", gap: "48px 64px", alignItems: "start" }}>
+        <section id="lockin" className="border-t border-line">
+          <div className={`${sectionPad} ${split2}`}>
             <div>
-              <div data-reveal style={label}>05 · no lock-in</div>
-              <h2 data-reveal className="h2" style={{ ...h2, maxWidth: "16ch" }}>
-                Switch models <em style={em}>mid-session.</em>
+              <div data-reveal className={label}>05 · no lock-in</div>
+              <h2 data-reveal className={`${h2} ${h2m} max-w-[16ch]`}>
+                Switch models <em className={em}>mid-session.</em>
               </h2>
-              <p data-reveal className="lead" style={{ ...lead, maxWidth: "52ch", margin: "0 0 16px" }}>The agent loop depends on a single internal provider interface: Gemini first, then Anthropic and OpenAI-compatible APIs (OpenRouter, DeepSeek, Qwen, Ollama, vLLM, LM Studio). Switch at any turn boundary with /model. Your own API keys, never logged.</p>
-              <div data-reveal className="mono" style={{ display: "flex", flexWrap: "wrap", gap: 8, margin: "0 0 20px", fontSize: 12.5 }}>
+              <p data-reveal className={`${lead} mt-0 mb-4 max-w-[52ch]`}>The agent loop depends on a single internal provider interface: Gemini first, then Anthropic and OpenAI-compatible APIs (OpenRouter, DeepSeek, Qwen, Ollama, vLLM, LM Studio). Switch at any turn boundary with /model. Your own API keys, never logged.</p>
+              <div data-reveal className="mt-0 mb-5 flex flex-wrap gap-2 font-mono text-[12.5px]">
                 {PROVIDERS.map(([n, live]) => (
-                  <span key={n} style={{ border: `1px solid ${live ? "var(--ok)" : "var(--line-2)"}`, color: live ? "var(--ok)" : "var(--fg-2)", padding: "4px 10px" }}>
+                  <span key={n} className={`border px-[10px] py-1 ${live ? "border-ok text-ok" : "border-line-2 text-fg-2"}`}>
                     {live ? "● " : ""}
                     {n}
                   </span>
                 ))}
-                <span style={{ color: "var(--fg-3)", padding: "4px 0" }}>● works today · others in M4</span>
+                <span className="px-0 py-1 text-fg-3">● works today · others in M4</span>
               </div>
-              <p data-reveal className="lead" style={{ ...lead, maxWidth: "52ch", margin: "0 0 28px" }}>Sessions are stored in a canonical message format, never in a provider's wire types, so a log does not depend on the provider that wrote it.</p>
-              <pre style={{ margin: 0, background: "var(--bg-2)", border: "1px solid var(--line)", padding: "14px 16px", fontFamily: "var(--mono)", fontSize: 13, lineHeight: 1.7, overflowX: "auto" }}>
-                <span style={{ color: "var(--fg-3)" }}>$</span> export GEMINI_API_KEY=…{"\n"}
-                <span style={{ color: "var(--fg-3)" }}>$</span> karya --model {model} --max-cost 1.00
+              <p data-reveal className={`${lead} mt-0 mb-7 max-w-[52ch]`}>Sessions are stored in a canonical message format, never in a provider's wire types, so a log does not depend on the provider that wrote it.</p>
+              <pre className="m-0 overflow-x-auto border border-line bg-bg-2 px-4 py-[14px] font-mono text-[13px] leading-[1.7]">
+                <span className="text-fg-3">$</span> export GEMINI_API_KEY=…{"\n"}
+                <span className="text-fg-3">$</span> karya --model {model} --max-cost 1.00
               </pre>
             </div>
             <EnvTable />
@@ -912,22 +932,22 @@ session 7f3a2c is resumable: karya resume 7f3a2c`}</pre>
         </section>
 
         {/* faq */}
-        <section id="faq" style={{ borderTop: "1px solid var(--line)" }}>
-          <div className="sec" style={{ ...sectionPad, display: "flex", flexWrap: "wrap", gap: "32px 64px", alignItems: "flex-start" }}>
-            <div style={{ flex: "1 1 280px" }}>
-              <div data-reveal style={label}>questions</div>
-              <h2 data-reveal className="h2" style={{ ...h2, maxWidth: "12ch" }}>
-                Before you <em style={em}>install.</em>
+        <section id="faq" className="border-t border-line">
+          <div className={`${sectionPad} flex flex-wrap items-start gap-x-16 gap-y-8`}>
+            <div className="flex-[1_1_280px]">
+              <div data-reveal className={label}>questions</div>
+              <h2 data-reveal className={`${h2} ${h2m} max-w-[12ch]`}>
+                Before you <em className={em}>install.</em>
               </h2>
             </div>
-            <div style={{ borderTop: "1px solid var(--line-2)", flex: "2 1 480px", minWidth: 0 }}>
+            <div className="min-w-0 flex-[2_1_480px] border-t border-line-2">
               {FAQ.map(([q, a]) => (
-                <details key={q} className="faq" style={{ borderBottom: "1px solid var(--line-2)" }}>
-                  <summary className="serif" style={{ cursor: "pointer", listStyle: "none", padding: "20px 0", fontSize: 21, lineHeight: 1.3, display: "flex", justifyContent: "space-between", gap: 16 }}>
+                <details key={q} className="group border-b border-line-2">
+                  <summary className="flex cursor-pointer list-none justify-between gap-4 px-0 py-5 font-serif text-[21px] leading-[1.3] hover:text-accent [&::-webkit-details-marker]:hidden">
                     {q}
-                    <span className="mono faq-icon" style={{ color: "var(--accent)", flex: "none" }}>+</span>
+                    <span className="flex-none font-mono text-accent [transition:transform_.2s] group-open:[transform:rotate(45deg)]">+</span>
                   </summary>
-                  <p className="serif" style={{ margin: "0 0 22px", fontSize: 17.5, lineHeight: 1.6, color: "var(--fg-2)", maxWidth: "62ch" }}>{a}</p>
+                  <p className="mt-0 mb-[22px] max-w-[62ch] font-serif text-[17.5px] leading-[1.6] text-fg-2">{a}</p>
                 </details>
               ))}
             </div>
@@ -935,47 +955,59 @@ session 7f3a2c is resumable: karya resume 7f3a2c`}</pre>
         </section>
 
         {/* open source */}
-        <section id="source" style={{ borderTop: "1px solid var(--line)" }}>
-          <div className="sec" style={sectionPad}>
-            <div data-reveal style={label}>open source</div>
-            <h2 data-reveal className="h2" style={{ ...h2, maxWidth: "20ch" }}>Small enough to read.</h2>
-            <p data-reveal className="lead" style={{ ...lead, maxWidth: "62ch", margin: "0 0 16px" }}>One loop, one provider interface, one binary, and every dependency has to earn its place. Karya is pre-1.0 and in active development; the roadmap shows what works today and what is next. Interfaces may change between releases.</p>
-            <p data-reveal className="lead" style={{ ...lead, maxWidth: "62ch", margin: "0 0 36px" }}>
+        <section id="source" className="border-t border-line">
+          <div className={sectionPad}>
+            <div data-reveal className={label}>open source</div>
+            <h2 data-reveal className={`${h2} ${h2m} max-w-[20ch]`}>Small enough to read.</h2>
+            <p data-reveal className={`${lead} mt-0 mb-4 max-w-[62ch]`}>One loop, one provider interface, one binary, and every dependency has to earn its place. Karya is pre-1.0 and in active development; the roadmap shows what works today and what is next. Interfaces may change between releases.</p>
+            <p data-reveal className={`${lead} mt-0 mb-9 max-w-[62ch]`}>
               Issues and pull requests are welcome. For anything larger than a bug fix, open an issue first so the change can be discussed before the work is done.
             </p>
-            <div className="mono" style={{ display: "flex", flexWrap: "wrap", gap: "12px 28px", fontSize: 13.5 }}>
-              <a href="https://github.com/prateek041/karya" className="ha" style={{ color: "var(--fg)", textUnderlineOffset: 4 }}>github.com/prateek041/karya ↗</a>
-              <Link href="/roadmap" className="ha" style={{ color: "var(--fg-2)", textUnderlineOffset: 4 }}>Roadmap</Link>
-              <a href="https://github.com/prateek041/karya/issues" className="ha" style={{ color: "var(--fg-2)", textUnderlineOffset: 4 }}>Issues</a>
+            <div className="flex flex-wrap gap-x-7 gap-y-3 font-mono text-[13.5px]">
+              <a href="https://github.com/prateek041/karya" className={`${textLink} text-fg`}>
+                github.com/prateek041/karya ↗
+              </a>
+              <Link href="/roadmap" className={`${textLink} text-fg-2`}>
+                Roadmap
+              </Link>
+              <a href="https://github.com/prateek041/karya/issues" className={`${textLink} text-fg-2`}>
+                Issues
+              </a>
             </div>
           </div>
         </section>
 
         {/* closing CTA */}
-        <section style={{ ...gridBg, borderTop: "1px solid var(--line)" }}>
-          <div className="cta-wrap" style={{ maxWidth: 1200, margin: "0 auto", padding: "clamp(88px,12vw,168px) 24px", display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 40 }}>
-            <div data-reveal style={{ display: "flex", alignItems: "center", gap: 18 }}>
+        <section className="bg-grid border-t border-line">
+          <div className="mx-auto my-0 flex max-w-[1200px] flex-col items-start gap-10 px-6 py-[clamp(88px,12vw,168px)] mobile:gap-7 mobile:px-5 mobile:py-16">
+            <div data-reveal className="flex items-center gap-[18px]">
               <Mark size={88} />
-              <span className="mono" style={{ fontSize: 13, color: "var(--fg-3)", lineHeight: 1.6 }}>
+              <span className="font-mono text-[13px] leading-[1.6] text-fg-3">
                 kārya · कार्य
                 <br />
                 every task, carried through
               </span>
             </div>
-            <h2 data-reveal className="serif cta-h2" style={{ fontWeight: 400, fontSize: "clamp(56px,10vw,152px)", lineHeight: 0.92, letterSpacing: "-0.045em", margin: 0, maxWidth: "11ch" }}>
-              Let it run. <em style={em}>Stay in control.</em>
+            <h2 data-reveal className="m-0 max-w-[11ch] font-serif text-[clamp(56px,10vw,152px)] leading-[0.92] font-normal tracking-[-0.045em] mobile:text-[48px]">
+              Let it run. <em className={em}>Stay in control.</em>
             </h2>
-            <div data-reveal className="mono cmd-box" style={{ display: "flex", alignItems: "center", gap: 16, maxWidth: "100%", border: "1px solid var(--accent)", background: "var(--bg-2)", padding: "16px 16px 16px 22px", fontSize: "clamp(13px,1.6vw,17px)" }}>
-              <span style={{ color: "var(--accent)" }}>$</span>
-              <code style={{ overflowX: "auto", whiteSpace: "nowrap", minWidth: 0 }}>{INSTALL}</code>
-              <button onClick={this.copy} className="btn-fill" style={{ font: "inherit", fontSize: 13, background: "var(--accent)", border: "1px solid var(--accent)", color: "var(--accent-ink)", padding: "6px 14px", cursor: "pointer", flex: "none" }}>
+            <div data-reveal className={`${cmdBox} gap-4 py-4 pr-4 pl-[22px] text-[clamp(13px,1.6vw,17px)]`}>
+              <span className="text-accent">$</span>
+              <code className={cmdCode}>{INSTALL}</code>
+              <button onClick={this.copy} className={`${copyBtn} px-[14px] py-[6px] text-[13px]`}>
                 {copyLabel}
               </button>
             </div>
-            <div data-reveal className="mono" style={{ display: "flex", flexWrap: "wrap", gap: "12px 32px", fontSize: 14 }}>
-              <Link href="/docs" className="ha" style={{ color: "var(--fg)", textUnderlineOffset: 4 }}>Read the docs →</Link>
-              <a href="https://github.com/prateek041/karya" className="ha" style={{ color: "var(--fg)", textUnderlineOffset: 4 }}>GitHub ↗</a>
-              <a href="mailto:lokesh@usekarya.dev?subject=Tell%20me%20when%20Karya%20launches" className="ha" style={{ color: "var(--fg)", textUnderlineOffset: 4 }}>Tell me at launch →</a>
+            <div data-reveal className="flex flex-wrap gap-x-8 gap-y-3 font-mono text-[14px]">
+              <Link href="/docs" className={`${textLink} text-fg`}>
+                Read the docs →
+              </Link>
+              <a href="https://github.com/prateek041/karya" className={`${textLink} text-fg`}>
+                GitHub ↗
+              </a>
+              <a href="mailto:lokesh@usekarya.dev?subject=Tell%20me%20when%20Karya%20launches" className={`${textLink} text-fg`}>
+                Tell me at launch →
+              </a>
             </div>
           </div>
         </section>

@@ -5,7 +5,7 @@ import "./globals.css";
 const mono = IBM_Plex_Mono({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
-  variable: "--font-mono",
+  variable: "--font-plex",
   display: "swap",
 });
 
@@ -14,7 +14,7 @@ const serif = Newsreader({
   weight: "variable",
   style: ["normal", "italic"],
   axes: ["opsz"],
-  variable: "--font-serif",
+  variable: "--font-newsreader",
   display: "swap",
 });
 

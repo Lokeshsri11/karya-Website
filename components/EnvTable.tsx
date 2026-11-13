@@ -1,10 +1,10 @@
-const desc: React.CSSProperties = { flex: "1 1 260px", fontFamily: "var(--serif)", fontSize: 17, lineHeight: 1.5, color: "var(--fg-2)" };
-const row: React.CSSProperties = { display: "flex", flexWrap: "wrap", gap: "6px 28px", padding: "14px 0", borderBottom: "1px solid var(--line)" };
-const key: React.CSSProperties = { flex: "0 0 220px", display: "flex", flexDirection: "column", gap: 4 };
+const desc = "flex-[1_1_260px] font-serif text-[17px] leading-[1.5] text-fg-2";
+const row = "flex flex-wrap gap-x-7 gap-y-[6px] border-b border-line py-[14px] px-0";
+const key = "flex flex-[0_0_220px] flex-col gap-1";
 
 type Status = "today" | "planned";
 const tag = (s: Status, note?: string) => (
-  <span style={{ color: s === "today" ? "var(--ok)" : "var(--fg-3)" }}>
+  <span className={s === "today" ? "text-ok" : "text-fg-3"}>
     {s === "today" ? "works today" : "planned"}
     {note ? ` · ${note}` : ""}
   </span>
@@ -30,14 +30,14 @@ const FLAGS: [string, Status, string | undefined, string][] = [
 
 function Rows({ items }: { items: [string, Status, string | undefined, string][] }) {
   return (
-    <div style={{ borderTop: "1px solid var(--line)" }}>
+    <div className="border-t border-line">
       {items.map(([k, s, note, d]) => (
-        <div key={k} style={row}>
-          <div style={key}>
-            <span style={{ fontWeight: 500, wordBreak: "break-word" }}>{k}</span>
+        <div key={k} className={row}>
+          <div className={key}>
+            <span className="font-medium [word-break:break-word]">{k}</span>
             {tag(s, note)}
           </div>
-          <div style={desc}>{d}</div>
+          <div className={desc}>{d}</div>
         </div>
       ))}
     </div>
@@ -46,12 +46,12 @@ function Rows({ items }: { items: [string, Status, string | undefined, string][]
 
 export default function EnvTable({ showFlags = true }: { showFlags?: boolean }) {
   return (
-    <div className="mono" style={{ fontSize: 13, color: "var(--fg)", textAlign: "left" }}>
-      <div style={{ color: "var(--fg-3)", padding: "0 0 10px" }}>environment</div>
+    <div className="text-left font-mono text-[13px] text-fg">
+      <div className="px-0 pt-0 pb-[10px] text-fg-3">environment</div>
       <Rows items={ENV} />
       {showFlags && (
         <>
-          <div style={{ color: "var(--fg-3)", padding: "32px 0 10px" }}>commands and flags</div>
+          <div className="px-0 pt-8 pb-[10px] text-fg-3">commands and flags</div>
           <Rows items={FLAGS} />
         </>
       )}

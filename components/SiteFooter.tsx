@@ -3,61 +3,67 @@ import Mark from "./Mark";
 import { COMPANY, FOUNDERS } from "./company";
 
 const EMAILS = FOUNDERS.map((f) => f.email);
-const link: React.CSSProperties = { color: "var(--fg-2)", textDecoration: "none" };
+const link = "text-fg-2 no-underline hover:text-fg";
 
 export default function SiteFooter() {
   return (
-    <footer style={{ borderTop: "1px solid var(--line)" }}>
-      <div className="footer-contact" style={{ maxWidth: 1100, margin: "0 auto", padding: "36px 24px 0", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "14px 32px" }}>
-        <span className="serif footer-ask" style={{ fontSize: 19, lineHeight: 1.3, color: "var(--fg-2)" }}>
-          Questions or ideas? <em style={{ color: "var(--accent)" }}>Write to us.</em>
+    <footer className="border-t border-line">
+      <div className="mx-auto my-0 flex max-w-[1100px] flex-wrap items-center gap-x-8 gap-y-[14px] px-6 pt-9 pb-0 mobile:gap-3 mobile:px-5 mobile:pt-8">
+        <span className="font-serif text-[19px] leading-[1.3] text-fg-2 mobile:text-[17px]">
+          Questions or ideas? <em className="text-accent">Write to us.</em>
         </span>
-        <span className="mono footer-mails" style={{ display: "flex", flexWrap: "wrap", gap: 10, fontSize: 13 }}>
+        <span className="flex flex-wrap gap-[10px] font-mono text-[13px]">
           {EMAILS.map((e) => (
-            <a key={e} href={`mailto:${e}`} className="mail-card" style={{ display: "inline-flex", alignItems: "center", gap: 8, border: "1px solid var(--line-2)", padding: "6px 12px", color: "var(--fg)", textDecoration: "none", transition: "background .2s,color .2s,border-color .2s" }}>
+            <a
+              key={e}
+              href={`mailto:${e}`}
+              className="inline-flex items-center gap-2 border border-line-2 px-3 py-[6px] text-fg no-underline [transition:background_.2s,color_.2s,border-color_.2s] hover:border-accent hover:bg-bg-2 hover:text-accent"
+            >
               {e}
-              <span style={{ color: "var(--accent)" }}>↗</span>
+              <span className="text-accent">↗</span>
             </a>
           ))}
         </span>
       </div>
-      <div className="mono footer-inner" style={{ maxWidth: 1100, margin: "0 auto", padding: "40px 24px 28px", display: "flex", flexWrap: "wrap", gap: "14px 28px", alignItems: "baseline", fontSize: 13, color: "var(--fg-3)" }}>
-        <span style={{ display: "flex", alignItems: "center", gap: 10, color: "var(--fg)" }}>
+      <div className="mx-auto my-0 flex max-w-[1100px] flex-wrap items-baseline gap-x-7 gap-y-[14px] px-6 pt-10 pb-7 font-mono text-[13px] text-fg-3 mobile:gap-x-[22px] mobile:gap-y-3 mobile:px-5 mobile:pt-8 mobile:pb-11">
+        <span className="flex items-center gap-[10px] text-fg">
           <Mark size={26} />
-          <span className="serif" style={{ fontSize: 21, fontWeight: 500, letterSpacing: "-0.02em" }}>
-            kārya
-          </span>
+          <span className="font-serif text-[21px] font-medium tracking-[-0.02em]">kārya</span>
         </span>
-        <Link href="/docs" className="hl" style={link}>
+        <Link href="/docs" className={link}>
           Docs
         </Link>
-        <Link href="/about" className="hl" style={link}>
+        <Link href="/about" className={link}>
           About
         </Link>
-        <a href={COMPANY.repo} className="hl" style={link}>
+        <a href={COMPANY.repo} className={link}>
           GitHub
         </a>
-        <Link href="/roadmap" className="hl" style={link}>
+        <Link href="/roadmap" className={link}>
           Roadmap
         </Link>
-        <Link href="/privacy" className="hl" style={link}>
+        <Link href="/privacy" className={link}>
           Privacy
         </Link>
-        <Link href="/terms" className="hl" style={link}>
+        <Link href="/terms" className={link}>
           Terms
         </Link>
-        <span className="footer-note" style={{ marginLeft: "auto" }}>pre-1.0 · kārya, work done as duty</span>
+        <span className="ml-auto mobile:mt-2 mobile:ml-0 mobile:flex-[1_0_100%]">pre-1.0 · kārya, work done as duty</span>
       </div>
-      <div className="mono footer-legal" style={{ maxWidth: 1100, margin: "0 auto", padding: "18px 24px 40px", borderTop: "1px solid var(--line)", display: "flex", flexWrap: "wrap", gap: "8px 24px", fontSize: 12.5, color: "var(--fg-3)" }}>
+      <div className="mx-auto my-0 flex max-w-[1100px] flex-wrap gap-x-6 gap-y-2 border-t border-line px-6 pt-[18px] pb-10 font-mono text-[12.5px] text-fg-3">
         <span>
           © {COMPANY.foundedYear} Karya · built by {FOUNDERS.map((f, i) => (
             <span key={f.name}>
               {i > 0 && " & "}
-              <a href={f.linkedin} className="hl" style={link}>{f.name}</a>
+              <a href={f.linkedin} className={link}>
+                {f.name}
+              </a>
             </span>
           ))}
         </span>
-        <span>{COMPANY.location} · founded {COMPANY.founded}</span>
+        <span>
+          {COMPANY.location} · founded {COMPANY.founded}
+        </span>
       </div>
     </footer>
   );
