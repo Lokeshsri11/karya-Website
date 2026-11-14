@@ -60,6 +60,8 @@ html[data-theme="light"] {
   /* next/font sets --font-plex and --font-newsreader on <html> */
   --font-mono: var(--font-plex), "IBM Plex Mono", ui-monospace, monospace;
   --font-serif: var(--font-newsreader), Newsreader, Georgia, serif;
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-plex-sans), "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
 }
 
 /* Breakpoints used by the design (max-width, inclusive) */
@@ -87,7 +89,11 @@ html[data-theme="light"] {
     background: var(--bg);
     color: var(--fg);
     -webkit-font-smoothing: antialiased;
-    font-family: var(--font-serif);
+    font-family: var(--font-sans);
+  }
+  /* pin Bricolage to its text cut; the display cut squeezes big headings */
+  .font-display {
+    font-variation-settings: "opsz" 14;
   }
   a {
     color: var(--fg);

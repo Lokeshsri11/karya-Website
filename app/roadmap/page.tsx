@@ -33,8 +33,8 @@ const LATER = ["Interactive commands (PTY)", "Parallel tool calls", "Branching s
 const chip = (s: Status) =>
   `px-2 py-[2px] text-[12px] border ${s === "done" ? "border-ok text-ok" : s === "now" ? "border-accent text-accent" : "border-line-2 text-fg-3"}`;
 const label = { done: "works today", now: "in progress", next: "planned" };
-const h2 = "mt-16 mr-0 mb-5 ml-0 border-t border-line pt-6 font-serif text-[32px] leading-[1.15] font-normal";
-const li = "font-serif text-[17px] leading-[1.55] text-fg-2";
+const h2 = "mt-16 mr-0 mb-5 ml-0 border-t border-line pt-6 font-display text-[32px] leading-[1.15] font-medium";
+const li = "font-sans text-[17px] leading-[1.55] text-fg-2";
 
 export default function Roadmap() {
   return (
@@ -42,10 +42,10 @@ export default function Roadmap() {
       <SiteNav active="roadmap" />
       <main className="mx-auto my-0 max-w-[860px] px-6 pt-11 pb-28">
         <div className="font-mono text-[13px] text-fg-3">roadmap</div>
-        <h1 className="mt-4 mr-0 mb-5 ml-0 font-serif text-[clamp(40px,5.6vw,60px)] leading-[1.04] font-normal tracking-[-0.022em] mobile:text-[38px]">
+        <h1 className="mt-4 mr-0 mb-5 ml-0 font-display text-[clamp(40px,5.6vw,60px)] leading-[1.04] font-medium tracking-[-0.022em] mobile:text-[38px]">
           What works, and <em className="text-accent">what&apos;s next.</em>
         </h1>
-        <p className="m-0 max-w-[62ch] font-serif text-[20px] leading-[1.6] text-fg-2">
+        <p className="m-0 max-w-[62ch] font-sans text-[20px] leading-[1.6] text-fg-2">
           Karya is built in milestones, and each one ends in something that runs. The landing page describes the product at launch. This page is the honest version of where it is today.
         </p>
 
@@ -65,7 +65,7 @@ export default function Roadmap() {
             <section key={id} className={`flex flex-wrap gap-x-7 gap-y-3 border-b border-l-2 border-b-line py-6 pr-0 pl-4 ${s === "now" ? "border-l-accent" : "border-l-transparent"}`}>
               <div className="flex flex-[0_0_160px] flex-col items-start gap-2 font-mono">
                 <span className="text-[13px] text-fg-3">{id}</span>
-                <span className="font-serif text-[22px] leading-[1.2] text-fg">{title}</span>
+                <span className="font-display font-medium text-[22px] leading-[1.2] text-fg">{title}</span>
                 <span className={chip(s)}>{label[s]}</span>
               </div>
               <ul className="m-0 flex min-w-0 flex-[1_1_280px] flex-col gap-1 pl-[18px]">

@@ -3,7 +3,7 @@
 export type ApprovalStatus = "pending" | "approved" | "denied";
 
 export interface ApprovalCardProps {
-  tool?: "edit" | "write" | "bash";
+  tool?: "edit" | "write" | "bash" | "proposal";
   target?: string;
   diff?: string[];
   command?: string;
@@ -25,7 +25,7 @@ export default function ApprovalCard(p: ApprovalCardProps) {
   const isCommand = !lines.length && !!p.command;
   const borderColor = pending ? "border-accent" : "border-line-2";
   const statusColor = pending ? "text-accent" : st === "approved" ? "text-ok" : "text-no";
-  const statusLabel = pending ? "awaiting approval" : st === "approved" ? "✓ approved" : "✕ denied";
+  const statusLabel = pending ? "awaiting you" : st === "approved" ? "✓ accepted" : "✕ declined";
   const showKeys = pending && !p.pressed;
   const showPressed = pending && !!p.pressed;
   const line = "whitespace-pre px-[10px] py-0";
@@ -68,18 +68,18 @@ export default function ApprovalCard(p: ApprovalCardProps) {
       {showKeys && (
         <div className={keyRow}>
           <span onClick={() => p.onApprove && p.onApprove()} className={`${key} hover:bg-ok hover:text-term`}>
-            <span className="text-inherit">[a]</span>pprove
+            <span className="text-inherit">[a]</span>ccept
           </span>
           <span onClick={() => p.onDeny && p.onDeny()} className={`${key} hover:bg-no hover:text-term`}>
-            <span className="text-inherit">[d]</span>eny
+            <span className="text-inherit">[d]</span>ecline
           </span>
         </div>
       )}
       {showPressed && (
         <div className={keyRow}>
-          <span className="bg-ok px-[3px] py-0 text-term">[a]pprove</span>
+          <span className="bg-ok px-[3px] py-0 text-term">[a]ccept</span>
           <span>
-            <span className="text-no">[d]</span>eny
+            <span className="text-no">[d]</span>ecline
           </span>
         </div>
       )}
