@@ -1,4 +1,4 @@
-const desc = "flex-[1_1_260px] font-serif text-[17px] leading-[1.5] text-fg-2";
+const desc = "flex-[1_1_260px] font-sans text-[17px] leading-[1.5] text-fg-2";
 const row = "flex flex-wrap gap-x-7 gap-y-[6px] border-b border-line py-[14px] px-0";
 const key = "flex flex-[0_0_220px] flex-col gap-1";
 

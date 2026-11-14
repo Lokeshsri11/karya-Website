@@ -8,9 +8,9 @@ import EnvTable from "@/components/EnvTable";
 
 export const metadata: Metadata = { title: "Getting started — Karya docs" };
 
-const h2 = "mt-16 mr-0 mb-4 ml-0 border-t border-line pt-6 font-serif text-[32px] leading-[1.15] font-normal";
-const h3 = "mt-10 mr-0 mb-3 ml-0 font-serif text-[22px] font-medium";
-const p = "max-w-[65ch] font-serif text-[18px] leading-[1.65] text-pretty text-fg-2";
+const h2 = "mt-16 mr-0 mb-4 ml-0 border-t border-line pt-6 font-display text-[32px] leading-[1.15] font-medium";
+const h3 = "mt-10 mr-0 mb-3 ml-0 font-display text-[22px] font-medium";
+const p = "max-w-[65ch] font-sans text-[18px] leading-[1.65] text-pretty text-fg-2";
 const pre = "overflow-x-auto border border-line bg-bg-2 px-4 py-[14px] font-mono text-[13.5px] leading-[1.7]";
 const code = "bg-bg-2 px-[5px] py-[1px] font-mono text-[0.84em] text-fg";
 const dim = "text-fg-3";
@@ -57,8 +57,8 @@ export default function Docs() {
 
         <main id="top" className="max-w-[740px] min-w-0 flex-[999_1_480px] px-0 pt-11 pb-28 mobile:pt-2">
           <div className="font-mono text-[13px] text-fg-3">docs / start</div>
-          <h1 className="mt-4 mr-0 mb-5 ml-0 font-serif text-[clamp(40px,5.6vw,60px)] leading-[1.04] font-normal tracking-[-0.022em] mobile:text-[38px]">Getting started</h1>
-          <p className="m-0 max-w-[62ch] font-serif text-[20px] leading-[1.6] text-pretty text-fg-2">Install Karya, add a Gemini key, and try the terminal UI. Karya is in active development: the TUI works today, and the agent loop, sandbox and undo arrive over the next milestones.</p>
+          <h1 className="mt-4 mr-0 mb-5 ml-0 font-display text-[clamp(40px,5.6vw,60px)] leading-[1.04] font-medium tracking-[-0.022em] mobile:text-[38px]">Getting started</h1>
+          <p className="m-0 max-w-[62ch] font-sans text-[20px] leading-[1.6] text-pretty text-fg-2">Install Karya, add a Gemini key, and try the terminal UI. Karya is in active development: the TUI works today, and the agent loop, sandbox and undo arrive over the next milestones.</p>
           <div className="mt-7 border border-accent px-4 py-[14px] font-mono text-[13px] leading-[1.7]">
             <div className="text-accent">status</div>
             <div>Working today: the TUI, the scripted demo, live Gemini streaming, threads and prompt history. Not yet: tools, sandbox, undo, sessions. <Link href="/roadmap" className="text-fg hover:text-accent">See the roadmap →</Link></div>

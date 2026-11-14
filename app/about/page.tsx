@@ -48,7 +48,7 @@ export default function About() {
       <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-4">
         {FOUNDERS.map((f) => (
           <div key={f.name} className="border border-line-2 bg-bg-2 px-[22px] py-5">
-            <div className="font-serif text-[24px] font-medium tracking-[-0.01em]">{f.name}</div>
+            <div className="font-display text-[24px] font-medium tracking-[-0.01em]">{f.name}</div>
             <div className="mt-1 mr-0 mb-4 ml-0 font-mono text-[13px] text-accent">{f.role}</div>
             <div className="flex flex-wrap gap-x-4 gap-y-[6px] font-mono text-[13px]">
               <a href={f.linkedin} className={link}>LinkedIn ↗</a>

@@ -73,9 +73,9 @@ const ATTEMPTS: Attempt[] = [
 /* shared class lists (the design's repeated style fragments) */
 const label = "font-mono text-[13px] text-fg-3";
 // section heading; margins are added per use, mobile margins always win
-const h2 = "font-serif font-normal text-[clamp(40px,6.2vw,78px)] leading-none tracking-[-0.018em] text-balance mobile:mt-[14px] mobile:mb-[18px] mobile:text-[36px] mobile:leading-[1.05]";
+const h2 = "font-display font-medium text-[clamp(40px,6.2vw,78px)] leading-none tracking-[-0.018em] text-balance mobile:mt-[14px] mobile:mb-[18px] mobile:text-[36px] mobile:leading-[1.05]";
 const h2m = "mt-[18px] mb-[22px]";
-const lead = "font-serif text-[19px] leading-[1.6] text-pretty text-fg-2 mobile:text-[17px] mobile:leading-[1.55]";
+const lead = "font-sans text-[19px] leading-[1.6] text-pretty text-fg-2 mobile:text-[17px] mobile:leading-[1.55]";
 const sectionPad = "mx-auto my-0 max-w-[1100px] px-6 py-[clamp(72px,10vw,128px)] mobile:px-5 mobile:py-14";
 const split2 = "grid grid-cols-[repeat(auto-fit,minmax(min(100%,380px),1fr))] items-start gap-x-16 gap-y-12";
 const em = "text-accent";
@@ -338,7 +338,7 @@ export default class Landing extends React.Component<LandingProps, State> {
                 <span className={`ml-[0.05em] inline-block h-[0.76em] w-[0.07em] bg-accent align-[-0.04em] ${this.state.cur ? "opacity-100" : "opacity-0"}`} />
               </span>
             </h1>
-            <p data-reveal className="m-0 max-w-[56ch] font-serif text-[clamp(19px,2.1vw,24px)] leading-[1.5] text-pretty text-fg-2 mobile:text-[17px] mobile:leading-[1.55]">
+            <p data-reveal className="m-0 max-w-[56ch] font-sans text-[clamp(19px,2.1vw,24px)] leading-[1.5] text-pretty text-fg-2 mobile:text-[17px] mobile:leading-[1.55]">
               Karya is an opinionated engineering harness for AI agents that work on problems with you. Actions run freely inside a protected sandbox by default, so agents can get real work done without asking at every step. Budgets, thinking limits and built-in observability keep you in control.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-4">
@@ -384,7 +384,7 @@ export default class Landing extends React.Component<LandingProps, State> {
         <div className="overflow-hidden border-b border-line px-0 py-[clamp(20px,3vw,40px)]">
           <div ref={this.marquee2Ref} className="flex w-max will-change-transform">
             {bigTicker.map((t, i) => (
-              <span key={i} className={`flex items-center gap-[0.35em] pr-[0.35em] font-serif text-[clamp(64px,10vw,150px)] leading-[1.05] tracking-[-0.04em] whitespace-nowrap ${t.cls}`}>
+              <span key={i} className={`flex items-center gap-[0.35em] pr-[0.35em] font-display font-medium text-[clamp(64px,10vw,150px)] leading-[1.05] tracking-[-0.04em] whitespace-nowrap ${t.cls}`}>
                 {t.text}
                 <span className="inline-block h-[0.16em] w-[0.16em] bg-accent" />
               </span>
@@ -405,7 +405,7 @@ export default class Landing extends React.Component<LandingProps, State> {
                 <div key={pth.name} data-reveal className={`flex flex-col border ${pth.us ? "border-accent bg-bg-2" : "border-line-2 bg-transparent"}`}>
                   <div className="border-b border-line px-[18px] py-4">
                     <div className={`font-mono text-[12px] ${pth.us ? "text-accent" : "text-fg-3"}`}>{pth.tag}</div>
-                    <div className={`mt-1 font-serif text-[26px] leading-[1.2] ${pth.us ? "text-accent italic" : "text-fg not-italic"}`}>{pth.name}</div>
+                    <div className={`mt-1 font-display font-medium text-[26px] leading-[1.2] ${pth.us ? "text-accent italic" : "text-fg not-italic"}`}>{pth.name}</div>
                   </div>
                   {pth.rows.map((v, k) => (
                     <div key={k} className={`flex flex-col gap-[3px] px-[18px] py-3 ${k < pth.rows.length - 1 ? "border-b border-line" : ""}`}>
@@ -434,8 +434,8 @@ export default class Landing extends React.Component<LandingProps, State> {
             ].map(([href, num, title, sub]) => (
               <a key={href} href={href} className="flex flex-col gap-2 text-fg no-underline">
                 <span className="font-mono text-[12.5px] text-fg-3">{num}</span>
-                <span className="font-serif text-[21px] leading-[1.2]">{title}</span>
-                <span className="font-serif text-[16px] leading-[1.45] text-fg-2">{sub}</span>
+                <span className="font-display font-medium text-[21px] leading-[1.2]">{title}</span>
+                <span className="font-sans text-[16px] leading-[1.45] text-fg-2">{sub}</span>
               </a>
             ))}
           </div>
@@ -518,7 +518,7 @@ export default class Landing extends React.Component<LandingProps, State> {
               ].map(([t, status, d, cmd, plat], i) => (
                 <div key={t} data-reveal className="flex min-w-0 flex-col gap-3 bg-bg px-[22px] py-6">
                   <div className="flex items-baseline justify-between gap-3">
-                    <div className="font-serif text-[26px] leading-[1.2]">{t}</div>
+                    <div className="font-display font-medium text-[26px] leading-[1.2]">{t}</div>
                     <div className={`flex items-center gap-2 font-mono text-[12px] ${i === 0 ? "text-accent" : "text-fg-3"}`}>
                       {i === 0 ? (
                         <span className="relative inline-flex h-2 w-2">
@@ -529,7 +529,7 @@ export default class Landing extends React.Component<LandingProps, State> {
                       {status}
                     </div>
                   </div>
-                  <div className="font-serif text-[16px] leading-[1.5] text-fg-2">{d}</div>
+                  <div className="font-sans text-[16px] leading-[1.5] text-fg-2">{d}</div>
                   {cmd ? (
                     <pre className="m-0 overflow-x-auto border border-accent bg-bg-2 px-3 py-2 font-mono text-[12.5px] leading-[1.6] whitespace-pre">
                       <span className="text-accent">$</span> {cmd}
@@ -632,7 +632,7 @@ export default class Landing extends React.Component<LandingProps, State> {
                 <p data-reveal className={`${lead} m-0 max-w-[52ch]`}>Each turn shows its tokens and cost.</p>
               </div>
               <div className="flex flex-col gap-[6px]">
-                <div className="font-serif text-[clamp(64px,9.5vw,150px)] leading-[0.9] font-normal tracking-[-0.04em] whitespace-nowrap tabular-nums mobile:text-[56px]">{this.state.costT >= 1 ? "$0.02" : "$" + (0.02 * e).toFixed(4)}</div>
+                <div className="font-display text-[clamp(64px,9.5vw,150px)] leading-[0.9] font-medium tracking-[-0.04em] whitespace-nowrap tabular-nums mobile:text-[56px]">{this.state.costT >= 1 ? "$0.02" : "$" + (0.02 * e).toFixed(4)}</div>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[13px] text-fg-3">
                   <span>estimated cost of the task above · 4 turns · 41s</span>
                   <button onClick={this.playLedger} className="cursor-pointer border border-line-2 bg-transparent px-[10px] py-[3px] text-fg-2 hover:border-accent hover:text-accent">
@@ -758,7 +758,7 @@ export default class Landing extends React.Component<LandingProps, State> {
                 every task, carried through
               </span>
             </div>
-            <h2 data-reveal className="m-0 max-w-[11ch] font-serif text-[clamp(56px,10vw,152px)] leading-[0.92] font-normal tracking-[-0.045em] mobile:text-[48px]">
+            <h2 data-reveal className="m-0 max-w-[11ch] font-display text-[clamp(56px,10vw,152px)] leading-[0.92] font-medium tracking-[-0.045em] mobile:text-[48px]">
               Let it run. <em className={em}>Stay in control.</em>
             </h2>
             <div data-reveal className={`${cmdBox} gap-4 py-4 pr-4 pl-[22px] text-[clamp(13px,1.6vw,17px)]`}>

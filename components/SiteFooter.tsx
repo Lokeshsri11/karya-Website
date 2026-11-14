@@ -10,7 +10,7 @@ export default function SiteFooter() {
       <div className="mx-auto my-0 grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(min(100%,440px),1fr))] items-center gap-x-16 gap-y-12 px-6 py-[clamp(72px,10vw,136px)] mobile:gap-10 mobile:px-5 mobile:py-16">
         <div>
           <div className="font-mono text-[13px]">write to us</div>
-          <h2 className="mt-5 mb-0 max-w-[11ch] font-serif text-[clamp(48px,7.4vw,108px)] leading-[0.95] font-normal tracking-[-0.04em] mobile:text-[44px]">
+          <h2 className="mt-5 mb-0 max-w-[11ch] font-display text-[clamp(48px,7.4vw,108px)] leading-[0.95] font-medium tracking-[-0.04em] mobile:text-[44px]">
             Questions or <em>ideas?</em>
           </h2>
         </div>

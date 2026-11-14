@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, IBM_Plex_Mono, Newsreader } from "next/font/google";
+import { Bricolage_Grotesque, IBM_Plex_Mono, IBM_Plex_Sans, Newsreader } from "next/font/google";
 import "./globals.css";
 
 const mono = IBM_Plex_Mono({
@@ -18,11 +18,21 @@ const serif = Newsreader({
   display: "swap",
 });
 
-// Hero headline only.
+// Headings.
 const display = Bricolage_Grotesque({
   subsets: ["latin"],
-  weight: "500",
+  weight: "variable",
+  axes: ["opsz"],
   variable: "--font-bricolage",
+  display: "swap",
+});
+
+// Body text.
+const sans = IBM_Plex_Sans({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  style: ["normal", "italic"],
+  variable: "--font-plex-sans",
   display: "swap",
 });
 
@@ -41,7 +51,7 @@ const themeScript = `try{document.documentElement.dataset.theme=localStorage.get
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-theme="dark" suppressHydrationWarning className={`${mono.variable} ${serif.variable} ${display.variable}`}>
+    <html lang="en" data-theme="dark" suppressHydrationWarning className={`${mono.variable} ${serif.variable} ${display.variable} ${sans.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
