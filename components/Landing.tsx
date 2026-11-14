@@ -326,7 +326,7 @@ export default class Landing extends React.Component<LandingProps, State> {
                 in development · see the roadmap →
               </Link>
             </div>
-            <h1 className="relative mt-7 mb-9 max-w-[12ch] font-display text-[clamp(48px,8.4vw,120px)] leading-[0.95] font-medium tracking-[-0.04em] mobile:mt-[22px] mobile:mb-[26px] mobile:text-[44px] mobile:tracking-[-0.035em]">
+            <h1 className="relative mt-7 mb-9 max-w-[12ch] font-display text-[clamp(44px,6.8vw,96px)] leading-[0.95] font-medium tracking-[-0.04em] mobile:mt-[22px] mobile:mb-[26px] mobile:text-[40px] mobile:tracking-[-0.035em]">
               <span aria-hidden="true" className="invisible">
                 {A}
                 <em>{B}</em>&nbsp;
