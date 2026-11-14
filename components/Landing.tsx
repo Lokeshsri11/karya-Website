@@ -365,7 +365,7 @@ export default class Landing extends React.Component<LandingProps, State> {
     const chapterLabel = ch >= 0 ? "chapter " + (ch + 1) + "/7 · " + CHAPTERS[ch] : "one task · one microVM · one review";
     const ticker = [...TICKER, ...TICKER];
     // alternate filled italic words with outlined upright ones
-    const bigTicker = [...BIG, ...BIG].map((text, i) => ({ text, cls: i % 2 ? "text-transparent [-webkit-text-stroke:1.5px_var(--fg-2)] not-italic" : "text-fg [-webkit-text-stroke:0] italic" }));
+    const bigTicker = [...BIG, ...BIG].map((text, i) => ({ text, cls: i % 2 ? "text-bg [-webkit-text-stroke:3px_var(--fg-2)] [paint-order:stroke_fill] not-italic" : "text-fg [-webkit-text-stroke:0] italic" }));
     const gp = this.state.gatePress;
     const gateMsg = this.state.gateKey === "a" ? "✓ accepted · checkpoint 3f9a1c taken · diff applied" : this.state.gateKey === "d" ? "✕ declined · your repo is untouched · the fix stays in the VM" : "› waiting on you · [a]ccept [d]ecline";
     const rowOp = (k: number) => (lg >= k ? "opacity-100" : "opacity-10");
