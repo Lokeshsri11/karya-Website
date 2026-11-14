@@ -44,14 +44,14 @@ export default function SiteNav({ active = "home" }: { active?: "home" | "docs" 
   const isLight = theme === "light";
 
   // Links in the open mobile panel become full-width rows.
-  const row = open ? "mobile:w-full mobile:justify-between mobile:py-[13px] mobile:px-0" : "";
+  const row = open ? "mobile:w-full mobile:justify-between mobile:py-3.25 mobile:px-0" : "";
   const rowLine = open ? "mobile:border-b mobile:border-line" : "";
   const navLink = (on: boolean) => `${on ? "text-fg" : "text-fg-2"} no-underline hover:text-fg ${row} ${rowLine}`;
 
   return (
     <header className="sticky top-0 z-20 border-b border-line bg-bg">
-      <div className="mx-auto my-0 flex max-w-[1100px] flex-wrap items-center gap-x-6 gap-y-3 px-6 py-[14px]">
-        <Link href="/" aria-label="Karya home" onClick={close} className="flex items-center gap-[10px] text-fg no-underline">
+      <div className="mx-auto my-0 flex max-w-275 flex-wrap items-center gap-x-6 gap-y-3 px-6 py-3.5">
+        <Link href="/" aria-label="Karya home" onClick={close} className="flex items-center gap-2.5 text-fg no-underline">
           <Mark size={30} />
           <span className="font-display text-[24px] leading-none font-medium tracking-[-0.02em]">kārya</span>
         </Link>
@@ -61,7 +61,7 @@ export default function SiteNav({ active = "home" }: { active?: "home" | "docs" 
           aria-expanded={open}
           aria-controls="site-menu"
           onClick={() => setOpen((o) => !o)}
-          className="ml-auto hidden h-[30px] w-9 cursor-pointer flex-col items-center justify-center gap-1 border border-line-2 bg-bg-2 p-0 text-fg mobile:inline-flex"
+          className="ml-auto hidden h-7.5 w-9 cursor-pointer flex-col items-center justify-center gap-1 border border-line-2 bg-bg-2 p-0 text-fg mobile:inline-flex"
         >
           {open ? (
             <span className="font-mono text-[15px] leading-none">✕</span>
@@ -75,7 +75,7 @@ export default function SiteNav({ active = "home" }: { active?: "home" | "docs" 
         </button>
         <nav
           id="site-menu"
-          className={`ml-auto flex flex-none flex-wrap items-center gap-x-[22px] gap-y-2 font-mono text-[13.5px] ${
+          className={`ml-auto flex flex-none flex-wrap items-center gap-x-5.5 gap-y-2 font-mono text-[13.5px] ${
             open
               ? "mobile:m-0 mobile:mt-3 mobile:flex-[1_0_100%] mobile:flex-col mobile:items-stretch mobile:gap-0 mobile:border-t mobile:border-line mobile:pt-1 mobile:text-[15px]"
               : "mobile:hidden"
@@ -104,9 +104,9 @@ export default function SiteNav({ active = "home" }: { active?: "home" | "docs" 
             className={`flex cursor-pointer items-center gap-2 border-none bg-transparent p-0 text-[12px] text-fg-2 hover:text-fg ${row}`}
           >
             <span className={`${theme === "dark" ? "text-fg" : "text-fg-3"} [transition:color_.2s]`}>dark</span>
-            <span className="relative inline-block box-border h-[22px] w-10 border border-line-2 bg-bg-2">
+            <span className="relative inline-block box-border h-5.5 w-10 border border-line-2 bg-bg-2">
               <span
-                className={`absolute top-[3px] left-[3px] h-[14px] w-[14px] bg-accent [transition:transform_.22s_cubic-bezier(.2,.7,.2,1)] ${
+                className={`absolute top-0.75 left-0.75 h-3.5 w-3.5 bg-accent [transition:transform_.22s_cubic-bezier(.2,.7,.2,1)] ${
                   isLight ? "[transform:translateX(18px)]" : "[transform:translateX(0px)]"
                 }`}
               />
@@ -116,8 +116,8 @@ export default function SiteNav({ active = "home" }: { active?: "home" | "docs" 
           <Link
             href="/docs#install"
             onClick={close}
-            className={`border border-accent bg-accent px-[14px] py-[6px] font-medium text-accent-ink no-underline hover:bg-transparent hover:text-accent ${
-              open ? "mobile:mt-[14px] mobile:w-full mobile:justify-between mobile:px-0 mobile:py-[11px] mobile:text-center" : ""
+            className={`border border-accent bg-accent px-3.5 py-1.5 font-medium text-accent-ink no-underline hover:bg-transparent hover:text-accent ${
+              open ? "mobile:mt-3.5 mobile:w-full mobile:justify-between mobile:px-0 mobile:py-2.75 mobile:text-center" : ""
             }`}
           >
             Install

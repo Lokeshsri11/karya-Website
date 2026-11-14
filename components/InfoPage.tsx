@@ -4,7 +4,7 @@ import SiteFooter from "./SiteFooter";
 // Shared typography for the About / Privacy / Terms pages.
 export const h2 = "mt-14 mr-0 mb-4 ml-0 border-t border-line pt-6 font-display text-[30px] leading-[1.15] font-medium";
 export const p = "mt-0 mr-0 mb-4 ml-0 max-w-[65ch] font-sans text-[18px] leading-[1.65] text-pretty text-fg-2";
-export const ul = `${p} pl-[22px]`;
+export const ul = `${p} pl-5.5`;
 
 export default function InfoPage({
   crumb,
@@ -22,7 +22,7 @@ export default function InfoPage({
   return (
     <div className="min-h-screen bg-bg text-fg">
       <SiteNav active={active} />
-      <main className="mx-auto my-0 max-w-[860px] px-6 pt-11 pb-28">
+      <main className="mx-auto my-0 max-w-215 px-6 pt-11 pb-28">
         <div className="font-mono text-[13px] text-fg-3">{crumb}</div>
         <h1 className="mt-4 mr-0 mb-5 ml-0 font-display text-[clamp(40px,5.6vw,60px)] leading-[1.04] font-medium tracking-[-0.022em] mobile:text-[38px]">{title}</h1>
         <p className="m-0 max-w-[62ch] font-sans text-[20px] leading-[1.6] text-fg-2">{lead}</p>

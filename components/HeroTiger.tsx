@@ -5,8 +5,8 @@ import Image from "next/image";
 export default function HeroTiger() {
   return (
     <figure className="pointer-events-none m-0 -mt-[clamp(56px,8vw,104px)] w-min shrink-0 narrow:hidden">
-      <Image src="/tiger.webp" alt="" aria-hidden="true" width={554} height={1600} sizes="250px" priority className="block h-[660px] w-auto max-w-none" />
-      <figcaption className="pointer-events-auto pt-2 font-mono text-[11.5px] leading-[1.5] text-fg-3">
+      <Image src="/tiger.webp" alt="" aria-hidden="true" width={554} height={1600} sizes="250px" priority className="block h-165 w-auto max-w-none" />
+      <figcaption className="pointer-events-auto pt-2 font-mono text-[11.5px] leading-normal text-fg-3">
         <a href="https://commons.wikimedia.org/wiki/File:Kuniyoshi_Utagawa,_Tiger.jpg" target="_blank" rel="noopener noreferrer" className="text-fg-3 no-underline hover:text-accent">
           <span className="text-fg-2">Tiger</span> · Utagawa Kuniyoshi (1797–1861) · public domain ↗
         </a>
@@ -18,7 +18,7 @@ export default function HeroTiger() {
 // On narrow screens the painting sits faded behind the hero text instead.
 export function HeroTigerBackdrop() {
   return (
-    <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 hidden h-[760px] narrow:block">
+    <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 hidden h-190 narrow:block">
       <Image src="/tiger.webp" alt="" fill sizes="100vw" className="object-cover object-[center_70%] opacity-[0.16]" />
       <div className="absolute inset-x-0 bottom-0 h-48 bg-[linear-gradient(to_top,var(--bg),transparent)]" />
     </div>

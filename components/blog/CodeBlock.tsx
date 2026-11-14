@@ -25,7 +25,7 @@ export default function CodeBlock({ className = "", ...props }: ComponentProps<"
         type="button"
         onClick={copy}
         aria-label="Copy code"
-        className="absolute top-2 right-2 cursor-pointer border border-line-2 bg-bg-2 px-2 py-[2px] font-mono text-[12px] text-fg-3 opacity-0 transition-opacity group-hover:opacity-100 hover:border-accent hover:text-accent focus-visible:opacity-100 [@media(hover:none)]:opacity-100"
+        className="absolute top-2 right-2 cursor-pointer border border-line-2 bg-bg-2 px-2 py-0.5 font-mono text-[12px] text-fg-3 opacity-0 transition-opacity group-hover:opacity-100 hover:border-accent hover:text-accent focus-visible:opacity-100 [@media(hover:none)]:opacity-100"
       >
         {copied ? "copied" : "copy"}
       </button>

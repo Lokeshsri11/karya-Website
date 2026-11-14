@@ -28,21 +28,21 @@ export default function ApprovalCard(p: ApprovalCardProps) {
   const statusLabel = pending ? "awaiting you" : st === "approved" ? "✓ accepted" : "✕ declined";
   const showKeys = pending && !p.pressed;
   const showPressed = pending && !!p.pressed;
-  const line = "whitespace-pre px-[10px] py-0";
-  const keyRow = "flex gap-[18px] border-t border-line px-[10px] py-[6px] text-fg-2";
-  const key = "-mx-[3px] my-0 cursor-pointer px-[3px] py-0";
+  const line = "whitespace-pre px-2.5 py-0";
+  const keyRow = "flex gap-4.5 border-t border-line px-2.5 py-1.5 text-fg-2";
+  const key = "-mx-0.75 my-0 cursor-pointer px-0.75 py-0";
 
   return (
-    <div className={`mt-[6px] mr-0 mb-[10px] ml-0 border bg-bg-2 text-left font-mono text-[0.96em] leading-[1.55] text-fg ${borderColor}`}>
-      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-line px-[10px] py-[6px]">
-        <div className="flex min-w-0 items-baseline gap-[10px]">
+    <div className={`mt-1.5 mr-0 mb-2.5 ml-0 border bg-bg-2 text-left font-mono text-[0.96em] leading-[1.55] text-fg ${borderColor}`}>
+      <div className="flex flex-wrap items-center justify-between gap-x-3 gap-y-1 border-b border-line px-2.5 py-1.5">
+        <div className="flex min-w-0 items-baseline gap-2.5">
           <span className="font-semibold">{p.tool ?? "edit"}</span>
           <span className="overflow-hidden text-ellipsis whitespace-nowrap text-fg-2">{p.target ?? ""}</span>
         </div>
         <span className={statusColor}>{statusLabel}</span>
       </div>
       {isDiff && (
-        <div className="overflow-x-auto px-0 py-[6px]">
+        <div className="overflow-x-auto px-0 py-1.5">
           {lines.map((l, i) =>
             l.isHunk ? (
               <div key={i} className={`${line} text-fg-3`}>{l.text}</div>
@@ -57,7 +57,7 @@ export default function ApprovalCard(p: ApprovalCardProps) {
         </div>
       )}
       {isCommand && (
-        <div className="flex flex-col gap-[2px] px-[10px] pt-[9px] pb-2">
+        <div className="flex flex-col gap-0.5 px-2.5 pt-2.25 pb-2">
           <div className="whitespace-pre-wrap [word-break:break-word]">
             <span className="text-fg-3">$ </span>
             {p.command}
@@ -77,7 +77,7 @@ export default function ApprovalCard(p: ApprovalCardProps) {
       )}
       {showPressed && (
         <div className={keyRow}>
-          <span className="bg-ok px-[3px] py-0 text-term">[a]ccept</span>
+          <span className="bg-ok px-0.75 py-0 text-term">[a]ccept</span>
           <span>
             <span className="text-no">[d]</span>ecline
           </span>
