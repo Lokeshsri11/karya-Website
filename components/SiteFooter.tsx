@@ -33,7 +33,7 @@ export default function SiteFooter() {
       <div className="mx-auto my-0 flex max-w-[1200px] flex-wrap items-center gap-x-7 gap-y-[14px] border-t-2 border-accent-ink px-6 pt-8 pb-7 font-mono text-[13px] mobile:gap-x-[22px] mobile:gap-y-3 mobile:px-5">
         <span className="flex items-center gap-[10px]">
           <Mark size={26} mono />
-          <span className="font-serif text-[21px] font-medium tracking-[-0.02em]">kārya</span>
+          <span className="font-display text-[21px] font-medium tracking-[-0.02em]">kārya</span>
         </span>
         <Link href="/docs" className={link}>
           Docs

@@ -4,7 +4,7 @@ import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import EnvTable from "@/components/EnvTable";
 
-export const metadata: Metadata = { title: "Getting started — Karya docs" };
+export const metadata: Metadata = { title: "Getting started | Karya docs" };
 
 const INSTALL = "curl -fsSL https://usekarya.dev/install | sh";
 

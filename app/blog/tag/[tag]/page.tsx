@@ -8,7 +8,7 @@ export const generateStaticParams = () => Object.keys(TAGS).map((tag) => ({ tag 
 
 export async function generateMetadata({ params }: { params: Promise<{ tag: string }> }): Promise<Metadata> {
   const { tag } = await params;
-  return { title: `${TAGS[tag as Tag] ?? tag} — Karya blog` };
+  return { title: `${TAGS[tag as Tag] ?? tag} | Karya blog` };
 }
 
 export default async function TagPage({ params }: { params: Promise<{ tag: string }> }) {

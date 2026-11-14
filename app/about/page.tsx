@@ -4,7 +4,7 @@ import InfoPage, { h2, p } from "@/components/InfoPage";
 import { COMPANY, FOUNDERS } from "@/components/company";
 
 export const metadata: Metadata = {
-  title: "About — Karya",
+  title: "About | Karya",
   description: "Karya is an open-source terminal coding agent built by Prateek Singh and Lokesh Srivastava in Prayagraj, India, founded in September 2026.",
 };
 

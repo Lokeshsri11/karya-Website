@@ -76,7 +76,7 @@ async function load(slug: string) {
 }
 
 export function slugs() {
-  return fs.existsSync(DIR) ? fs.readdirSync(DIR).filter((f) => f.endsWith(".mdx")).map((f) => f.replace(/\.mdx$/, "")) : [];
+  return fs.existsSync(DIR) ? fs.readdirSync(DIR).filter((f) => f.endsWith(".mdx") && !f.startsWith("_")).map((f) => f.replace(/\.mdx$/, "")) : [];
 }
 
 // Newest first. Drafts are visible in `next dev` only.

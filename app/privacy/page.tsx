@@ -3,7 +3,7 @@ import InfoPage, { h2, p, ul } from "@/components/InfoPage";
 import { COMPANY, FOUNDERS, LAST_UPDATED } from "@/components/company";
 
 export const metadata: Metadata = {
-  title: "Privacy — Karya",
+  title: "Privacy | Karya",
   description: "What data the Karya website and the Karya CLI collect, and where your code goes.",
 };
 

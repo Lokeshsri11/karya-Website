@@ -53,7 +53,7 @@ export default function SiteNav({ active = "home" }: { active?: "home" | "docs" 
       <div className="mx-auto my-0 flex max-w-[1100px] flex-wrap items-center gap-x-6 gap-y-3 px-6 py-[14px]">
         <Link href="/" aria-label="Karya home" onClick={close} className="flex items-center gap-[10px] text-fg no-underline">
           <Mark size={30} />
-          <span className="font-serif text-[24px] leading-none font-medium tracking-[-0.02em]">kārya</span>
+          <span className="font-display text-[24px] leading-none font-medium tracking-[-0.02em]">kārya</span>
         </Link>
         <button
           type="button"

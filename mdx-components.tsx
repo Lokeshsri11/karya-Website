@@ -1,5 +1,6 @@
 import type { MDXComponents } from "mdx/types";
 import Link from "next/link";
+import CodeBlock from "@/components/blog/CodeBlock";
 
 // Writers type plain Markdown; these map each element to the site's look,
 // so every post matches the design without any per-post styling.
@@ -14,8 +15,8 @@ export function Note({ children }: { children: React.ReactNode }) {
 
 export const components: MDXComponents = {
   Note,
-  h2: (p) => <h2 {...p} className="mt-14 mb-4 scroll-mt-20 border-t border-line pt-6 font-serif text-[34px] leading-[1.15] font-normal" />,
-  h3: (p) => <h3 {...p} className="mt-10 mb-3 scroll-mt-20 font-serif text-[24px] leading-[1.25] font-medium" />,
+  h2: (p) => <h2 {...p} className="mt-14 mb-4 scroll-mt-20 border-t border-line pt-6 font-display text-[34px] leading-[1.15] font-medium" />,
+  h3: (p) => <h3 {...p} className="mt-10 mb-3 scroll-mt-20 font-display text-[24px] leading-[1.25] font-medium" />,
   p: (p) => <p {...p} className="mt-0 mb-[22px] font-serif text-[19px] leading-[1.7] text-fg-2" />,
   a: ({ href = "", ...p }) =>
     href.startsWith("/") ? (
@@ -31,9 +32,9 @@ export const components: MDXComponents = {
   blockquote: (p) => <blockquote {...p} className="my-7 border-l-2 border-accent py-1 pl-6 font-serif text-[28px] leading-[1.35] text-fg italic [&>p]:m-0 [&>p]:text-[28px] [&>p]:text-fg" />,
   code: (p) => <code {...p} className="bg-bg-2 px-[5px] py-[1px] font-mono text-[0.84em] text-fg" />,
   pre: (p) => (
-    <pre
+    <CodeBlock
       {...p}
-      className="mt-0 mb-7 overflow-x-auto border border-line-2 bg-term px-[18px] py-4 font-mono text-[13.5px] leading-[1.75] text-fg-2 [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-[1em] [&_code]:text-inherit"
+      className="overflow-x-auto border border-line-2 bg-term px-[18px] py-4 font-mono text-[13.5px] leading-[1.75] text-fg-2 [&_code]:bg-transparent [&_code]:p-0 [&_code]:text-[1em] [&_code]:text-inherit"
     />
   ),
   table: (p) => (

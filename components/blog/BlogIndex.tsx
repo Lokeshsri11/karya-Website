@@ -17,12 +17,9 @@ export default function BlogIndex({ posts, tag }: { posts: PostMeta[]; tag?: Tag
         <div className="flex flex-wrap items-end justify-between gap-x-12 gap-y-6">
           <div className="min-w-0 flex-[1_1_520px]">
             <div className="font-mono text-[13px] text-fg-3">blog{tag ? ` / ${TAGS[tag]}` : ""}</div>
-            <h1 className="mt-4 mb-5 max-w-[13ch] font-serif text-[clamp(44px,6vw,72px)] leading-[0.98] font-normal tracking-[-0.03em]">
+            <h1 className="mt-4 mb-5 max-w-[13ch] font-display text-[clamp(44px,6vw,72px)] leading-[0.98] font-medium tracking-[-0.03em]">
               Notes from building <em className="text-accent">kārya.</em>
             </h1>
-            <p className="m-0 max-w-[58ch] font-serif text-[20px] leading-[1.6] text-fg-2">
-              How the agent loop, the sandbox and undo are being built, what we got wrong on the way, and what ships in each milestone.
-            </p>
           </div>
           <div className="flex flex-col gap-[10px] font-mono text-[13px]">
             <a href="/blog/rss.xml" className="inline-flex items-center gap-2 border border-line-2 px-[14px] py-2 text-fg no-underline hover:border-accent hover:text-accent">
@@ -51,7 +48,7 @@ export default function BlogIndex({ posts, tag }: { posts: PostMeta[]; tag?: Tag
                 </span>
                 {featured.draft && <span className="border border-no px-2 py-[2px] text-no">draft</span>}
               </div>
-              <h2 className="m-0 font-serif text-[clamp(32px,4vw,48px)] leading-[1.04] font-normal tracking-[-0.025em]">{featured.title}</h2>
+              <h2 className="m-0 font-display text-[clamp(32px,4vw,48px)] leading-[1.04] font-medium tracking-[-0.025em]">{featured.title}</h2>
               <p className="m-0 max-w-[52ch] font-serif text-[18px] leading-[1.6] text-fg-2">{featured.summary}</p>
               <span className="font-mono text-[13px] text-fg-2">{featured.author.name} · read the post →</span>
             </div>
@@ -59,7 +56,7 @@ export default function BlogIndex({ posts, tag }: { posts: PostMeta[]; tag?: Tag
         )}
 
         <div className="mt-[72px] flex flex-wrap items-center justify-between gap-4 border-b border-line-2 pb-4">
-          <h2 className="m-0 font-serif text-[32px] leading-[1.15] font-normal">{tag ? `Posts tagged ${TAGS[tag]}` : "All posts"}</h2>
+          <h2 className="m-0 font-display text-[32px] leading-[1.15] font-medium">{tag ? `Posts tagged ${TAGS[tag]}` : "All posts"}</h2>
           <div className="flex flex-wrap gap-2 font-mono text-[12.5px]">
             <Link href="/blog" className={`${filterBtn} ${!tag ? "border-accent text-accent" : "border-line-2 text-fg-2 hover:text-accent"}`}>
               all
@@ -81,7 +78,7 @@ export default function BlogIndex({ posts, tag }: { posts: PostMeta[]; tag?: Tag
                 <span className="text-fg-2">{p.tags.map((t) => TAGS[t]).join(" · ")}</span>
               </div>
               <div className="flex min-w-0 flex-[999_1_420px] flex-col gap-[10px]">
-                <h3 className="m-0 font-serif text-[28px] leading-[1.2] font-normal tracking-[-0.01em] group-hover:text-accent">
+                <h3 className="m-0 font-display text-[28px] leading-[1.2] font-medium tracking-[-0.01em] group-hover:text-accent">
                   {p.title}
                   {p.draft && <span className="ml-3 border border-no px-2 py-[2px] align-middle font-mono text-[12px] tracking-normal text-no">draft</span>}
                 </h3>
@@ -94,7 +91,7 @@ export default function BlogIndex({ posts, tag }: { posts: PostMeta[]; tag?: Tag
 
         <div className="mt-[72px] flex flex-wrap items-center gap-x-10 gap-y-5 border border-line-2 px-8 py-7 mobile:px-5">
           <div className="min-w-0 flex-[1_1_360px]">
-            <div className="font-serif text-[26px] leading-[1.25]">Get the next post when a milestone ships.</div>
+            <div className="font-display text-[26px] leading-[1.25]">Get the next post when a milestone ships.</div>
             <div className="mt-[6px] font-mono text-[13px] text-fg-3">one email per milestone, or follow the RSS feed</div>
           </div>
           <a

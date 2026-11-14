@@ -4,7 +4,7 @@ import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 
 export const metadata: Metadata = {
-  title: "Roadmap — Karya",
+  title: "Roadmap | Karya",
   description: "What works in Karya today, what is being built now, and what comes after launch.",
 };
 
