@@ -337,7 +337,7 @@ export default class Landing extends React.Component<LandingProps, State> {
                 <span className={`ml-[0.05em] inline-block h-[0.76em] w-[0.07em] bg-accent align-[-0.04em] ${this.state.cur ? "opacity-100" : "opacity-0"}`} />
               </span>
             </h1>
-            <p data-reveal className="m-0 max-w-[56ch] font-sans text-[clamp(19px,2.1vw,24px)] leading-[1.5] text-pretty text-fg-2 mobile:text-[17px] mobile:leading-[1.55]">
+            <p data-reveal className="m-0 max-w-[56ch] font-sans text-[clamp(17px,1.6vw,20px)] leading-[1.55] text-pretty text-fg-2 mobile:text-[16px] mobile:leading-[1.55]">
               Karya is an opinionated engineering harness for AI agents that work on problems with you. Actions run freely inside a protected sandbox by default, so agents can get real work done without asking at every step. Budgets, thinking limits and built-in observability keep you in control.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-4">
