@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { Fragment } from "react";
 import { notFound } from "next/navigation";
 import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
@@ -39,24 +40,30 @@ export default async function Post({ params }: { params: Promise<{ slug: string 
       <SiteNav active="blog" />
 
       <div className="bg-grid border-b border-line">
-        <div className="mx-auto my-0 max-w-275 px-6 pt-16 pb-14 mobile:px-5 mobile:pt-10 mobile:pb-10">
+        <div className="relative mx-auto my-0 max-w-275 px-6 pt-16 pb-14 mobile:px-5 mobile:pt-10 mobile:pb-10">
           <div className="font-mono text-[13px] text-fg-3">
             <Link href="/blog" className="text-fg-3 no-underline hover:text-accent">blog</Link> / {TAGS[meta.tags[0]]}
           </div>
           <h1 className="mt-4.5 mb-6 max-w-[15ch] font-display text-[clamp(40px,6vw,76px)] leading-[0.98] font-medium tracking-[-0.03em]">{meta.title}</h1>
           <p className="m-0 max-w-[56ch] font-serif text-[clamp(18px,2vw,22px)] leading-normal text-fg-2">{meta.summary}</p>
-          <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-3 font-mono text-[13px] text-fg-2">
+          <div className="mt-8 flex flex-col items-start gap-3 font-mono text-[13px] text-fg-2">
             <span className="flex items-center gap-2.5 border border-line-2 bg-bg-2 py-0.75 pr-2.5 pl-0.75 text-fg">
               <span aria-hidden="true" className="inline-flex h-7 w-7 items-center justify-center border border-line-2 bg-bg text-[12px] text-accent">{initials}</span>
               {a.name}
             </span>
-            <span className="border border-line-2 bg-bg-2 px-2.25 py-0.75">{formatDate(meta.date)}</span>
-            <span className="border border-line-2 bg-bg-2 px-2.25 py-0.75">{meta.readMinutes} min read</span>
-            {meta.tags.map((t) => (
-              <Link key={t} href={`/blog/tag/${t}`} className="border border-line-2 bg-bg-2 px-2.25 py-0.75 text-fg-2 no-underline hover:border-accent hover:text-accent">{TAGS[t]}</Link>
-            ))}
-            {meta.milestone && <span className="border border-line-2 bg-bg-2 px-2.25 py-0.75 text-fg-2">{meta.milestone}</span>}
-            {meta.draft && <span className="border border-no bg-bg-2 px-2.25 py-0.75 text-no">draft · hidden in production</span>}
+            <div className="absolute bottom-0 left-6 flex translate-y-1/2 flex-wrap items-center gap-x-2 gap-y-1 border border-line bg-bg px-3 py-1.5 text-[12.5px] text-fg-2 mobile:left-5">
+              <span>{formatDate(meta.date)}</span>
+              <span aria-hidden="true">·</span>
+              <span>{meta.readMinutes} min read</span>
+              {meta.tags.map((t) => (
+                <Fragment key={t}>
+                  <span aria-hidden="true">·</span>
+                  <Link href={`/blog/tag/${t}`} className="text-fg-3 no-underline hover:text-accent">{TAGS[t]}</Link>
+                </Fragment>
+              ))}
+              {meta.milestone && (<><span aria-hidden="true">·</span><span>{meta.milestone}</span></>)}
+              {meta.draft && (<><span aria-hidden="true">·</span><span className="text-no">draft · hidden in production</span></>)}
+            </div>
           </div>
         </div>
       </div>
