@@ -5,7 +5,7 @@ import Link from "next/link";
 import SiteNav from "./SiteNav";
 import SiteFooter from "./SiteFooter";
 import Terminal from "./Terminal";
-import HeroTiger from "./HeroTiger";
+import HeroTiger, { HeroTigerBackdrop } from "./HeroTiger";
 
 const INSTALL = "curl -fsSL https://usekarya.dev/install | sh";
 
@@ -319,6 +319,7 @@ export default class Landing extends React.Component<LandingProps, State> {
 
         {/* hero */}
         <section className="relative overflow-hidden border-b border-line">
+          <HeroTigerBackdrop />
           <div className="relative z-10 mx-auto my-0 max-w-[1200px] px-6 pt-[clamp(56px,8vw,104px)] pb-[clamp(56px,7vw,96px)] mobile:px-5 mobile:pt-10 mobile:pb-12">
             <div className="flex items-start justify-between gap-10">
               <div className="min-w-0">

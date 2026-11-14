@@ -14,3 +14,13 @@ export default function HeroTiger() {
     </figure>
   );
 }
+
+// On narrow screens the painting sits faded behind the hero text instead.
+export function HeroTigerBackdrop() {
+  return (
+    <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 hidden h-[760px] narrow:block">
+      <Image src="/tiger.webp" alt="" fill sizes="100vw" className="object-cover object-[center_70%] opacity-[0.16]" />
+      <div className="absolute inset-x-0 bottom-0 h-48 bg-[linear-gradient(to_top,var(--bg),transparent)]" />
+    </div>
+  );
+}
