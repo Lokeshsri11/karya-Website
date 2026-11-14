@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { IBM_Plex_Mono, Newsreader } from "next/font/google";
+import { Bricolage_Grotesque, IBM_Plex_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
 
 const mono = IBM_Plex_Mono({
@@ -18,6 +18,14 @@ const serif = Newsreader({
   display: "swap",
 });
 
+// Hero headline only.
+const display = Bricolage_Grotesque({
+  subsets: ["latin"],
+  weight: "500",
+  variable: "--font-bricolage",
+  display: "swap",
+});
+
 const description =
   "Karya is an open-source coding agent for your terminal, in a single Go binary. Commands run in an OS sandbox, every turn can be undone, budgets are enforced, and sessions follow you to any machine.";
 
@@ -33,7 +41,7 @@ const themeScript = `try{document.documentElement.dataset.theme=localStorage.get
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-theme="dark" suppressHydrationWarning className={`${mono.variable} ${serif.variable}`}>
+    <html lang="en" data-theme="dark" suppressHydrationWarning className={`${mono.variable} ${serif.variable} ${display.variable}`}>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

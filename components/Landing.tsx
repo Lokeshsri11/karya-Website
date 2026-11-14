@@ -6,6 +6,7 @@ import SiteNav from "./SiteNav";
 import SiteFooter from "./SiteFooter";
 import Terminal from "./Terminal";
 import Mark from "./Mark";
+import Contours from "./Contours";
 
 const INSTALL = "curl -fsSL https://usekarya.dev/install | sh";
 
@@ -318,14 +319,15 @@ export default class Landing extends React.Component<LandingProps, State> {
         <SiteNav active="home" />
 
         {/* hero */}
-        <section className="bg-grid border-b border-line">
-          <div className="mx-auto my-0 max-w-[1200px] px-6 pt-[clamp(56px,8vw,104px)] pb-[clamp(56px,7vw,96px)] mobile:px-5 mobile:pt-10 mobile:pb-12">
+        <section className="relative overflow-hidden border-b border-line">
+          <Contours />
+          <div className="relative z-10 mx-auto my-0 max-w-[1200px] px-6 pt-[clamp(56px,8vw,104px)] pb-[clamp(56px,7vw,96px)] mobile:px-5 mobile:pt-10 mobile:pb-12">
             <div className="flex flex-wrap items-center gap-x-[14px] gap-y-[10px] font-mono text-[12.5px]">
               <Link href="/roadmap" className="border border-accent px-[10px] py-[3px] text-accent no-underline hover:text-accent">
                 in development · see the roadmap →
               </Link>
             </div>
-            <h1 className="relative mt-7 mb-9 max-w-[12ch] font-serif text-[clamp(48px,8.4vw,120px)] leading-[0.95] font-normal tracking-[-0.04em] mobile:mt-[22px] mobile:mb-[26px] mobile:text-[44px] mobile:tracking-[-0.035em]">
+            <h1 className="relative mt-7 mb-9 max-w-[12ch] font-display text-[clamp(48px,8.4vw,120px)] leading-[0.95] font-medium tracking-[-0.04em] mobile:mt-[22px] mobile:mb-[26px] mobile:text-[44px] mobile:tracking-[-0.035em]">
               <span aria-hidden="true" className="invisible">
                 {A}
                 <em>{B}</em>&nbsp;

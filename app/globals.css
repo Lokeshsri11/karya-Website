@@ -60,6 +60,7 @@ html[data-theme="light"] {
   /* next/font sets --font-plex and --font-newsreader on <html> */
   --font-mono: var(--font-plex), "IBM Plex Mono", ui-monospace, monospace;
   --font-serif: var(--font-newsreader), Newsreader, Georgia, serif;
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
 }
 
 /* Breakpoints used by the design (max-width, inclusive) */
