@@ -11,21 +11,18 @@ const tag = (s: Status, note?: string) => (
 );
 
 const ENV: [string, Status, string | undefined, string][] = [
-  ["GEMINI_API_KEY", "today", "required", "Your Gemini API key. Karya also reads it from a .env file in the working directory; a real exported variable wins over the file."],
-  ["GOOGLE_API_KEY", "today", "optional", "Alternative name for the Gemini key. Wins if both are set."],
-  ["ANTHROPIC_API_KEY · OpenAI-compatible", "planned", "M4", "Anthropic and OpenAI-compatible providers (OpenRouter, DeepSeek, Qwen, Ollama, vLLM, LM Studio). Keys never reach logs, sessions or sync bundles."],
+  ["OPENAI_API_KEY", "today", "required", "Your OpenAI key, or an Amazon Bedrock API key. Karya also reads it from a .env file in the working directory; a real exported variable wins over the file."],
+  ["OPENAI_BASE_URL", "today", "optional", "Another OpenAI-compatible endpoint, such as Amazon Bedrock's."],
+  ["KARYA_MODEL", "today", "optional", "The model sessions run on, written <provider>/<model>. Default: openai/openai.gpt-oss-120b."],
+  ["Gemini · Anthropic keys", "planned", undefined, "More providers behind the same interface. Keys never reach logs, and never enter the VM."],
 ];
 
 const FLAGS: [string, Status, string | undefined, string][] = [
-  ["karya", "today", undefined, "Start the TUI in the current directory, talking to the demo core."],
-  ["karya -live", "today", undefined, "Stream answers straight from Gemini, without the core. Threads are saved under $XDG_DATA_HOME/karya/threads."],
-  ["karya -demo", "today", undefined, "Play the scripted demo. No API key needed."],
-  ["karya -theme light", "today", undefined, "Colour theme: dark or light."],
-  ["--model · --mode · --max-cost · --max-steps", "planned", "M1–M3", "Pick the model and mode, and set hard budgets for the session."],
-  ["--root <dir> · --no-sandbox", "planned", "M2", "Choose the project root. Run bash without the sandbox, in which case every command asks."],
-  ["karya run \"<task>\" [--json]", "planned", "M1", "Run one task headless. Exit codes: 0 done and verified, 1 failed, 2 limit reached, 3 verification failed, 4 interrupted."],
-  ["karya resume [<id>] · sessions", "planned", "M1", "List and resume sessions, on this machine or another clone of the same repository."],
-  ["karya sync · doctor", "planned", "M4–M5", "End-to-end encrypted session sync, and a health check for the sandbox, keys and config."],
+  ["karya", "today", undefined, "Start the terminal UI in the current directory. Each session gets its own microVM with the repo copied in."],
+  ["karya -model <provider>/<model>", "today", undefined, "Pick the model. Overrides KARYA_MODEL."],
+  ["approvals · YOLO", "planned", undefined, "Asks only at the edges: more files, new network writes, real secrets, applying changes. YOLO turns the prompts off; the VM and the gate stay."],
+  ["limits · loop detection", "planned", undefined, "Hard limits on steps, tokens, cost and time, and a pause after the same call or failure three times."],
+  ["saved sessions", "planned", undefined, "Sessions, turns and the audit log kept on disk, and a session's VM kept for a week after last use."],
 ];
 
 function Rows({ items }: { items: [string, Status, string | undefined, string][] }) {

