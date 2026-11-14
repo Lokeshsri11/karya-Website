@@ -297,7 +297,7 @@ export default class Terminal extends React.Component<TerminalProps, State> {
           <div className="min-w-0 whitespace-pre-wrap [word-break:break-word]">
             {input ? <span>{input}</span> : null}
             <span className={`inline-block h-[1.2em] w-[0.62em] bg-accent align-[-0.22em] ${this.state.cursor ? "opacity-100" : "opacity-0"}`} />
-            {!input ? <span className="text-fg-3">arise, resolved to fight</span> : null}
+            {!input ? <span className="text-fg-3">What are we building today?</span> : null}
           </div>
         </div>
       </div>

