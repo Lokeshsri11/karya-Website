@@ -5,8 +5,7 @@ import Link from "next/link";
 import SiteNav from "./SiteNav";
 import SiteFooter from "./SiteFooter";
 import Terminal from "./Terminal";
-import Mark from "./Mark";
-import Contours from "./Contours";
+import HeroTiger from "./HeroTiger";
 
 const INSTALL = "curl -fsSL https://usekarya.dev/install | sh";
 
@@ -320,8 +319,8 @@ export default class Landing extends React.Component<LandingProps, State> {
 
         {/* hero */}
         <section className="relative overflow-hidden border-b border-line">
-          <Contours />
           <div className="relative z-10 mx-auto my-0 max-w-[1200px] px-6 pt-[clamp(56px,8vw,104px)] pb-[clamp(56px,7vw,96px)] mobile:px-5 mobile:pt-10 mobile:pb-12">
+            <HeroTiger />
             <div className="flex flex-wrap items-center gap-x-[14px] gap-y-[10px] font-mono text-[12.5px]">
               <Link href="/roadmap" className="border border-accent px-[10px] py-[3px] text-accent no-underline hover:text-accent">
                 in development · see the roadmap →
@@ -750,14 +749,6 @@ export default class Landing extends React.Component<LandingProps, State> {
         {/* closing CTA */}
         <section className="bg-grid border-t border-line">
           <div className="mx-auto my-0 flex max-w-[1200px] flex-col items-start gap-10 px-6 py-[clamp(88px,12vw,168px)] mobile:gap-7 mobile:px-5 mobile:py-16">
-            <div data-reveal className="flex items-center gap-[18px]">
-              <Mark size={88} />
-              <span className="font-mono text-[13px] leading-[1.6] text-fg-3">
-                kārya · कार्य
-                <br />
-                every task, carried through
-              </span>
-            </div>
             <h2 data-reveal className="m-0 max-w-[11ch] font-display text-[clamp(56px,10vw,152px)] leading-[0.92] font-medium tracking-[-0.045em] mobile:text-[48px]">
               Let it run. <em className={em}>Stay in control.</em>
             </h2>
