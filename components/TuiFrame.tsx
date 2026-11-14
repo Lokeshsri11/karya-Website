@@ -40,13 +40,13 @@ export default function TuiFrame() {
   }, [i]);
   return (
     <div className="min-w-0 border border-line-2 bg-[#14120f] text-[#ede6d9]">
-      <div className="flex flex-wrap items-center gap-[6px] border-b border-[#2a2620] px-[10px] py-2 font-mono text-[12px]">
+      <div className="flex flex-wrap items-center gap-1.5 border-b border-[#2a2620] px-2.5 py-2 font-mono text-[12px]">
         {FRAMES.map((fr, k) => (
           <button
             key={fr.key}
             onClick={() => setI(k)}
             aria-pressed={k === i}
-            className={`cursor-pointer border px-[10px] py-[3px] ${
+            className={`cursor-pointer border px-2.5 py-0.75 ${
               k === i ? "border-[#d9a14b] bg-[#d9a14b] text-[#17130d]" : "border-[#3d372e] bg-transparent text-[#b9b0a0]"
             }`}
           >
@@ -57,7 +57,7 @@ export default function TuiFrame() {
       </div>
       <div ref={scroller} className="no-scrollbar flex overflow-x-auto">
         <pre
-          className="m-0 mx-auto w-max px-[18px] py-4 font-mono text-[clamp(10.5px,1.05vw,13.5px)] leading-[1.3]"
+          className="m-0 mx-auto w-max px-4.5 py-4 font-mono text-[clamp(10.5px,1.05vw,13.5px)] leading-[1.3]"
           dangerouslySetInnerHTML={{ __html: RENDERED[i] }}
         />
       </div>

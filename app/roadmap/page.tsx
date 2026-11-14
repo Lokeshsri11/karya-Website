@@ -4,7 +4,7 @@ import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 
 export const metadata: Metadata = {
-  title: "Roadmap — Karya",
+  title: "Roadmap | Karya",
   description: "What works in Karya today, what is being built now, and what comes after launch.",
 };
 
@@ -31,7 +31,7 @@ const MILESTONES: [string, Status, string, string[]][] = [
 const LATER = ["Interactive commands (PTY)", "Parallel tool calls", "Branching sessions", "Hooks and skills", "Sub-agents", "Editor clients", "GitHub Action", "Container and remote executors", "Native Windows sandbox"];
 
 const chip = (s: Status) =>
-  `px-2 py-[2px] text-[12px] border ${s === "done" ? "border-ok text-ok" : s === "now" ? "border-accent text-accent" : "border-line-2 text-fg-3"}`;
+  `px-2 py-0.5 text-[12px] border ${s === "done" ? "border-ok text-ok" : s === "now" ? "border-accent text-accent" : "border-line-2 text-fg-3"}`;
 const label = { done: "works today", now: "in progress", next: "planned" };
 const h2 = "mt-16 mr-0 mb-5 ml-0 border-t border-line pt-6 font-display text-[32px] leading-[1.15] font-medium";
 const li = "font-sans text-[17px] leading-[1.55] text-fg-2";
@@ -40,7 +40,7 @@ export default function Roadmap() {
   return (
     <div className="min-h-screen bg-bg text-fg">
       <SiteNav active="roadmap" />
-      <main className="mx-auto my-0 max-w-[860px] px-6 pt-11 pb-28">
+      <main className="mx-auto my-0 max-w-215 px-6 pt-11 pb-28">
         <div className="font-mono text-[13px] text-fg-3">roadmap</div>
         <h1 className="mt-4 mr-0 mb-5 ml-0 font-display text-[clamp(40px,5.6vw,60px)] leading-[1.04] font-medium tracking-[-0.022em] mobile:text-[38px]">
           What works, and <em className="text-accent">what&apos;s next.</em>
@@ -50,7 +50,7 @@ export default function Roadmap() {
         </p>
 
         <h2 className={h2}>Works today</h2>
-        <ul className="m-0 flex list-none flex-col gap-[10px] p-0 font-mono text-[13.5px]">
+        <ul className="m-0 flex list-none flex-col gap-2.5 p-0 font-mono text-[13.5px]">
           {DONE.map((d) => (
             <li key={d} className="flex gap-3">
               <span className="text-ok">✓</span>
@@ -68,7 +68,7 @@ export default function Roadmap() {
                 <span className="font-display font-medium text-[22px] leading-[1.2] text-fg">{title}</span>
                 <span className={chip(s)}>{label[s]}</span>
               </div>
-              <ul className="m-0 flex min-w-0 flex-[1_1_280px] flex-col gap-1 pl-[18px]">
+              <ul className="m-0 flex min-w-0 flex-[1_1_280px] flex-col gap-1 pl-4.5">
                 {items.map((i) => (
                   <li key={i} className={li}>
                     {i}
@@ -80,15 +80,15 @@ export default function Roadmap() {
         </div>
 
         <h2 className={h2}>After launch</h2>
-        <div className="flex flex-wrap gap-[10px] font-mono text-[13px]">
+        <div className="flex flex-wrap gap-2.5 font-mono text-[13px]">
           {LATER.map((l) => (
-            <span key={l} className="border border-line-2 px-[10px] py-[5px] text-fg-2">
+            <span key={l} className="border border-line-2 px-2.5 py-1.25 text-fg-2">
               {l}
             </span>
           ))}
         </div>
 
-        <div className="mt-[72px] flex flex-wrap justify-between gap-3 border-t border-line pt-5 font-mono text-[13px]">
+        <div className="mt-18 flex flex-wrap justify-between gap-3 border-t border-line pt-5 font-mono text-[13px]">
           <Link href="/" className="text-fg-2 no-underline hover:text-fg">
             ← Overview
           </Link>

@@ -20,7 +20,7 @@ const serif = Newsreader({
 
 // Headings.
 const display = Bricolage_Grotesque({
-  subsets: ["latin"],
+  subsets: ["latin", "latin-ext"],
   weight: "variable",
   axes: ["opsz"],
   variable: "--font-bricolage",

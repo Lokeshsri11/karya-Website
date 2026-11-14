@@ -1,5 +1,5 @@
-const desc = "flex-[1_1_260px] font-sans text-[17px] leading-[1.5] text-fg-2";
-const row = "flex flex-wrap gap-x-7 gap-y-[6px] border-b border-line py-[14px] px-0";
+const desc = "flex-[1_1_260px] font-sans text-[17px] leading-normal text-fg-2";
+const row = "flex flex-wrap gap-x-7 gap-y-1.5 border-b border-line py-3.5 px-0";
 const key = "flex flex-[0_0_220px] flex-col gap-1";
 
 const tag = (note: string) => <span className="text-fg-3">{note}</span>;
@@ -30,7 +30,7 @@ function Rows({ items }: { items: [string, string, string][] }) {
 export default function EnvTable() {
   return (
     <div className="text-left font-mono text-[13px] text-fg">
-      <div className="px-0 pt-0 pb-[10px] text-fg-3">environment</div>
+      <div className="px-0 pt-0 pb-2.5 text-fg-3">environment</div>
       <Rows items={ENV} />
     </div>
   );

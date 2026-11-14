@@ -4,16 +4,16 @@ import SiteNav from "@/components/SiteNav";
 import SiteFooter from "@/components/SiteFooter";
 import EnvTable from "@/components/EnvTable";
 
-export const metadata: Metadata = { title: "Getting started — Karya docs" };
+export const metadata: Metadata = { title: "Getting started | Karya docs" };
 
 const INSTALL = "curl -fsSL https://usekarya.dev/install | sh";
 
 const h2 = "mt-16 mr-0 mb-4 ml-0 border-t border-line pt-6 font-display text-[32px] leading-[1.15] font-medium";
 const p = "max-w-[65ch] font-sans text-[18px] leading-[1.65] text-pretty text-fg-2";
-const pre = "overflow-x-auto border border-line bg-bg-2 px-4 py-[14px] font-mono text-[13.5px] leading-[1.7]";
-const code = "bg-bg-2 px-[5px] py-[1px] font-mono text-[0.84em] text-fg";
+const pre = "overflow-x-auto border border-line bg-bg-2 px-4 py-3.5 font-mono text-[13.5px] leading-[1.7]";
+const code = "bg-bg-2 px-1.25 py-px font-mono text-[0.84em] text-fg";
 const dim = "text-fg-3";
-const sub = "border-l border-line pt-[3px] pr-0 pb-[3px] pl-6 text-fg-2 no-underline hover:text-fg mobile:border mobile:border-line-2 mobile:px-[10px] mobile:py-[6px]";
+const sub = "border-l border-line pt-0.75 pr-0 pb-0.75 pl-6 text-fg-2 no-underline hover:text-fg mobile:border mobile:border-line-2 mobile:px-2.5 mobile:py-1.5";
 
 const KEYS: [string, string][] = [
   ["enter", "send the prompt"],
@@ -37,11 +37,11 @@ export default function Docs() {
   return (
     <div className="min-h-screen bg-bg text-fg">
       <SiteNav active="docs" />
-      <div className="mx-auto my-0 flex max-w-[1100px] flex-wrap items-start gap-x-16 gap-y-0 px-6 py-0">
-        <aside className="sticky top-[62px] max-w-[220px] flex-[1_0_200px] px-0 pt-11 pb-6 font-mono text-[13px] leading-[1.5] narrow:static mobile:max-w-none mobile:flex-[1_0_100%] mobile:px-0 mobile:pt-5 mobile:pb-0">
-          <div className={`${dim} mb-[10px] mobile:hidden`}>start</div>
-          <div className="mb-7 flex flex-col gap-[2px] mobile:mb-2 mobile:flex-row mobile:flex-wrap mobile:gap-2">
-            <a href="#top" className="border-l border-accent py-1 pr-0 pl-3 text-fg no-underline mobile:border mobile:border-accent mobile:px-[10px] mobile:py-[6px] mobile:text-accent">
+      <div className="mx-auto my-0 flex max-w-275 flex-wrap items-start gap-x-16 gap-y-0 px-6 py-0">
+        <aside className="sticky top-15.5 max-w-55 flex-[1_0_200px] px-0 pt-11 pb-6 font-mono text-[13px] leading-normal narrow:static mobile:max-w-none mobile:flex-[1_0_100%] mobile:px-0 mobile:pt-5 mobile:pb-0">
+          <div className={`${dim} mb-2.5 mobile:hidden`}>start</div>
+          <div className="mb-7 flex flex-col gap-0.5 mobile:mb-2 mobile:flex-row mobile:flex-wrap mobile:gap-2">
+            <a href="#top" className="border-l border-accent py-1 pr-0 pl-3 text-fg no-underline mobile:border mobile:border-accent mobile:px-2.5 mobile:py-1.5 mobile:text-accent">
               Getting started
             </a>
             {NAV.map(([id, label]) => (
@@ -52,7 +52,7 @@ export default function Docs() {
           </div>
         </aside>
 
-        <main id="top" className="max-w-[740px] min-w-0 flex-[999_1_480px] px-0 pt-11 pb-28 mobile:pt-2">
+        <main id="top" className="max-w-185 min-w-0 flex-[999_1_480px] px-0 pt-11 pb-28 mobile:pt-2">
           <div className="font-mono text-[13px] text-fg-3">docs / start</div>
           <h1 className="mt-4 mr-0 mb-5 ml-0 font-display text-[clamp(40px,5.6vw,60px)] leading-[1.04] font-medium tracking-[-0.022em] mobile:text-[38px]">Getting started</h1>
           <p className="m-0 max-w-[62ch] font-sans text-[20px] leading-[1.6] text-pretty text-fg-2">
@@ -106,7 +106,7 @@ export OPENAI_BASE_URL=https://bedrock-mantle.us-east-1.api.aws/v1`}</pre>
           <h2 id="reference" className={h2}>Reference</h2>
           <EnvTable />
 
-          <div className="mt-[72px] flex flex-wrap justify-between gap-3 border-t border-line pt-5 font-mono text-[13px]">
+          <div className="mt-18 flex flex-wrap justify-between gap-3 border-t border-line pt-5 font-mono text-[13px]">
             <Link href="/" className="text-fg-2 no-underline hover:text-fg">
               ← Overview
             </Link>

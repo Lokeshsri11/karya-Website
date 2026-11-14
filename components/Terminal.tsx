@@ -256,14 +256,14 @@ export default class Terminal extends React.Component<TerminalProps, State> {
 
     const narrow = this.state.narrow;
     // A custom height prop wins; otherwise the frame is fixed while animating.
-    const height = frozen ? "h-auto" : narrow ? "h-[460px]" : this.props.height ? "" : "h-[580px]";
+    const height = frozen ? "h-auto" : narrow ? "h-115" : this.props.height ? "" : "h-145";
 
     return (
       <div
         ref={this.rootRef}
         style={!frozen && !narrow && this.props.height ? { height: this.props.height } : undefined}
         className={`relative box-border flex w-full flex-col border border-line-2 bg-term text-left font-mono leading-[1.6] text-fg ${height} ${
-          narrow ? "px-3 pt-5 pb-3 text-[12px]" : "px-[18px] pt-[22px] pb-[14px] text-[13px]"
+          narrow ? "px-3 pt-5 pb-3 text-[12px]" : "px-4.5 pt-5.5 pb-3.5 text-[13px]"
         }`}
       >
         <div className="pointer-events-none absolute top-[-0.85em] right-3 left-3 flex justify-between gap-3">
@@ -274,7 +274,7 @@ export default class Terminal extends React.Component<TerminalProps, State> {
           {src.map((b) => {
             if (b.kind === "user")
               return (
-                <div key={b.id} className="mt-0 mr-0 mb-[10px] ml-0 flex gap-[10px] font-medium">
+                <div key={b.id} className="mt-0 mr-0 mb-2.5 ml-0 flex gap-2.5 font-medium">
                   <span className="text-accent">›</span>
                   <span className="whitespace-pre-wrap">{b.text}</span>
                 </div>
@@ -287,12 +287,12 @@ export default class Terminal extends React.Component<TerminalProps, State> {
             );
           })}
         </div>
-        <div className="mt-[10px] flex min-h-[1.6em] flex-wrap gap-x-4 gap-y-1 border-t border-line pt-2 text-[0.92em] text-fg-3">
+        <div className="mt-2.5 flex min-h-[1.6em] flex-wrap gap-x-4 gap-y-1 border-t border-line pt-2 text-[0.92em] text-fg-3">
           {isWaiting && <span className="text-accent">{waitText}</span>}
           {isBusy && <span>{labels[status]}</span>}
           <span className="ml-auto">{usage}</span>
         </div>
-        <div className="mt-2 flex items-start gap-[10px] border border-line-2 px-[10px] py-[7px]">
+        <div className="mt-2 flex items-start gap-2.5 border border-line-2 px-2.5 py-1.75">
           <span className="text-accent">›</span>
           <div className="min-w-0 whitespace-pre-wrap [word-break:break-word]">
             {input ? <span>{input}</span> : null}

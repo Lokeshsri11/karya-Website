@@ -4,7 +4,7 @@ import InfoPage, { h2, p } from "@/components/InfoPage";
 import { COMPANY, FOUNDERS } from "@/components/company";
 
 export const metadata: Metadata = {
-  title: "About — Karya",
+  title: "About | Karya",
   description: "Karya is an open-source terminal coding agent built by Prateek Singh and Lokesh Srivastava in Prayagraj, India, founded in September 2026.",
 };
 
@@ -27,7 +27,7 @@ export default function About() {
       title={<>The people behind <em className="text-accent">kārya.</em></>}
       lead="Karya is an open-source coding agent for the terminal. It lets an AI model work on your code with real autonomy, inside an OS sandbox, with every turn undoable and every budget enforced. We started building it in September 2026 in Prayagraj, India."
     >
-      <dl className="mt-10 mr-0 mb-0 ml-0 grid grid-cols-[max-content_1fr] gap-x-7 gap-y-[10px] border-t border-line px-0 pt-5 pb-0 font-mono text-[13.5px]">
+      <dl className="mt-10 mr-0 mb-0 ml-0 grid grid-cols-[max-content_1fr] gap-x-7 gap-y-2.5 border-t border-line px-0 pt-5 pb-0 font-mono text-[13.5px]">
         {facts.map(([k, v]) => (
           <div key={k} className="contents">
             <dt className="text-fg-3">{k}</dt>
@@ -47,16 +47,16 @@ export default function About() {
       <h2 className={h2}>Founders</h2>
       <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] gap-4">
         {FOUNDERS.map((f) => (
-          <div key={f.name} className="border border-line-2 bg-bg-2 px-[22px] py-5">
+          <div key={f.name} className="border border-line-2 bg-bg-2 px-5.5 py-5">
             <div className="font-display text-[24px] font-medium tracking-[-0.01em]">{f.name}</div>
             <div className="mt-1 mr-0 mb-4 ml-0 font-mono text-[13px] text-accent">{f.role}</div>
-            <div className="flex flex-wrap gap-x-4 gap-y-[6px] font-mono text-[13px]">
+            <div className="flex flex-wrap gap-x-4 gap-y-1.5 font-mono text-[13px]">
               <a href={f.linkedin} className={link}>LinkedIn ↗</a>
               <a href={f.github} className={link}>GitHub ↗</a>
               <a href={f.x} className={link}>X ↗</a>
               {f.site && <a href={f.site} className={link}>Website ↗</a>}
             </div>
-            <a href={`mailto:${f.email}`} className="mt-[14px] inline-block font-mono text-[13px] text-fg hover:text-accent">{f.email}</a>
+            <a href={`mailto:${f.email}`} className="mt-3.5 inline-block font-mono text-[13px] text-fg hover:text-accent">{f.email}</a>
           </div>
         ))}
       </div>

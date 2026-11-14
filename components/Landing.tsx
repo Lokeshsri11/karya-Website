@@ -72,13 +72,13 @@ const ATTEMPTS: Attempt[] = [
 /* shared class lists (the design's repeated style fragments) */
 const label = "font-mono text-[13px] text-fg-3";
 // section heading; margins are added per use, mobile margins always win
-const h2 = "font-display font-medium text-[clamp(40px,6.2vw,78px)] leading-none tracking-[-0.018em] text-balance mobile:mt-[14px] mobile:mb-[18px] mobile:text-[36px] mobile:leading-[1.05]";
-const h2m = "mt-[18px] mb-[22px]";
+const h2 = "font-display font-medium text-[clamp(40px,6.2vw,78px)] leading-none tracking-[-0.018em] text-balance mobile:mt-3.5 mobile:mb-4.5 mobile:text-[36px] mobile:leading-[1.05]";
+const h2m = "mt-4.5 mb-5.5";
 const lead = "font-sans text-[19px] leading-[1.6] text-pretty text-fg-2 mobile:text-[17px] mobile:leading-[1.55]";
-const sectionPad = "mx-auto my-0 max-w-[1100px] px-6 py-[clamp(72px,10vw,128px)] mobile:px-5 mobile:py-14";
+const sectionPad = "mx-auto my-0 max-w-275 px-6 py-[clamp(72px,10vw,128px)] mobile:px-5 mobile:py-14";
 const split2 = "grid grid-cols-[repeat(auto-fit,minmax(min(100%,380px),1fr))] items-start gap-x-16 gap-y-12";
 const em = "text-accent";
-const pill = "border border-line-2 px-[9px] py-[3px] text-fg-2";
+const pill = "border border-line-2 px-2.25 py-0.75 text-fg-2";
 const th = "px-4 py-3 font-normal";
 const thFirst = "pt-3 pr-4 pb-3 pl-0 font-normal";
 const thLast = "pt-3 pr-0 pb-3 pl-4 font-normal";
@@ -87,8 +87,8 @@ const td = "px-4 py-3";
 const tdFirst = "pt-3 pr-4 pb-3 pl-0";
 const tdLast = "pt-3 pr-0 pb-3 pl-4";
 const tdR = `${td} text-right`;
-const cmdBox = "flex max-w-full items-center border border-accent bg-bg-2 font-mono mobile:w-full mobile:gap-[10px] mobile:py-[10px] mobile:pr-[10px] mobile:pl-[14px] mobile:text-[12.5px]";
-const cmdCode = "min-w-0 overflow-x-auto whitespace-nowrap mobile:flex-[1_1_auto] mobile:whitespace-normal mobile:[overflow-wrap:anywhere]";
+const cmdBox = "flex max-w-full items-center border border-accent bg-bg-2 font-mono mobile:w-full mobile:gap-2.5 mobile:py-2.5 mobile:pr-2.5 mobile:pl-3.5 mobile:text-[12.5px]";
+const cmdCode = "min-w-0 overflow-x-auto whitespace-nowrap mobile:flex-[1_1_auto] mobile:whitespace-normal mobile:wrap-anywhere";
 const copyBtn = "flex-none cursor-pointer border border-accent bg-accent text-accent-ink hover:bg-transparent hover:text-accent";
 const textLink = "font-mono underline-offset-4 hover:text-accent";
 
@@ -320,15 +320,15 @@ export default class Landing extends React.Component<LandingProps, State> {
         {/* hero */}
         <section className="relative overflow-hidden border-b border-line">
           <HeroTigerBackdrop />
-          <div className="relative z-10 mx-auto my-0 max-w-[1200px] px-6 pt-[clamp(56px,8vw,104px)] pb-[clamp(56px,7vw,96px)] mobile:px-5 mobile:pt-10 mobile:pb-12">
+          <div className="relative z-10 mx-auto my-0 max-w-300 px-6 pt-[clamp(56px,8vw,104px)] pb-[clamp(56px,7vw,96px)] mobile:px-5 mobile:pt-10 mobile:pb-12">
             <div className="flex items-start justify-between gap-10">
               <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-x-[14px] gap-y-[10px] font-mono text-[12.5px]">
-              <Link href="/roadmap" className="border border-accent px-[10px] py-[3px] text-accent no-underline hover:text-accent">
+            <div className="flex flex-wrap items-center gap-x-3.5 gap-y-2.5 font-mono text-[12.5px]">
+              <Link href="/roadmap" className="border border-accent px-2.5 py-0.75 text-accent no-underline hover:text-accent">
                 in development · see the roadmap →
               </Link>
             </div>
-            <h1 className="relative mt-7 mb-9 max-w-[12ch] font-display text-[clamp(44px,6.8vw,96px)] leading-[0.95] font-medium tracking-[-0.04em] mobile:mt-[22px] mobile:mb-[26px] mobile:text-[40px] mobile:tracking-[-0.035em]">
+            <h1 className="relative mt-7 mb-9 max-w-[12ch] font-display text-[clamp(44px,6.8vw,96px)] leading-[0.95] font-medium tracking-[-0.04em] mobile:mt-5.5 mobile:mb-6.5 mobile:text-[40px] mobile:tracking-[-0.035em]">
               <span aria-hidden="true" className="invisible">
                 {A}
                 <em>{B}</em>&nbsp;
@@ -343,10 +343,10 @@ export default class Landing extends React.Component<LandingProps, State> {
               Karya is an opinionated engineering harness for AI agents that work on problems with you. Actions run freely inside a protected sandbox by default, so agents can get real work done without asking at every step. Budgets, thinking limits and built-in observability keep you in control.
             </p>
             <div className="mt-10 flex flex-wrap items-center gap-x-7 gap-y-4">
-              <div className={`${cmdBox} gap-[14px] py-3 pr-3 pl-[18px] text-[14px]`}>
+              <div className={`${cmdBox} gap-3.5 py-3 pr-3 pl-4.5 text-[14px]`}>
                 <span className="text-accent">$</span>
                 <code className={cmdCode}>{INSTALL}</code>
-                <button onClick={this.copy} className={`${copyBtn} px-3 py-[5px] text-[12.5px]`}>
+                <button onClick={this.copy} className={`${copyBtn} px-3 py-1.25 text-[12.5px]`}>
                   {copyLabel}
                 </button>
               </div>
@@ -357,15 +357,15 @@ export default class Landing extends React.Component<LandingProps, State> {
               </div>
               <HeroTiger />
             </div>
-            <div data-reveal className="mt-[72px] border border-line-2 bg-bg-2 p-[clamp(12px,2.4vw,32px)] mobile:mt-11 mobile:p-[10px]">
-              <div className="mb-[22px] flex flex-wrap justify-end gap-x-4 gap-y-[6px] font-mono text-[12px] text-fg-3 mobile:mb-4 mobile:text-[11px]">
+            <div data-reveal className="mt-18 border border-line-2 bg-bg-2 p-[clamp(12px,2.4vw,32px)] mobile:mt-11 mobile:p-2.5">
+              <div className="mb-5.5 flex flex-wrap justify-end gap-x-4 gap-y-1.5 font-mono text-[12px] text-fg-3 mobile:mb-4 mobile:text-[11px]">
                 <span>{chapterLabel}</span>
               </div>
               <Terminal mode={termMode} model={model} interactive onChapter={this.onChapter} />
-              <div className="mt-[18px] grid grid-cols-[repeat(7,minmax(0,1fr))] gap-[6px] font-mono text-[11.5px] mobile:mt-3 mobile:gap-1 mobile:text-[10px]">
+              <div className="mt-4.5 grid grid-cols-7 gap-1.5 font-mono text-[11.5px] mobile:mt-3 mobile:gap-1 mobile:text-[10px]">
                 {CHAPTERS.map((c, i) => (
-                  <div key={c} className="flex min-w-0 flex-col gap-[7px]">
-                    <div className={`h-[2px] [transition:background_.3s] ${i < ch ? "bg-fg-2" : i === ch ? "bg-accent" : "bg-line-2"}`} />
+                  <div key={c} className="flex min-w-0 flex-col gap-1.75">
+                    <div className={`h-0.5 [transition:background_.3s] ${i < ch ? "bg-fg-2" : i === ch ? "bg-accent" : "bg-line-2"}`} />
                     <span className={`overflow-hidden text-ellipsis whitespace-nowrap [transition:color_.3s] ${i === ch ? "text-accent" : i < ch ? "text-fg-2" : "text-fg-3"}`}>{c}</span>
                   </div>
                 ))}
@@ -378,7 +378,7 @@ export default class Landing extends React.Component<LandingProps, State> {
         <div className="overflow-hidden bg-fg text-bg">
           <div ref={this.marqueeRef} className="flex w-max will-change-transform">
             {ticker.map((t, i) => (
-              <span key={i} className="flex items-center gap-[22px] py-[18px] pr-[22px] pl-0 font-mono text-[15px] whitespace-nowrap">
+              <span key={i} className="flex items-center gap-5.5 py-4.5 pr-5.5 pl-0 font-mono text-[15px] whitespace-nowrap">
                 <span className="inline-block h-2 w-2 bg-accent" />
                 {t}
               </span>
@@ -407,12 +407,12 @@ export default class Landing extends React.Component<LandingProps, State> {
             <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,240px),1fr))] gap-4">
               {PATHS.map((pth) => (
                 <div key={pth.name} data-reveal className={`flex flex-col border ${pth.us ? "border-accent bg-bg-2" : "border-line-2 bg-transparent"}`}>
-                  <div className="border-b border-line px-[18px] py-4">
+                  <div className="border-b border-line px-4.5 py-4">
                     <div className={`font-mono text-[12px] ${pth.us ? "text-accent" : "text-fg-3"}`}>{pth.tag}</div>
                     <div className={`mt-1 font-display font-medium text-[26px] leading-[1.2] ${pth.us ? "text-accent italic" : "text-fg not-italic"}`}>{pth.name}</div>
                   </div>
                   {pth.rows.map((v, k) => (
-                    <div key={k} className={`flex flex-col gap-[3px] px-[18px] py-3 ${k < pth.rows.length - 1 ? "border-b border-line" : ""}`}>
+                    <div key={k} className={`flex flex-col gap-0.75 px-4.5 py-3 ${k < pth.rows.length - 1 ? "border-b border-line" : ""}`}>
                       <span className="font-mono text-[11.5px] text-fg-3">{PATH_ROWS[k]}</span>
                       <span className={`font-mono text-[14px] ${pth.us ? "text-ok" : "text-fg-2"}`}>
                         {pth.us ? "✓ " : ""}
@@ -428,7 +428,7 @@ export default class Landing extends React.Component<LandingProps, State> {
 
         {/* pillars index */}
         <section className="border-t border-line">
-          <div className="mx-auto my-0 grid max-w-[1100px] grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-x-7 gap-y-8 px-6 py-12 mobile:gap-x-5 mobile:gap-y-[22px] mobile:px-5 mobile:py-9">
+          <div className="mx-auto my-0 grid max-w-275 grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-x-7 gap-y-8 px-6 py-12 mobile:gap-x-5 mobile:gap-y-5.5 mobile:px-5 mobile:py-9">
             {[
               ["#vm", "01", "A computer of its own", "Every command runs in the session's microVM, never on your machine."],
               ["#review", "02", "Reviewed before it lands", "Diffs are reviewed, then applied only when you accept."],
@@ -451,8 +451,8 @@ export default class Landing extends React.Component<LandingProps, State> {
             <div data-reveal className={label}>the loop</div>
             <h2 data-reveal className={`${h2} ${h2m} max-w-[20ch]`}>The model works freely. The edges are checked.</h2>
             <p data-reveal className={`${lead} m-0 max-w-[62ch]`}>Karya runs one turn at a time. Each tool call the model asks for runs inside the session's microVM, and the result goes straight back to the model, with no prompt in between. The checks sit at the edges: when the work is done, an oracle reviews the diff, you get a brief, and only your answer applies it.</p>
-            <div data-reveal className="mt-14 border border-line-2 p-[clamp(18px,3vw,36px)] mobile:mt-9 mobile:px-[14px] mobile:py-4">
-              <div className="mb-7 flex flex-wrap justify-between gap-x-4 gap-y-[6px] font-mono text-[12.5px] text-fg-3">
+            <div data-reveal className="mt-14 border border-line-2 p-[clamp(18px,3vw,36px)] mobile:mt-9 mobile:px-3.5 mobile:py-4">
+              <div className="mb-7 flex flex-wrap justify-between gap-x-4 gap-y-1.5 font-mono text-[12.5px] text-fg-3">
                 <span>
                   iteration {step.it} · step {this.state.loopI + 1} of {SEQ.length}
                 </span>
@@ -469,11 +469,11 @@ export default class Landing extends React.Component<LandingProps, State> {
                   return (
                     <div key={i} className="flex items-start mobile:w-full mobile:flex-col mobile:items-start">
                       <div className="flex flex-col gap-2">
-                        <div className={`border px-[14px] py-[10px] whitespace-nowrap [transition:background_.25s,color_.25s,border-color_.25s] ${borderStyle} ${borderColor} ${bg} ${color}`}>{lbl}</div>
+                        <div className={`border px-3.5 py-2.5 whitespace-nowrap [transition:background_.25s,color_.25s,border-color_.25s] ${borderStyle} ${borderColor} ${bg} ${color}`}>{lbl}</div>
                         <div className={`text-[12px] whitespace-nowrap ${human ? "text-accent" : "text-fg-3"}`}>{sub}</div>
                       </div>
                       {i < NODES.length - 1 && (
-                        <div className={`p-[10px] [transition:color_.25s] mobile:pt-1 mobile:pr-0 mobile:pb-[6px] mobile:pl-[14px] ${i < step.n ? "text-accent" : "text-fg-3"}`}>
+                        <div className={`p-2.5 [transition:color_.25s] mobile:pt-1 mobile:pr-0 mobile:pb-1.5 mobile:pl-3.5 ${i < step.n ? "text-accent" : "text-fg-3"}`}>
                           <span className="mobile:hidden">→</span>
                           <span className="hidden mobile:inline">↓</span>
                         </div>
@@ -487,19 +487,19 @@ export default class Landing extends React.Component<LandingProps, State> {
                 <span>{step.cap}</span>
               </div>
             </div>
-            <div className="mt-9 flex flex-wrap items-center gap-[10px] border-t border-line pt-5 font-mono text-[12.5px]">
+            <div className="mt-9 flex flex-wrap items-center gap-2.5 border-t border-line pt-5 font-mono text-[12.5px]">
               <span className="mr-2 text-fg-3">you are asked only for</span>
               <span className={pill}>more files or repos</span>
               <span className={pill}>new network writes</span>
               <span className={pill}>real secrets</span>
               <span className={pill}>applying changes</span>
-              <span className="ml-auto flex gap-[18px] text-fg-3">
+              <span className="ml-auto flex gap-4.5 text-fg-3">
                 <span>
-                  <span className="mr-[6px] inline-block h-[10px] w-[10px] border border-line-2 align-[-1px]" />
+                  <span className="mr-1.5 inline-block h-2.5 w-2.5 border border-line-2 align-[-1px]" />
                   automatic
                 </span>
                 <span>
-                  <span className="mr-[6px] inline-block h-[10px] w-[10px] border border-dashed border-accent align-[-1px]" />
+                  <span className="mr-1.5 inline-block h-2.5 w-2.5 border border-dashed border-accent align-[-1px]" />
                   you
                 </span>
               </span>
@@ -520,7 +520,7 @@ export default class Landing extends React.Component<LandingProps, State> {
                 ["Desktop", "early preview", "The same core in a native window, with the same chat, tools and usage.", "", "beta builds · expect rough edges"],
                 ["Cloud", "coming soon", "The same microVM, review and gate, running on our servers instead of your machine.", "", "no hardware needed"],
               ].map(([t, status, d, cmd, plat], i) => (
-                <div key={t} data-reveal className="flex min-w-0 flex-col gap-3 bg-bg px-[22px] py-6">
+                <div key={t} data-reveal className="flex min-w-0 flex-col gap-3 bg-bg px-5.5 py-6">
                   <div className="flex items-baseline justify-between gap-3">
                     <div className="font-display font-medium text-[26px] leading-[1.2]">{t}</div>
                     <div className={`flex items-center gap-2 font-mono text-[12px] ${i === 0 ? "text-accent" : "text-fg-3"}`}>
@@ -533,7 +533,7 @@ export default class Landing extends React.Component<LandingProps, State> {
                       {status}
                     </div>
                   </div>
-                  <div className="font-sans text-[16px] leading-[1.5] text-fg-2">{d}</div>
+                  <div className="font-sans text-[16px] leading-normal text-fg-2">{d}</div>
                   {cmd ? (
                     <pre className="m-0 overflow-x-auto border border-accent bg-bg-2 px-3 py-2 font-mono text-[12.5px] leading-[1.6] whitespace-pre">
                       <span className="text-accent">$</span> {cmd}
@@ -568,16 +568,16 @@ export default class Landing extends React.Component<LandingProps, State> {
             </div>
             <div data-reveal className="flex min-w-0 flex-col gap-3 font-mono text-[12.5px] leading-[1.7]">
               <div className="border border-line-2 bg-term">
-                <div className="flex flex-wrap justify-between gap-x-4 gap-y-1 border-b border-line px-[14px] py-2 text-fg-3">
+                <div className="flex flex-wrap justify-between gap-x-4 gap-y-1 border-b border-line px-3.5 py-2 text-fg-3">
                   <span>microVM · session 7f3a2c</span>
                 </div>
-                <div className="overflow-x-auto overflow-y-hidden px-[14px] py-3">
+                <div className="overflow-x-auto overflow-y-hidden px-3.5 py-3">
                   {ROWS.map(([id, path, note, status, kind]) => {
                     const hit = !!(act && act.rows.includes(id));
                     const bg = hit ? (act!.ok ? "bg-ok-bg" : "bg-no-bg") : "bg-transparent";
                     const color = hit ? (act!.ok ? "text-ok" : "text-no") : kind === "w" ? "text-fg" : kind === "p" ? "text-fg-2" : "text-fg-3";
                     return (
-                      <div key={id} className={`-mx-[6px] my-0 flex justify-between gap-3 px-[6px] py-0 whitespace-pre [transition:background_.3s,color_.3s] ${bg} ${color}`}>
+                      <div key={id} className={`-mx-1.5 my-0 flex justify-between gap-3 px-1.5 py-0 whitespace-pre [transition:background_.3s,color_.3s] ${bg} ${color}`}>
                         <span>
                           {path}
                           <span className="opacity-70">{note}</span>
@@ -587,7 +587,7 @@ export default class Landing extends React.Component<LandingProps, State> {
                     );
                   })}
                 </div>
-                <div className="flex h-[11.9em] flex-col justify-end overflow-hidden border-t border-line px-[14px] py-3">
+                <div className="flex h-[11.9em] flex-col justify-end overflow-hidden border-t border-line px-3.5 py-3">
                   {this.state.sbLines.map((l, i) => (
                     <div key={i} className={`whitespace-pre-wrap [word-break:break-word] ${l.color}`}>
                       {l.text}
@@ -610,7 +610,7 @@ export default class Landing extends React.Component<LandingProps, State> {
               <p data-reveal className={`${lead} mt-0 mb-4 max-w-[52ch]`}>The agent never writes to your repo. Its work comes back as a proposal: the diff against your repo, plus the docs and charts it made. An oracle, a second agent, reviews it first, and the coding agent and the oracle keep working on it together until they both agree on the solution.</p>
               <p data-reveal className={`${lead} m-0 max-w-[52ch]`}>Only then does it reach you: one final change, already agreed on, waiting for your approval.</p>
             </div>
-            <pre data-reveal className="m-0 min-w-0 overflow-x-auto border border-line-2 bg-term px-4 py-[14px] font-mono text-[13px] leading-[1.75] text-fg-2">
+            <pre data-reveal className="m-0 min-w-0 overflow-x-auto border border-line-2 bg-term px-4 py-3.5 font-mono text-[13px] leading-[1.75] text-fg-2">
               <span className="text-fg-3">brief · proposal 2 · session 7f3a2c{"\n"}</span>
               {"changed   internal/meter/sum.go  +1 −1\nmade      /outputs/usage-histogram.png\nchecks    go test ./...  "}
               <span className="text-ok">passed in the VM{"\n"}</span>
@@ -635,11 +635,11 @@ export default class Landing extends React.Component<LandingProps, State> {
                 </h2>
                 <p data-reveal className={`${lead} m-0 max-w-[52ch]`}>Each turn shows its tokens and cost.</p>
               </div>
-              <div className="flex flex-col gap-[6px]">
+              <div className="flex flex-col gap-1.5">
                 <div className="font-display text-[clamp(64px,9.5vw,150px)] leading-[0.9] font-medium tracking-[-0.04em] whitespace-nowrap tabular-nums mobile:text-[56px]">{this.state.costT >= 1 ? "$0.02" : "$" + (0.02 * e).toFixed(4)}</div>
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[13px] text-fg-3">
                   <span>estimated cost of the task above · 4 turns · 41s</span>
-                  <button onClick={this.playLedger} className="cursor-pointer border border-line-2 bg-transparent px-[10px] py-[3px] text-fg-2 hover:border-accent hover:text-accent">
+                  <button onClick={this.playLedger} className="cursor-pointer border border-line-2 bg-transparent px-2.5 py-0.75 text-fg-2 hover:border-accent hover:text-accent">
                     replay
                   </button>
                 </div>
@@ -705,26 +705,26 @@ export default class Landing extends React.Component<LandingProps, State> {
             <p data-reveal className={`${lead} mt-0 mb-12 max-w-[62ch]`}>The VM holds only placeholders. When a request leaves for the host a key belongs to, the gate adds the real key to the Authorization header, for that host and no other. Every request out is checked and logged: reads that carry nothing from your repo pass, writes to somewhere new ask you, and a placeholder sent anywhere else is refused.</p>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,260px),1fr))] gap-4 font-mono text-[13px] leading-[1.7]">
               <div data-reveal className="border border-line-2">
-                <div className="border-b border-line px-[14px] py-2 text-fg-3">inside the VM</div>
-                <div className="overflow-x-auto px-[14px] py-3 whitespace-pre">
+                <div className="border-b border-line px-3.5 py-2 text-fg-3">inside the VM</div>
+                <div className="overflow-x-auto px-3.5 py-3 whitespace-pre">
                   <span className="text-fg-3">$</span> echo $STRIPE_KEY{"\n"}
                   <span className="text-fg-3">karya-placeholder-7f3a</span>
                 </div>
               </div>
-              <div className="flex flex-col justify-center gap-[6px] border border-dashed border-line-2 px-[14px] py-4">
+              <div className="flex flex-col justify-center gap-1.5 border border-dashed border-line-2 px-3.5 py-4">
                 <div className="text-fg-3">the gate</div>
                 <div className="text-[14px] font-medium break-all">adds the real key</div>
                 <div className="text-fg-3">only for api.stripe.com</div>
               </div>
               <div data-reveal className="border border-line-2">
-                <div className="border-b border-line px-[14px] py-2 text-fg-3">on the way to api.stripe.com</div>
-                <div className="overflow-x-auto px-[14px] py-3 whitespace-pre">
+                <div className="border-b border-line px-3.5 py-2 text-fg-3">on the way to api.stripe.com</div>
+                <div className="overflow-x-auto px-3.5 py-3 whitespace-pre">
                   <span className="text-fg-3">Authorization:</span> Bearer sk_test_••••{"\n"}
                   <span className="text-ok">✓ allowed · logged</span>
                 </div>
               </div>
             </div>
-            <div className="mt-4 border border-no px-4 py-[14px] font-mono text-[13px] leading-[1.7]">
+            <div className="mt-4 border border-no px-4 py-3.5 font-mono text-[13px] leading-[1.7]">
               <div className="text-no">blocked, and shown to you</div>
               <div className="mt-1">POST paste.example · the body matches 14 files from internal/ · nothing left the VM</div>
             </div>
@@ -744,7 +744,7 @@ export default class Landing extends React.Component<LandingProps, State> {
             <div data-reveal className="grid grid-cols-4 gap-px self-center border border-line bg-line">
               {PROVIDERS.map(([id, name]) => (
                 <div key={id} title={name} className="group flex aspect-square items-center justify-center bg-bg [transition:background_.2s] hover:bg-bg-2">
-                  <span role="img" aria-label={name} className="block h-[clamp(28px,3.4vw,44px)] w-[clamp(28px,3.4vw,44px)] bg-fg-2 [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain] [transition:background_.2s] group-hover:bg-fg" style={{ maskImage: `url(/providers/${id}.svg)`, WebkitMaskImage: `url(/providers/${id}.svg)` }} />
+                  <span role="img" aria-label={name} className="block h-[clamp(28px,3.4vw,44px)] w-[clamp(28px,3.4vw,44px)] bg-fg-2 mask-center mask-no-repeat mask-contain [transition:background_.2s] group-hover:bg-fg" style={{ maskImage: `url(/providers/${id}.svg)`, WebkitMaskImage: `url(/providers/${id}.svg)` }} />
                 </div>
               ))}
             </div>
@@ -753,14 +753,14 @@ export default class Landing extends React.Component<LandingProps, State> {
 
         {/* closing CTA */}
         <section className="bg-grid border-t border-line">
-          <div className="mx-auto my-0 flex max-w-[1200px] flex-col items-start gap-10 px-6 py-[clamp(88px,12vw,168px)] mobile:gap-7 mobile:px-5 mobile:py-16">
+          <div className="mx-auto my-0 flex max-w-300 flex-col items-start gap-10 px-6 py-[clamp(88px,12vw,168px)] mobile:gap-7 mobile:px-5 mobile:py-16">
             <h2 data-reveal className="m-0 max-w-[11ch] font-display text-[clamp(56px,10vw,152px)] leading-[0.92] font-medium tracking-[-0.045em] mobile:text-[48px]">
               Let it run. <em className={em}>Stay in control.</em>
             </h2>
-            <div data-reveal className={`${cmdBox} gap-4 py-4 pr-4 pl-[22px] text-[clamp(13px,1.6vw,17px)]`}>
+            <div data-reveal className={`${cmdBox} gap-4 py-4 pr-4 pl-5.5 text-[clamp(13px,1.6vw,17px)]`}>
               <span className="text-accent">$</span>
               <code className={cmdCode}>{INSTALL}</code>
-              <button onClick={this.copy} className={`${copyBtn} px-[14px] py-[6px] text-[13px]`}>
+              <button onClick={this.copy} className={`${copyBtn} px-3.5 py-1.5 text-[13px]`}>
                 {copyLabel}
               </button>
             </div>
