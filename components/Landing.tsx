@@ -320,7 +320,8 @@ export default class Landing extends React.Component<LandingProps, State> {
         {/* hero */}
         <section className="relative overflow-hidden border-b border-line">
           <div className="relative z-10 mx-auto my-0 max-w-[1200px] px-6 pt-[clamp(56px,8vw,104px)] pb-[clamp(56px,7vw,96px)] mobile:px-5 mobile:pt-10 mobile:pb-12">
-            <HeroTiger />
+            <div className="flex items-start justify-between gap-10">
+              <div className="min-w-0">
             <div className="flex flex-wrap items-center gap-x-[14px] gap-y-[10px] font-mono text-[12.5px]">
               <Link href="/roadmap" className="border border-accent px-[10px] py-[3px] text-accent no-underline hover:text-accent">
                 in development · see the roadmap →
@@ -351,6 +352,9 @@ export default class Landing extends React.Component<LandingProps, State> {
               <Link href="/docs" className={`${textLink} text-[14px] text-fg`}>
                 Read the docs →
               </Link>
+            </div>
+              </div>
+              <HeroTiger />
             </div>
             <div data-reveal className="mt-[72px] border border-line-2 bg-bg-2 p-[clamp(12px,2.4vw,32px)] mobile:mt-11 mobile:p-[10px]">
               <div className="mb-[22px] flex flex-wrap justify-end gap-x-4 gap-y-[6px] font-mono text-[12px] text-fg-3 mobile:mb-4 mobile:text-[11px]">
